@@ -2,7 +2,7 @@ import web3 from './web3';
 import SquareJSON from './build/Square.json';
 
 // TODONEW : DSF singleton
-let address = '0x832bc8d56065dd710f28d05276847471079ccA5A';
+let address = '0x2b92288b6C2D24f99F9Cc12b79Cf31E64B797514';
 
 // Note: expots a function, not a class
 const instance = new web3.eth.Contract(

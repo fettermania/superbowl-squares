@@ -1,8 +1,8 @@
-TODONEW: 0x7D1820e7E18ba241996AfaaBB3486c80DfAeB529
+// Rinkeby
+0x832bc8d56065dd710f28d05276847471079ccA5A
 
-MAIN ACCOUNT: 0x4f4B5b3e529B742A67f08C2DEe6820Aa6302d1E0
-DEV ACCOUNT: 0x573B7CfBe96aE97D1CD83812938A2a9574B263fa
-DEV ACCOUNT 2: 0x15108F81824640a0D9E73C4270d24089fb425625
+// Mainnet
+
 
 HEROKU: https://devcenter.heroku.com/articles/deploying-nodejs
 // TODO (need)
@@ -26,5 +26,6 @@ git push heroku main
 
 
 // Contract features
-- lock
-- don't pay to null
+- refund?
+
+1000000000000000
