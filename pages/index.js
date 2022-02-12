@@ -68,13 +68,14 @@ class SquaresIndex extends Component {
 		// TODO Fix this hardcoded nonsnese
 		const headerContent = Array(10).fill().map(
 			(n, index) => {
-				return <Grid.Column key={index} width={1}><Card>{index}</Card></Grid.Column>; }
-				)
+				return <Grid.Column color="orange"  key={index}>{index}</Grid.Column>; }
+				);
 
 		return (
-			<Grid>
+			// COLOR: Away Row
+			<Grid textAlign="right">
 				<Grid.Row >
-					<Grid.Column key={0} width={1}><Card><div color="red">TODO</div></Card></Grid.Column>
+					<Grid.Column key={0}></Grid.Column>
 					{headerContent}
 				</Grid.Row>
 				{this.renderRows()}
@@ -91,12 +92,14 @@ class SquaresIndex extends Component {
 		const countSquaresYouBought = this.props.squareSelections.filter(address => 
 			address == this.state.accounts[0]).length;
 
+		const acctName = (this.state.accounts[0]) ? (this.state.accounts[0].substr(2,4) ) : "none";
+
 		const totalAccounts = (	new Set(squaresTaken)).size;
 		const squaresLeft = 100 - squaresTaken;
 		const items = [
 
 	   {
-        header: SquaresIndex.entryPriceInEther,
+        header: (SquaresIndex.entryPriceInEther + "/$" + 3000*SquaresIndex.entryPriceInEther) ,
         description: 'Entry price (in ether)',
      	},
 	   {
@@ -104,16 +107,19 @@ class SquaresIndex extends Component {
         description: 'Squares Taken'
      	},
 		{
-        header: SquaresIndex.entryPriceInEther * countSquaresTaken,
+        header: (SquaresIndex.entryPriceInEther * countSquaresTaken + "/$" + 
+        	3000 * SquaresIndex.entryPriceInEther * countSquaresTaken),
         description: 'Total at stake (in ether)'
      	},
       {
         header: countSquaresYouBought,
-        description: 'Squares you (account ' + this.state.accounts[0] + ') bought',
+        description: 'Your entries (account ' + acctName + '...)',
         style: {overflowWrap: 'break-word'}
       },
   		{
-        header: SquaresIndex.entryPriceInEther * countSquaresYouBought,
+        header: 
+        	(SquaresIndex.entryPriceInEther * countSquaresYouBought + "/$" + 
+        	3000 * SquaresIndex.entryPriceInEther * countSquaresYouBought),
         description: 'Your total stake (in ether)'
      	},
        {
@@ -133,12 +139,12 @@ class SquaresIndex extends Component {
 
 		return (<Layout>
 		  	<h3 suppressHydrationWarning>{installText}</h3>
-		  	<h3>Squares</h3>
-			<Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
-
-		  	{this.renderSquareGrid()}
+		  	<Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
   			<h3>Stats</h3>
   			{this.renderStatsBlock()}
+  			<h3>Squares</h3>
+			<p/>
+		  	{this.renderSquareGrid()}
  		</Layout>);
 	}
 }

@@ -58,17 +58,16 @@ class SquareCell extends Component {
 		var buyable = (this.props.buyerAddress == SquareCell.nullAddress);
 		var boughtByMe = (this.props.buyerAddress == this.props.viewerAddress);
 		if (boughtByMe) {
-			button = <Button  basic color="blue">Yours</Button>
+			button = <Button  basic color="blue">YOU</Button>
 		} else if (!buyable) {
-			button = <Button basic color="grey">{this.props.buyerAddress.substr(0, 6)}</Button>
+			button = <Button basic color="grey">{this.props.buyerAddress.substr(2, 4)}</Button>
 		} else if (this.props.locked) {
 			button = <Button basic color="grey">EMPTY</Button>
 		} else {
 			button = <Button loading={this.state.loading} basic color="green" onClick={this.onPurchase}>BUY</Button>
 		}
-		return (<Grid.Column width={1}><Card >
+		return (<Grid.Column >
 			{button}
-			</Card>
 			</Grid.Column>)
 	}
 

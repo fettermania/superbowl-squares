@@ -20,9 +20,10 @@ class SquareRow extends Component {
 				});
 
 		return (
-			<Grid.Row stretched height={2}>
-				<Grid.Column width={1}>
-					<Card>{this.props.row}</Card>
+			// COLOR: Home column
+			<Grid.Row  height={2}>
+				<Grid.Column color="blue">
+					{this.props.row}
 				</Grid.Column>
 				{rowContent}
 
