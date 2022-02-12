@@ -20,3 +20,11 @@ HEROKU: https://devcenter.heroku.com/articles/deploying-nodejs
 - Submit multiple picks with one click
 
 //
+
+git push -u origin main
+git push heroku main
+
+
+// Contract features
+- lock
+- don't pay to null

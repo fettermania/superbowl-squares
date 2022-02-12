@@ -42,7 +42,7 @@ class SquareCell extends Component {
 						break;
 					default:
 						humanMessage = "Unknown error.  Details:" + err.message;
-					console.log("GOT ERROR " + humanMessage);
+					console.log("GOT ERROR " + JSON.stringify(error));
 					this.setState({errorMessage: humanMessage});
 				}
 

@@ -33,9 +33,8 @@ class SquaresIndex extends Component {
 	static async getInitialProps() {
 		const squareSelections =  await squaremodel.methods.getSelectors().call();
 		const rows = SquaresIndex.selectionsTo2D(squareSelections);
-		
-
-		return {squareSelections, rows};  // sugar for  { squareSelections : squareSelections}
+		const locked = await squaremodel.methods.getLocked().call();
+		return {squareSelections, rows, locked};  // sugar for  { squareSelections : squareSelections}
 	}
 
 	// TODO Getting accounts here - is that bad?
@@ -118,9 +117,10 @@ class SquaresIndex extends Component {
 	}
 
 	render () {
+		const lockedText = this.props.locked ? " - LOCKED!" : ""
 		return (<Layout>
 		  <div>
-		  	<h3>Squares</h3>
+		  	<h3>Squares{lockedText}</h3>
 		  	{this.renderSquareGrid()}
   			<h3>Stats</h3>
   			{this.renderStatsBlock()}
