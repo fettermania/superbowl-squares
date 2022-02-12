@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Card, Button, Grid } from 'semantic-ui-react';
+import { Card, Button, Grid, Message } from 'semantic-ui-react';
 
 import SquareRow from '../components/SquareRow';
 import squaremodel from '../ethereum/squaremodel';
@@ -14,7 +14,8 @@ class SquaresIndex extends Component {
 	static entryPriceInEther = 0.001;
 
 	state = {
-		accounts: [] // TODO Gross global variable
+		accounts: [], // TODO Gross global variable
+		errorMessage: ''
 	};
 
 	static selectionsTo2D(squareSelections) {
@@ -41,13 +42,22 @@ class SquaresIndex extends Component {
 	async componentDidMount() {
 		const accounts = await web3.eth.getAccounts();
 		this.setState({accounts: accounts});
+		if(this.props.locked) {
+			this.setState({errorMessage: 'Games are locked'})
+		}
 	}
+
+	setTopError = (errorMessage) => {
+        this.setState({errorMessage: errorMessage});
+    }
 
 	renderRows() {
 		return this.props.rows.map((rowSelections, index) => {
 			return (<SquareRow 
 							key={index}
 							row={index}
+							locked={this.props.locked}
+							setTopError={this.setTopError.bind(this)}
 							rowBuyerAddresses={rowSelections}
 							viewerAddress={this.state.accounts[0]}
 							/>);
@@ -121,13 +131,11 @@ class SquaresIndex extends Component {
 			(<div suppressHydrationWarning>Ethereum wallet installed ✅</div>)
 			: (<div suppressHydrationWarning>Ethereum wallet not installed ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
 
-		const lockedText = this.props.locked ? 
-			" - LOCKED!" 
-			: "";
-
 		return (<Layout>
 		  	<h3 suppressHydrationWarning>{installText}</h3>
-		  	<h3>Squares{lockedText}</h3>
+		  	<h3>Squares</h3>
+			<Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
+
 		  	{this.renderSquareGrid()}
   			<h3>Stats</h3>
   			{this.renderStatsBlock()}

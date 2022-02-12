@@ -11,28 +11,30 @@ class SquareCell extends Component {
 	static entryPriceInEther = 0.001;	
 
 	state = {
-		loading: false,
-		errorMessage: ''
+		loading: false
 	};
 
 	onPurchase = async () => {
-
+		if (!this.props.viewerAddress) {
+			this.props.setTopError('No viewer address.  Connect your ethereum wallet.');
+			return;
+		}
 		try { 
-			this.setState({
-					loading: true,
-					errorMessage: ''
-					});
+
+			this.setState({loading: true});
+			this.props.setTopError('');
+
 			await squaremodel.methods.makeSelection(this.props.row, this.props.col)
 				.send({
 					from: this.props.viewerAddress,
 					value: web3.utils.toWei(String(SquareCell.entryPriceInEther), 'ether')
 				});	
 			this.setState({loading: false, value: ''});
+			this.props.setTopError('');
+
 			Router.replaceRoute('/');
 		} catch (err) 	{
 				let humanMessage;
-
-				// NOTE: Fetterman wrote this sugar.
 				switch (err.code) { 
 					case 'INVALID_ARGUMENT':
 						humanMessage = "Something wrong with the input";
@@ -42,12 +44,11 @@ class SquareCell extends Component {
 						break;
 					default:
 						humanMessage = "Unknown error.  Details:" + err.message;
-					console.log("GOT ERROR " + JSON.stringify(error));
-					this.setState({errorMessage: humanMessage});
-				}
+						break;
 
-				// NOTE: Never get here!
-			this.setState({loading: false, value: ''});
+				}
+				this.setState({loading: false});
+				this.props.setTopError(humanMessage);
 		}
 	}
 
@@ -60,6 +61,8 @@ class SquareCell extends Component {
 			button = <Button  basic color="blue">Yours</Button>
 		} else if (!buyable) {
 			button = <Button basic color="grey">{this.props.buyerAddress.substr(0, 6)}</Button>
+		} else if (this.props.locked) {
+			button = <Button basic color="grey">EMPTY</Button>
 		} else {
 			button = <Button loading={this.state.loading} basic color="green" onClick={this.onPurchase}>BUY</Button>
 		}

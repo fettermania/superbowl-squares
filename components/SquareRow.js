@@ -13,6 +13,8 @@ class SquareRow extends Component {
 					row={this.props.row}
 					col={index}
 					key={index}
+					locked={this.props.locked}
+					setTopError={this.props.setTopError}
 					buyerAddress={buyerAddress}
 					viewerAddress={this.props.viewerAddress} />);
 				});
