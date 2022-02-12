@@ -134,8 +134,8 @@ class SquaresIndex extends Component {
 
 	render () {
 		const installText = (typeof window !== "undefined" && typeof window.ethereum !== "undefined") ?
-			(<div suppressHydrationWarning>Ethereum wallet installed ✅</div>)
-			: (<div suppressHydrationWarning>Ethereum wallet not installed ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
+			(<div suppressHydrationWarning>Ethereum wallet detected (Use Rinkeby Test Network) ✅</div>)
+			: (<div suppressHydrationWarning>Ethereum wallet not detected (Use Rinkeby Test Network) ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
 
 		return (<Layout>
 		  	<h3 suppressHydrationWarning>{installText}</h3>
