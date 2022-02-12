@@ -10,7 +10,7 @@ import Header from './Header';
 // NOTE: Different than lecture.  Need named variable to export for React v17+ linter.
  const Layout = (props) => {
  	return (
- 		<Container>
+ 		<Container fluid>
  		    <Head>
    			  <link async
 	    	    rel="stylesheet"
