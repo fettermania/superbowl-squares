@@ -117,14 +117,20 @@ class SquaresIndex extends Component {
 	}
 
 	render () {
-		const lockedText = this.props.locked ? " - LOCKED!" : ""
+		const installText = (typeof window !== "undefined" && typeof window.ethereum !== "undefined") ?
+			(<div suppressHydrationWarning>Ethereum wallet installed ✅</div>)
+			: (<div suppressHydrationWarning>Ethereum wallet not installed ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
+
+		const lockedText = this.props.locked ? 
+			" - LOCKED!" 
+			: "";
+
 		return (<Layout>
-		  <div>
+		  	<h3 suppressHydrationWarning>{installText}</h3>
 		  	<h3>Squares{lockedText}</h3>
 		  	{this.renderSquareGrid()}
   			<h3>Stats</h3>
   			{this.renderStatsBlock()}
- 		</div>
  		</Layout>);
 	}
 }
