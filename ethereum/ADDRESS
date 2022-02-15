@@ -28,4 +28,6 @@ git push heroku main
 // Contract features
 - refund?
 
+// TOOD URL Switch between rinkeby and mainnet.
+
 1000000000000000
