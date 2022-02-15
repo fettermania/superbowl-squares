@@ -8,8 +8,8 @@ const compiledSquare = require('./build/Square.json');
 // TODO Get new rinkeby?
 const provider = new HDWalletProvider(
   process.env.METAMASK_PHRASE,
- //'https://mainnet.infura.io/v3/b2d352d974ab45d8bd72f4af53a01f16'
- 'https://rinkeby.infura.io/v3/b2d352d974ab45d8bd72f4af53a01f16'
+ 'https://mainnet.infura.io/v3/b2d352d974ab45d8bd72f4af53a01f16'
+ //'https://rinkeby.infura.io/v3/b2d352d974ab45d8bd72f4af53a01f16'
   );
 
 

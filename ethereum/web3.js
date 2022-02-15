@@ -13,7 +13,10 @@ if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
 } else {
   // We are on the server *OR* the user is not running metamask
   const provider = new Web3.providers.HttpProvider(
-    "https://rinkeby.infura.io/v3/15c1d32581894b88a92d8d9e519e476c"
+  	// TODO Fetterman
+  	 'https://mainnet.infura.io/v3/b2d352d974ab45d8bd72f4af53a01f16'
+
+//    "https://rinkeby.infura.io/v3/15c1d32581894b88a92d8d9e519e476c"
   );
   web3 = new Web3(provider);
 }
