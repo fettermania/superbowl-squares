@@ -6,17 +6,18 @@
 
 HEROKU: https://devcenter.heroku.com/articles/deploying-nodejs
 // TODO (need)
-
-// TODO (details)
-- Deploy on mainnet and see how expensive
-- Move bitcoin to eth
-- deploy on heroku
-- remap fettermania/superbowl to heroku
-
+- Add factory contract
+- Add 
+- and list page back
+- Figure out mobile wallet
+- Mobile layout, including colors / team names
+- Manager feature: 
+- Manager feature: declare winner and lock
+- Manager feature: 
+-
 
 // TODO (Nice)
 
-- Add factory and list page back
 - Submit multiple picks with one click
 
 //

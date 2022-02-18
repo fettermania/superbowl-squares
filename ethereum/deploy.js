@@ -3,7 +3,7 @@ const Web3 = require('web3');
 //const { abi, evm } = require('./compile');
 // TODO : Update to newer versin ^^^
  
-const compiledSquare = require('./build/Square.json');
+const compiledSquareFactory = require('./build/SquareFactory.json');
 
 // TODO Get new rinkeby?
 const provider = new HDWalletProvider(
@@ -20,9 +20,9 @@ const deploy = async () => {
 
   console.log('Attempting to deploy from account', accounts[0]);
   try {
-    const result = await new web3.eth.Contract(JSON.parse(compiledSquare.interface))
+    const result = await new web3.eth.Contract(JSON.parse(compiledSquareFactory.interface))
     //  .deploy({ data: evm.bytecode.object })
-      .deploy({ data: compiledSquare.bytecode })
+      .deploy({ data: compiledSquareFactory.bytecode })
         .send({ gas: '1000000', from: accounts[0] });
      console.log('Contract deployed to', result.options.address);
   } catch (err) { 

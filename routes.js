@@ -13,3 +13,5 @@ const routes = require('next-routes')();
 
 // NOTE: this is an OBJECT that generates helpers we use everywhere.
 module.exports = routes;
+
+// TODO See if routes can work.

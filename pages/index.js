@@ -33,8 +33,9 @@ class SquaresIndex extends Component {
 
 	static async getInitialProps() {
 		const squareSelections =  await squaremodel.methods.getSelectors().call();
-		const rows = SquaresIndex.selectionsTo2D(squareSelections);
-		const locked = await squaremodel.methods.getLocked().call();
+		const rows = SquaresIndex.selectionsTo2D(squareSelections);	
+//		const locked = await squaremodel.methods.getLocked().call(); // TODO fettermania
+		const locked = false;
 		return {squareSelections, rows, locked};  // sugar for  { squareSelections : squareSelections}
 	}
 
