@@ -16,6 +16,8 @@ HEROKU: https://devcenter.heroku.com/articles/deploying-nodejs
 - Manager feature: 
 -
 
+ // TODO Fettermania - is node server.js this necessary for routibng? 
+
 // TODO (Nice)
 
 - Submit multiple picks with one click
