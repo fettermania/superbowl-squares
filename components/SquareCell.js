@@ -19,12 +19,14 @@ class SquareCell extends Component {
 			this.props.setTopError('No viewer address.  Connect your ethereum wallet.');
 			return;
 		}
+
+		const square = squaremodel(this.props.squareAddress);
 		try { 
 
 			this.setState({loading: true});
 			this.props.setTopError('');
 
-			await squaremodel.methods.makeSelection(this.props.row, this.props.col)
+			await square.methods.makeSelection(this.props.row, this.props.col)
 				.send({
 					from: this.props.viewerAddress,
 					value: web3.utils.toWei(String(SquareCell.entryPriceInEther), 'ether')
@@ -32,7 +34,8 @@ class SquareCell extends Component {
 			this.setState({loading: false, value: ''});
 			this.props.setTopError('');
 
-			Router.replaceRoute('/');
+			Router.pushRoute(`/squares/${this.props.squareAddress}`);
+
 		} catch (err) 	{
 				let humanMessage;
 				switch (err.code) { 

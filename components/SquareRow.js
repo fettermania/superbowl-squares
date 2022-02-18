@@ -15,6 +15,7 @@ class SquareRow extends Component {
 					key={index}
 					locked={this.props.locked}
 					setTopError={this.props.setTopError}
+					squareAddress={this.props.squareAddress}
 					buyerAddress={buyerAddress}
 					viewerAddress={this.props.viewerAddress} />);
 				});
