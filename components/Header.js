@@ -6,7 +6,9 @@ import { Link } from '../routes';
 const Header = (props) => {
   return (
     <Menu style={{ marginTop: '10px' }}>
-          <a className="item">Superbowl Squares</a>
+    	<Link route={`/`}>
+    		<a className="item">Superbowl Squares</a>
+		 </Link>
           
        <Menu.Menu position='right'>
           <a className="item">fettermania@gmail.com</a>

@@ -39,9 +39,9 @@ class SquaresDetail extends Component {
 		// TODO How can we pass the object instead of just the address?
 		const squareAddress = props.query.address;
 		const square = squaremodel(props.query.address);
-		const summaryRaw = await square.methods.getSummary().call();
 		const squareSelections =  await square.methods.getSelectors().call();
 		const rows = SquaresDetail.selectionsTo2D(squareSelections);
+		const summaryRaw = await square.methods.getSummary().call();
 		const summary = {
 			competitionName: summaryRaw[0],
 			squarePrice: summaryRaw[1],
@@ -74,7 +74,7 @@ class SquaresDetail extends Component {
 							key={index}
 							row={index}
 							squareAddress={this.props.squareAddress}
-							locked={this.props.locked}
+							locked={this.props.summary.locked}
 							setTopError={this.setTopError.bind(this)}
 							rowBuyerAddresses={rowSelections}
 							viewerAddress={this.state.accounts[0]}
@@ -156,11 +156,11 @@ class SquaresDetail extends Component {
 			: (<div suppressHydrationWarning>Ethereum wallet not detected (Use Rinkeby Test Network) ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
 
 		return (<Layout>
-		  	<h3 suppressHydrationWarning>{installText}</h3>
+			<h2>{this.props.summary.competitionName}</h2>
+		  	<h4 suppressHydrationWarning><em>{installText}</em></h4>
 		  	<Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
   			<h3>Stats</h3>
   			{this.renderStatsBlock()}
-  			<h3>Squares</h3>
 			<p/>
 		  	{this.renderSquareGrid()}
  		</Layout>);
