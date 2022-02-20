@@ -6,21 +6,15 @@
 
 HEROKU: https://devcenter.heroku.com/articles/deploying-nodejs
 // TODO (need)
-- Add factory contract
-- Add 
-- and list page back
 - Figure out mobile wallet
 - Mobile layout, including colors / team names
-- Manager feature: 
 - Manager feature: declare winner and lock
 - Manager feature: 
--
-
- // TODO Fettermania - is node server.js this necessary for routibng? 
 
 // TODO (Nice)
 
 - Submit multiple picks with one click
+- Changing your wallet in the middle of the game
 
 //
 
@@ -34,3 +28,5 @@ git push heroku main
 // TOOD URL Switch between rinkeby and mainnet.
 
 1000000000000000
+
+// TODO Web3 is depreacted: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3

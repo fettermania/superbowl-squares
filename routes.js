@@ -6,6 +6,7 @@ const routes = require('next-routes')();
 // NOTE: This matches IN ORDER, so above shadows below.
 
 routes
+	.add('Square Creation Dialog', '/squares/new', '/new')
 	.add('Individual Square', '/squares/:address', '/show');
 
 // NOTE: this is an OBJECT that generates helpers we use everywhere.
