@@ -5,7 +5,7 @@ import SquareRow from '../components/SquareRow';
 import squaremodel from '../ethereum/squaremodel';
 //import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
-import { Link }  from '../routes';
+import { Link, Router }  from '../routes';
 import web3 from '../ethereum/web3.js';
 
 class SquaresDetail extends Component {
@@ -15,7 +15,9 @@ class SquaresDetail extends Component {
 
 	state = {
 		accounts: [], // TODO Gross global variable
-		errorMessage: ''
+		errorMessage: '',
+		locked: false,
+		lockedLoading: false
 	};
 
 	static selectionsTo2D(squareSelections) {
@@ -32,8 +34,9 @@ class SquaresDetail extends Component {
 	}
 
 
-	// TODO Note: getInitialProps is a nextJS thing for server only!
-	// TODO Use componentDidMount (a react thing)
+	// TODO 
+	// NOTE Note: getInitialProps is a nextJS thing for server only!
+	// NOTE Use componentDidMount (a react thing)
 	static async getInitialProps(props) {
 
 		// TODO How can we pass the object instead of just the address?
@@ -53,19 +56,80 @@ class SquaresDetail extends Component {
 		return {squareAddress, squareSelections, rows, summary};  
 	}
 
+	setGamesLockedState(state) {
+		if (state) {
+			this.setState({errorMessage: 'Games are locked', locked: false});
+		} else {
+			this.setState({errorMessage: '', locked: false});
+		}
+	}
 	// TODO Getting accounts here - is that bad?
 	async componentDidMount() {
 		const accounts = await web3.eth.getAccounts();
 		this.setState({accounts: accounts});
-		if(this.props.summary.locked) {
-			this.setState({errorMessage: 'Games are locked'})
-		}
+		this.setGamesLockedState(this.props.summary.locked);
 	}
 
 	setTopError = (errorMessage) => {
         this.setState({errorMessage: errorMessage});
     }
 
+	onLockChange = async () => {
+		const square = squaremodel(this.props.squareAddress);
+		try { 
+
+			this.setTopError('');
+			this.setState({lockedLoading: true});
+
+			await square.methods.setLocked(!this.props.summary.locked)
+				.send({
+					from: this.state.accounts[0]
+				});				
+
+			// TODO Just let refresh take care of it
+			this.setState({lockedLoading: false});
+			this.setGamesLockedState(!this.props.summary.locked);
+
+			Router.pushRoute(`/squares/${this.props.squareAddress}`);
+
+		} catch (err) 	{
+				let humanMessage;
+				switch (err.code) { 
+					case 'INVALID_ARGUMENT':
+						humanMessage = "Something wrong with the input";
+						break;
+					case 4001:
+						humanMessage = "Transaction rejected by metamask/provider";
+						break;
+					default:
+						humanMessage = "Unknown error.  Details:" + err.message;
+						break;
+				}
+				this.setState({lockedLoading: false});
+				this.setTopError(humanMessage);
+		}
+	}
+
+	// TODO Add score selection
+	// TODO Add status on list page
+    renderManagerBlock() {
+    	const buttonText = (this.props.summary.locked) ? "Unlock" : "Lock";
+    	if (this.props.summary.manager != this.state.accounts[0]) { return ''; }
+    	return (
+    		<div>
+    		<p/><p/>
+		 	<h3>Manager zone </h3>
+    		<Button
+    		loading={this.state.lockedLoading} 
+					basic 
+					color="red" 
+					onClick={this.onLockChange}>{buttonText}</Button>
+			</div>
+			);
+    }
+
+
+ 
 	renderRows() {
 
 
@@ -163,6 +227,8 @@ class SquaresDetail extends Component {
   			{this.renderStatsBlock()}
 			<p/>
 		  	{this.renderSquareGrid()}
+		  	
+		  	{this.renderManagerBlock()}
  		</Layout>);
 	}
 }
