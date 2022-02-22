@@ -68,9 +68,10 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 
 - Web3 is depreacted-is: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3
 - Mobile layout is suboptimal
+- Detect swtiching users
 - Home and away names  
-- List indicates status
-- Show page indicates game complete
+- Icon explanation: you, them, free, locked
+- Show prices in either, not wei?
 
 ### Props
 

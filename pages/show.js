@@ -48,25 +48,28 @@ class SquaresDetail extends Component {
 			competitionName: summaryRaw[0],
 			squarePrice: summaryRaw[1],
           	manager: summaryRaw[2],
-          	locked: summaryRaw[3]
+          	locked: summaryRaw[3],
+      	    completed: summaryRaw[4]
 		}
-		
+
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, squareSelections, rows, summary};  
 	}
 
-	setGamesLockedState(state) {
-		if (state) {
-			this.setState({errorMessage: 'Games are locked', locked: false});
+	setGameProgressState(locked, completed) {
+		if (completed) {
+			this.setState({errorMessage: 'Contest completed', locked: true, completed: true});
+		} else if (locked) {
+			this.setState({errorMessage: 'Choices are locked', locked: true, completed: false});
 		} else {
-			this.setState({errorMessage: '', locked: false});
+			this.setState({errorMessage: '', locked: false, completed: false});
 		}
 	}
 	// TODO Getting accounts here - is that bad?
 	async componentDidMount() {
 		const accounts = await web3.eth.getAccounts();
 		this.setState({accounts: accounts});
-		this.setGamesLockedState(this.props.summary.locked);
+		this.setGameProgressState(this.props.summary.locked, this.props.summary.completed);
 	}
 
 	setTopError = (errorMessage) => {
@@ -76,7 +79,8 @@ class SquaresDetail extends Component {
 	// TODO Add score selection
 	// TODO Add status on list page
     renderManagerButton() {
-    	if (this.props.summary.manager === this.state.accounts[0]) {
+    	if (this.props.summary.manager === this.state.accounts[0]
+    		&& !this.props.summary.completed) {
     		return (
   	  		<div>
   	  			<p/>
@@ -101,6 +105,7 @@ class SquaresDetail extends Component {
 							row={index}
 							squareAddress={this.props.squareAddress}
 							locked={this.props.summary.locked}
+							completed={this.props.summary.completed}
 							setTopError={this.setTopError.bind(this)}
 							rowBuyerAddresses={rowSelections}
 							viewerAddress={this.state.accounts[0]}
@@ -143,17 +148,16 @@ class SquaresDetail extends Component {
 		const items = [
 
 	   {
-        header: (SquaresDetail.entryPriceInEther + "/$" + 3000*SquaresDetail.entryPriceInEther) ,
-        description: 'Entry price (in ether)',
+        header: this.props.summary.squarePrice,
+        description: 'Entry price (in wei)',
      	},
 	   {
         header: countSquaresTaken,
         description: 'Squares Taken'
      	},
 		{
-        header: (SquaresDetail.entryPriceInEther * countSquaresTaken + "/$" + 
-        	3000 * SquaresDetail.entryPriceInEther * countSquaresTaken),
-        description: 'Total at stake (in ether)'
+        header: (this.props.summary.squarePrice * countSquaresTaken),
+        description: 'Total at stake (in wei)'
      	},
       {
         header: countSquaresYouBought,
@@ -161,10 +165,8 @@ class SquaresDetail extends Component {
         style: {overflowWrap: 'break-word'}
       },
   		{
-        header: 
-        	(SquaresDetail.entryPriceInEther * countSquaresYouBought + "/$" + 
-        	3000 * SquaresDetail.entryPriceInEther * countSquaresYouBought),
-        description: 'Your total stake (in ether)'
+        header:this.props.summary.squarePrice * countSquaresYouBought,
+        description: 'Your total stake (in wei)'
      	},
        {
         header: totalAccounts,

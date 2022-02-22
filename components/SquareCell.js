@@ -64,7 +64,7 @@ class SquareCell extends Component {
 			button = <Button disabled icon color="blue"><Icon name='user'/></Button>
 		} else if (!buyable) {
 			button = <Button disabled icon color="red"><Icon name='user secret'/></Button>
-		} else if (this.props.locked) {
+		} else if (this.props.locked || this.props.completed) {
 			button = <Button disabled icon color="grey"><Icon name='x'/></Button>
 		} else {
 			button = <Button icon loading={this.state.loading} icon color="green" onClick={this.onPurchase}>

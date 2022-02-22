@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Card, Button } from 'semantic-ui-react';
+import { Card, Button, Icon } from 'semantic-ui-react';
 
 import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
@@ -28,6 +28,7 @@ class SquaresList extends Component {
 			squarePrice: summaryRaw[1],
           	manager: summaryRaw[2],
           	locked: summaryRaw[3],
+          	completed: summaryRaw[4],
           	squareAddress: address
 		}
 		return summary;
@@ -42,14 +43,23 @@ class SquaresList extends Component {
 	// TODO : Disable if locked, or indicate as such	
 	renderSquaresList() {	
 		const items = this.state.summaries.map((summary, index) => {
+			let icon;
+			if (summary.locked) {
+				icon = <Icon color='red' name='lock'/>;
+			} else if (summary.completed) {
+				icon = <Icon color='grey' name='money'/>
+			} else {
+				icon = <Icon color='green' name='angle right'/>
+			}
 			return {
-				header: summary.competitionName,
+				header: (summary.competitionName),
+				meta: icon,
 				description: 
 					(<Link  route={`/squares/${summary.squareAddress}`}>
 			    		 <a>{summary.squarePrice} wei</a>
 		    		 </Link>),
 		    	
-				extra: "Manager " + summary.manager,
+				extra: ("Manager " + summary.manager.substring(0,8)),
 				fluid:true
 			  };
 			})

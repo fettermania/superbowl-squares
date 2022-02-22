@@ -22,7 +22,7 @@ contract Square {
 
   address[100] public selectors;
   bool locked;
-//  bool concluded; TODO
+  bool completed; 
 
   // note: gloval variable msg auto-provided with any invocation
   // .data, .gas, .sender, .value
@@ -32,16 +32,18 @@ contract Square {
       manager = creator;
 
       locked = false;
+      completed = false;
   }
 
   function getSummary() public view returns (
-    string, uint, address, bool) {
+    string, uint, address, bool, bool) {
 
       return (
           competitionName,
           squarePrice,
           manager,
-          locked
+          locked,
+          completed
           );
   }
 
@@ -71,8 +73,8 @@ contract Square {
     
     address player = selectors[home * 10 + away];
     player.transfer(address(this).balance);
-    delete selectors; // TODO - does this ruin the contract? Maybe that's a good thing.
     locked = false;
+    completed = true;
   }
 
   modifier onlyManagerCanCall() {

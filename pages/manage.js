@@ -64,21 +64,20 @@ class SquaresManager extends Component {
 		const squareAddress = props.query.address;
 		const square = squaremodel(props.query.address);
 		const summaryRaw = await square.methods.getSummary().call();
-		console.log("SUMMARY RAW");
-		console.log(summaryRaw);
 		const summary = {
 			competitionName: summaryRaw[0],
           	manager: summaryRaw[2],
-		  	locked: summaryRaw[3]
+		  	locked: summaryRaw[3],
+		  	completed: summaryRaw[4]
 		}
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, summary};  
 	}
 
-	// TODO Consolideate getInitialProps and compoentnDidMount?
 	async componentDidMount() {
 		const accounts = await web3.eth.getAccounts();
-		if (this.props.summary.manager !== accounts[0]) {
+		if ((this.props.summary.manager !== accounts[0])
+			|| this.props.summary.completed) {
 		 	Router.pushRoute(`/squares/${this.props.squareAddress}`);
 		 } 
 		this.setState({accounts: accounts, locked: this.props.summary.locked});
