@@ -11,7 +11,6 @@ import web3 from '../ethereum/web3.js';
 class SquaresDetail extends Component {
 	// TODO move these
 	static nullAddress = '0x0000000000000000000000000000000000000000';
-	static entryPriceInEther = 0.001;
 
 	state = {
 		accounts: [], // TODO Gross global variable
@@ -34,7 +33,6 @@ class SquaresDetail extends Component {
 	}
 
 
-	// TODO 
 	// NOTE Note: getInitialProps is a nextJS thing for server only!
 	// NOTE Use componentDidMount (a react thing)
 	static async getInitialProps(props) {
@@ -104,6 +102,7 @@ class SquaresDetail extends Component {
 							key={index}
 							row={index}
 							squareAddress={this.props.squareAddress}
+							squarePrice={this.props.summary.squarePrice}
 							locked={this.props.summary.locked}
 							completed={this.props.summary.completed}
 							setTopError={this.setTopError.bind(this)}
@@ -117,7 +116,7 @@ class SquaresDetail extends Component {
 		// TODO Fix this hardcoded nonsnese
 		const headerContent = Array(10).fill().map(
 			(n, index) => {
-				return <Grid.Column color="orange"  key={index}>{index}</Grid.Column>; }
+				return <Grid.Column key={index}>{index}</Grid.Column>; }
 				);
 
 		return (
@@ -165,7 +164,7 @@ class SquaresDetail extends Component {
         style: {overflowWrap: 'break-word'}
       },
   		{
-        header:this.props.summary.squarePrice * countSquaresYouBought,
+    header:this.props.summary.squarePrice * countSquaresYouBought,
         description: 'Your total stake (in wei)'
      	},
        {

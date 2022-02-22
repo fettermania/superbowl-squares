@@ -8,7 +8,6 @@ class SquareCell extends Component {
 	
 	// TODO move this
 	static nullAddress = '0x0000000000000000000000000000000000000000';
-	static entryPriceInEther = 0.001;	
 
 	state = {
 		loading: false
@@ -26,10 +25,12 @@ class SquareCell extends Component {
 			this.setState({loading: true});
 			this.props.setTopError('');
 
+			console.log("CELL PROPS");
+			console.log(this.props);
 			await square.methods.makeSelection(this.props.row, this.props.col)
 				.send({
 					from: this.props.viewerAddress,
-					value: web3.utils.toWei(String(SquareCell.entryPriceInEther), 'ether')
+					value: String(this.props.squarePrice),
 				});	
 			this.setState({loading: false, value: ''});
 			this.props.setTopError('');

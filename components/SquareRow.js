@@ -17,14 +17,15 @@ class SquareRow extends Component {
 					locked={this.props.locked}
 					setTopError={this.props.setTopError}
 					squareAddress={this.props.squareAddress}
+					squarePrice={this.props.squarePrice}
 					buyerAddress={buyerAddress}
 					viewerAddress={this.props.viewerAddress} />);
 				});
 
 		return (
 			// COLOR: Home column
-			<Grid.Row  height={2}>
-				<Grid.Column color="blue">
+			<Grid.Row >
+				<Grid.Column color="black">
 					{this.props.row}
 				</Grid.Column>
 				{rowContent}

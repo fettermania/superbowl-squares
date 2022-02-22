@@ -36,8 +36,6 @@ class SquaresNew extends Component {
 				Router.pushRoute('/');
 
 		} catch (err) {
-			console.log("GOT ERROR ON CREATE");
-			console.log(JSON.stringify(err));
 			let humanMessage;
 
 			// NOTE: Fetterman wrote this sugar.
