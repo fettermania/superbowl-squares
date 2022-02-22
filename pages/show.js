@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Card, Button, Grid, Message } from 'semantic-ui-react';
+import { Card, Button, Grid, Message, Image, Icon, Label } from 'semantic-ui-react';
 
 import SquareRow from '../components/SquareRow';
 import squaremodel from '../ethereum/squaremodel';
@@ -94,6 +94,26 @@ class SquaresDetail extends Component {
     	}	
     }
 
+    renderKey() {
+    		return (
+    		<Grid>
+    		<Grid.Column width={8}>
+    	  <Button.Group vertical labeled icon>
+		    <Button icon='user secret' disabled color='red' content='Opponents' />
+		    <Button icon='user' disabled color='blue' content='You' />
+		    <Button icon='chevron down' color='black' content='Rams' />
+		    </Button.Group>
+		    </Grid.Column>
+		    <Grid.Column width={8}>
+    	  <Button.Group vertical labeled icon>
+		    <Button icon='x' disabled color='grey' content='Locked' />
+		    <Button icon='ethereum'  color='green' content='Open' />
+		    <Button icon='chevron left' color='grey' content='Bengals' />
+		    </Button.Group>
+		    </Grid.Column>
+		    </Grid>
+  		 );
+    }
 
  
 	renderRows() {
@@ -116,7 +136,7 @@ class SquaresDetail extends Component {
 		// TODO Fix this hardcoded nonsnese
 		const headerContent = Array(10).fill().map(
 			(n, index) => {
-				return <Grid.Column key={index}>{index}</Grid.Column>; }
+				return <Grid.Column color="grey" key={index}>{index}</Grid.Column>; }
 				);
 
 		return (
@@ -187,11 +207,14 @@ class SquaresDetail extends Component {
 			<h2>{this.props.summary.competitionName}</h2>
 		  	<h4 suppressHydrationWarning><em>{installText}</em></h4>
 			<Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
-  			<h3>Stats</h3>
-  			{this.renderStatsBlock()}
-			<p/>
+		  	<p/>
+		  	{this.renderKey()}
+  			<p/>
 		  	{this.renderSquareGrid()}
-		  	
+			
+		  	<h3>Stats</h3>
+  			{this.renderStatsBlock()}
+			
  		</Layout>);
 	}
 }

@@ -25,8 +25,6 @@ class SquareCell extends Component {
 			this.setState({loading: true});
 			this.props.setTopError('');
 
-			console.log("CELL PROPS");
-			console.log(this.props);
 			await square.methods.makeSelection(this.props.row, this.props.col)
 				.send({
 					from: this.props.viewerAddress,
