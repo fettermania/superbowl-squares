@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, Table, Grid, Card} from 'semantic-ui-react';
+import { Button, Table, Grid, Card, Icon} from 'semantic-ui-react';
 import web3 from '../ethereum/web3';
 import squaremodel from '../ethereum/squaremodel';
 import { Router } from '../routes';
@@ -61,18 +61,18 @@ class SquareCell extends Component {
 		var buyable = (this.props.buyerAddress == SquareCell.nullAddress);
 		var boughtByMe = (this.props.buyerAddress == this.props.viewerAddress);
 		if (boughtByMe) {
-			button = <Button  basic color="blue">YOU</Button>
+			button = <Button disabled icon color="blue"><Icon name='user'/></Button>
 		} else if (!buyable) {
-			button = <Button basic color="grey">{this.props.buyerAddress.substr(2, 4)}</Button>
+			button = <Button disabled icon color="red"><Icon name='user secret'/></Button>
 		} else if (this.props.locked) {
-			button = <Button basic color="grey">EMPTY</Button>
+			button = <Button disabled icon color="grey"><Icon name='x icon'/></Button>
 		} else {
-			button = <Button loading={this.state.loading} basic color="green" onClick={this.onPurchase}>BUY</Button>
+			button = <Button icon loading={this.state.loading} icon color="green" onClick={this.onPurchase}>
+				<Icon name='ethereum'/></Button>
 		}
-		return (<Grid.Column >
+		return (<Grid.Column width={1} >
 			{button}
 			</Grid.Column>)
 	}
-
 }
 export default SquareCell;
