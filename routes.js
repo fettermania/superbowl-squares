@@ -7,7 +7,8 @@ const routes = require('next-routes')();
 
 routes
 	.add('Square Creation Dialog', '/squares/new', '/new')
-	.add('Individual Square', '/squares/:address', '/show');
+	.add('Individual Square', '/squares/:address', '/show')
+	.add('Individual Square Manager', '/squares/:address/manage', '/manage');
 
 // NOTE: this is an OBJECT that generates helpers we use everywhere.
 module.exports = routes;

@@ -67,9 +67,10 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 ### Bugs and TODOs
 
 - Web3 is depreacted-is: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3
-- Mobile layout
-- Home and away names / colors 
+- Mobile layout is suboptimal
+- Home and away names  
 - List indicates status
+- Manager zone (incl. score setting)
 
 ### Props
 

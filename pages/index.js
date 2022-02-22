@@ -48,6 +48,7 @@ class SquaresList extends Component {
 					(<Link  route={`/squares/${summary.squareAddress}`}>
 			    		 <a>{summary.squarePrice} wei</a>
 		    		 </Link>),
+		    	
 				extra: "Manager " + summary.manager,
 				fluid:true
 			  };

@@ -39,7 +39,6 @@ class SquaresDetail extends Component {
 	// NOTE Use componentDidMount (a react thing)
 	static async getInitialProps(props) {
 
-		// TODO How can we pass the object instead of just the address?
 		const squareAddress = props.query.address;
 		const square = squaremodel(props.query.address);
 		const squareSelections =  await square.methods.getSelectors().call();
@@ -74,65 +73,28 @@ class SquaresDetail extends Component {
         this.setState({errorMessage: errorMessage});
     }
 
-	onLockChange = async () => {
-		const square = squaremodel(this.props.squareAddress);
-		try { 
-
-			this.setTopError('');
-			this.setState({lockedLoading: true});
-
-			await square.methods.setLocked(!this.props.summary.locked)
-				.send({
-					from: this.state.accounts[0]
-				});				
-
-			// TODO Just let refresh take care of it
-			this.setState({lockedLoading: false});
-			this.setGamesLockedState(!this.props.summary.locked);
-
-			Router.pushRoute(`/squares/${this.props.squareAddress}`);
-
-		} catch (err) 	{
-				let humanMessage;
-				switch (err.code) { 
-					case 'INVALID_ARGUMENT':
-						humanMessage = "Something wrong with the input";
-						break;
-					case 4001:
-						humanMessage = "Transaction rejected by metamask/provider";
-						break;
-					default:
-						humanMessage = "Unknown error.  Details:" + err.message;
-						break;
-				}
-				this.setState({lockedLoading: false});
-				this.setTopError(humanMessage);
-		}
-	}
-
 	// TODO Add score selection
 	// TODO Add status on list page
-    renderManagerBlock() {
-    	const buttonText = (this.props.summary.locked) ? "Unlock" : "Lock";
-    	if (this.props.summary.manager != this.state.accounts[0]) { return ''; }
-    	return (
-    		<div>
-    		<p/><p/>
-		 	<h3>Manager zone </h3>
-    		<Button
-    		loading={this.state.lockedLoading} 
-					basic 
-					color="red" 
-					onClick={this.onLockChange}>{buttonText}</Button>
-			</div>
-			);
+    renderManagerButton() {
+    	if (this.props.summary.manager === this.state.accounts[0]) {
+    		return (
+  	  		<div>
+  	  			<p/>
+	    		<Link route={`/squares/${this.props.squareAddress}/manage`}>
+					 		<Button 
+					 			color="red"
+					 			floated="right"
+					 			content="Manage"/>	    					
+			 		</Link>
+		 		</div>);
+    	} else {
+    		return '';
+    	}	
     }
 
 
  
 	renderRows() {
-
-
 		return this.props.rows.map((rowSelections, index) => {
 			return (<SquareRow 
 							key={index}
@@ -220,15 +182,15 @@ class SquaresDetail extends Component {
 			: (<div suppressHydrationWarning>Ethereum wallet not detected (Use Rinkeby Test Network) ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
 
 		return (<Layout>
+		  	{this.renderManagerButton()}
 			<h2>{this.props.summary.competitionName}</h2>
 		  	<h4 suppressHydrationWarning><em>{installText}</em></h4>
-		  	<Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
+			<Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
   			<h3>Stats</h3>
   			{this.renderStatsBlock()}
 			<p/>
 		  	{this.renderSquareGrid()}
 		  	
-		  	{this.renderManagerBlock()}
  		</Layout>);
 	}
 }
