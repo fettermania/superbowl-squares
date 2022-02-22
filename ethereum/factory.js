@@ -5,7 +5,7 @@ import SquareFactory from './build/SquareFactory.json';
 
 const instance = new web3.eth.Contract(
 	JSON.parse(SquareFactory.interface),
-	 '0xd52cE536dA452cda10b3d144248738568541291B' // Rinkeby
+	 '0xd73dE68601e88b924B92fa01764b8739bC7074c9' // Rinkeby
 	);
 
 export default instance;

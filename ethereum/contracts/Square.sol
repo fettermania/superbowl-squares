@@ -5,8 +5,8 @@ pragma solidity ^0.4.17;
 contract SquareFactory {
   address[] public deployedSquares;
   
-  function createSquare(string competitionName, uint squarePrice) public {
-    address newSquare = new Square(competitionName, squarePrice, msg.sender);
+  function createSquare(string competitionName, string homeName, string awayName, uint squarePrice) public {
+    address newSquare = new Square(competitionName, homeName, awayName, squarePrice, msg.sender);
     deployedSquares.push(newSquare);
   }
 
@@ -16,18 +16,22 @@ contract SquareFactory {
 }
 
 contract Square {
-  address public manager;
-  uint public squarePrice;
   string public competitionName;
-
+  string public homeName;
+  string public awayName;
+  uint public squarePrice;
+  address public manager;
+  
   address[100] public selectors;
   bool locked;
   bool completed; 
 
   // note: gloval variable msg auto-provided with any invocation
   // .data, .gas, .sender, .value
-  constructor(string name, uint price, address creator) public {
+  constructor(string name, string home, string away, uint price, address creator) public {
       competitionName = name;
+      homeName = home;
+      awayName = away;
       squarePrice = price;
       manager = creator;
 
@@ -36,10 +40,12 @@ contract Square {
   }
 
   function getSummary() public view returns (
-    string, uint, address, bool, bool) {
+    string, string, string, uint, address, bool, bool) {
 
       return (
           competitionName,
+          homeName,
+          awayName,
           squarePrice,
           manager,
           locked,

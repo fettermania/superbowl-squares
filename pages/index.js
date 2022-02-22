@@ -25,10 +25,12 @@ class SquaresList extends Component {
 		const summaryRaw = await square.methods.getSummary().call();
 		const summary = {
 			competitionName: summaryRaw[0],
-			squarePrice: summaryRaw[1],
-          	manager: summaryRaw[2],
-          	locked: summaryRaw[3],
-          	completed: summaryRaw[4],
+			homeName: summaryRaw[1],
+	        awayName: summaryRaw[2],
+			squarePrice: summaryRaw[3],
+          	manager: summaryRaw[4],
+          	locked: summaryRaw[5],
+          	completed: summaryRaw[6],
           	squareAddress: address
 		}
 		return summary;
@@ -47,7 +49,7 @@ class SquaresList extends Component {
 			if (summary.locked) {
 				icon = <Icon color='red' name='lock'/>;
 			} else if (summary.completed) {
-				icon = <Icon color='grey' name='money'/>
+				icon = <Icon color='grey' name='check'/>
 			} else {
 				icon = <Icon color='green' name='angle right'/>
 			}
@@ -56,10 +58,10 @@ class SquaresList extends Component {
 				meta: icon,
 				description: 
 					(<Link  route={`/squares/${summary.squareAddress}`}>
-			    		 <a>{summary.squarePrice} wei</a>
+			    		 <a>{summary.awayName} at {summary.awayName}</a>
 		    		 </Link>),
 		    	
-				extra: ("Manager " + summary.manager.substring(0,8)),
+				extra: ("Manager " + summary.manager.substring(0,8)) + ", cost: " + summary.squarePrice + " wei",
 				fluid:true
 			  };
 			})

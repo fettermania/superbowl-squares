@@ -44,10 +44,12 @@ class SquaresDetail extends Component {
 		const summaryRaw = await square.methods.getSummary().call();
 		const summary = {
 			competitionName: summaryRaw[0],
-			squarePrice: summaryRaw[1],
-          	manager: summaryRaw[2],
-          	locked: summaryRaw[3],
-      	    completed: summaryRaw[4]
+			homeName: summaryRaw[1],
+			awayName: summaryRaw[2],
+			squarePrice: summaryRaw[3],
+          	manager: summaryRaw[4],
+          	locked: summaryRaw[5],
+      	    completed: summaryRaw[6]
 		}
 
 		// sugar for  { squareSelections : squareSelections}
@@ -101,14 +103,14 @@ class SquaresDetail extends Component {
     	  <Button.Group vertical labeled icon>
 		    <Button icon='user secret' disabled color='red' content='Opponents' />
 		    <Button icon='user' disabled color='blue' content='You' />
-		    <Button icon='chevron down' color='black' content='Rams' />
+		    <Button icon='chevron down' color='black' content='Home' />
 		    </Button.Group>
 		    </Grid.Column>
 		    <Grid.Column width={8}>
     	  <Button.Group vertical labeled icon>
 		    <Button icon='x' disabled color='grey' content='Locked' />
 		    <Button icon='ethereum'  color='green' content='Open' />
-		    <Button icon='chevron left' color='grey' content='Bengals' />
+		    <Button icon='chevron left' color='grey' content='Away' />
 		    </Button.Group>
 		    </Grid.Column>
 		    </Grid>
@@ -205,6 +207,8 @@ class SquaresDetail extends Component {
 		return (<Layout>
 		  	{this.renderManagerButton()}
 			<h2>{this.props.summary.competitionName}</h2>
+			<h3>{this.props.summary.awayName} <em>(Away)</em> at {this.props.summary.homeName} <em>(Home)</em></h3>
+			
 		  	<h4 suppressHydrationWarning><em>{installText}</em></h4>
 			<Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
 		  	<p/>

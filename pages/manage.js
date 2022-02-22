@@ -66,9 +66,11 @@ class SquaresManager extends Component {
 		const summaryRaw = await square.methods.getSummary().call();
 		const summary = {
 			competitionName: summaryRaw[0],
-          	manager: summaryRaw[2],
-		  	locked: summaryRaw[3],
-		  	completed: summaryRaw[4]
+			homeName: summaryRaw[1],
+			awayName: summaryRaw[1],
+          	manager: summaryRaw[4],
+		  	locked: summaryRaw[5],
+		  	completed: summaryRaw[6]
 		}
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, summary};  
@@ -93,8 +95,8 @@ class SquaresManager extends Component {
 		try  {
 			this.setState({errorMessage: '', winnerLoading: true});
 			await square.methods.pickWinner(
-				this.state.homeScore,
-				this.state.awayScore)
+				this.state.homeScore % 10,
+				this.state.awayScore % 10)
 				.send({
 					from: this.state.accounts[0]
 				});

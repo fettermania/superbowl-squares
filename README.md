@@ -66,10 +66,12 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 
 ### Bugs and TODOs
 
-- Web3 is depreacted-is: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3
+- Generally, most of the non-financial state should be moved to a database, not the contract
+- Web3 is depreacted: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3
 - Mobile layout is suboptimal
-- Detect swtiching users
-- Home and away names  
+- Detect swtiching accounts
+- Detect updates in state from "server" 
+- Major bug: should we refund if no clear winner?
 - Show prices in either, not wei?
 
 ### Props

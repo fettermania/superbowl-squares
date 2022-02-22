@@ -11,6 +11,8 @@ class SquaresNew extends Component {
 	state = {
  		squarePrice: '', // user input is usually a string
  		competitionName: '',
+ 		homeName: '',
+ 		awayName: '',
  		errorMessage: '',
  		loading: false
 	};
@@ -27,6 +29,8 @@ class SquaresNew extends Component {
 
 			await factory.methods.createSquare(
 				this.state.competitionName,
+				this.state.homeName,
+				this.state.awayName,
 				this.state.squarePrice)
 				.send({
 					from: accounts[0] // TODO  
@@ -67,6 +71,20 @@ class SquaresNew extends Component {
 							labelPosition="right" 
 							value={this.state.competitionName}
 							onChange={event => this.setState({competitionName: event.target.value})} />
+					</Form.Field>
+					<Form.Field>
+						<label>Home Team Name</label>
+						<Input 
+							labelPosition="right" 
+							value={this.state.homeName}
+							onChange={event => this.setState({homeName: event.target.value})} />
+					</Form.Field>
+					<Form.Field>
+						<label>Away Team Name</label>
+						<Input 
+							labelPosition="right" 
+							value={this.state.awayName}
+							onChange={event => this.setState({awayName: event.target.value})} />
 					</Form.Field>
 					<Form.Field>
 						<label>Square Price</label>
