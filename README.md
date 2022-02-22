@@ -70,7 +70,7 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 - Mobile layout is suboptimal
 - Home and away names  
 - List indicates status
-- Manager zone (incl. score setting)
+- Show page indicates game complete
 
 ### Props
 

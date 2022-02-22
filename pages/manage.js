@@ -16,15 +16,16 @@ class SquaresManager extends Component {
  		awayScore: '',
  		locked: false,
  		accounts: [],
- 		errorMessage: ''
+ 		errorMessage: '',
+ 		lockedLoading: false,
+ 		winnerLoading: false
 	};
 
 	onLockChange = async () => {
 		const square = squaremodel(this.props.squareAddress);
 		try { 
 
-			this.setTopError('');
-			this.setState({lockedLoading: true});
+			this.setState({errorMessage: '', lockedLoading: true});
 
 			await square.methods.setLocked(!this.props.summary.locked)
 				.send({
@@ -32,8 +33,9 @@ class SquaresManager extends Component {
 				});				
 
 			// TODO Just let refresh take care of it
-			this.setState({lockedLoading: false});
-			this.setGamesLockedState(!this.props.summary.locked);
+			this.setState({lockedLoading: false, 
+				locked: !this.props.summary.locked,
+				erroMessage: ''});
 
 			// NOTE: Back to detail page on change
 			// TODO Completed message on detail page
@@ -52,8 +54,7 @@ class SquaresManager extends Component {
 						humanMessage = "Unknown error.  Details:" + err.message;
 						break;
 				}
-				this.setState({lockedLoading: false});
-				this.setTopError(humanMessage);
+				this.setState({errorMessage: humanMessage, lockedLoading: false});
 		}
 	}
 
@@ -80,89 +81,69 @@ class SquaresManager extends Component {
 		if (this.props.summary.manager !== accounts[0]) {
 		 	Router.pushRoute(`/squares/${this.props.squareAddress}`);
 		 } 
-		this.setState({accounts: accounts});
-		this.setGamesLockedState(this.props.summary.locked);
+		this.setState({accounts: accounts, locked: this.props.summary.locked});
 	}
-	
-	setTopError = (errorMessage) => {
-        this.setState({errorMessage: errorMessage});
-    }
-    
-	setGamesLockedState(state) {
-		if (state) {
-			this.setState({errorMessage: 'Games are locked', locked: false});
-		} else {
-			this.setState({errorMessage: '', locked: false});
+	    
+
+	// NOTE: Gotcha - need the arrow function for THIS to work.
+	onPickWinner = async (event) => {
+		event.preventDefault(); // NOTE - prevent HTML1 form submittal
+
+		const square = squaremodel(this.props.squareAddress);
+
+		try  {
+			this.setState({errorMessage: '', winnerLoading: true});
+			await square.methods.pickWinner(
+				this.state.homeScore,
+				this.state.awayScore)
+				.send({
+					from: this.state.accounts[0]
+				});
+
+				// NOTE: Redirect back to index route after completon.
+				Router.pushRoute(`/squares/${this.props.squareAddress}`);
+
+		} catch (err) {
+			let humanMessage;
+
+			// NOTE: Fetterman wrote this sugar.
+			switch (err.code) {
+				case 'INVALID_ARGUMENT':
+					humanMessage = "Something wrong with the input";
+					break;
+				case 4001:
+					humanMessage = "Transaction rejected by metamask/provider";
+					break;
+				default:
+					humanMessage = "Unknown error.  Details:" + err.message;
+			}
+			this.setState({errorMessage: humanMessage, winnerLoading: false});
 		}
+	};
+
+	renderScoreForm(){
+
+		return (
+				<Form onSubmit={this.onPickWinner} error={Boolean(this.state.errorMessage)}>
+					<Form.Field>
+						<label>Home Score</label>
+						<Input 
+							labelPosition="right" 
+							value={this.state.homeScore}
+							onChange={event => this.setState({homeScore: event.target.value})} />
+					</Form.Field>
+					<Form.Field>
+						<label>Away Score</label>
+						<Input 
+							labelPosition="right" 
+							value={this.state.awayScore}
+							onChange={event => this.setState({awayScore: event.target.value})} />
+					</Form.Field>
+					<Message error header="Oops!" content={this.state.errorMessage} />
+					<Button loading={this.state.winnerLoading} primary>Declare Winner</Button>
+				</Form>
+		);
 	}
-
-	// // NOTE: Gotcha - need the arrow function for THIS to work.
-	// onSubmit = async (event) => {
-	// 	event.preventDefault(); // NOTE - prevent HTML1 form submittal
-
-	// 	try  {
-	// 		const accounts = await web3.eth.getAccounts();
-	// 		this.setState({loading: true,
-	// 						errorMessage: ''});
-
-
-	// 		await factory.methods.createSquare(
-	// 			this.state.competitionName,
-	// 			this.state.squarePrice)
-	// 			.send({
-	// 				from: accounts[0] // TODO  
-	// 			});
-
-	// 			// NOTE: Redirect back to index route after completon.
-	// 			Router.pushRoute('/');
-
-	// 	} catch (err) {
-	// 		console.log("GOT ERROR ON CREATE");
-	// 		console.log(JSON.stringify(err));
-	// 		let humanMessage;
-
-	// 		// NOTE: Fetterman wrote this sugar.
-	// 		switch (err.code) {
-	// 			case 'INVALID_ARGUMENT':
-	// 				humanMessage = "Something wrong with the input";
-	// 				break;
-	// 			case 4001:
-	// 				humanMessage = "Transaction rejected by metamask/provider";
-	// 				break;
-	// 			default:
-	// 				humanMessage = "Unknown error.  Details:" + err.message;
-	// 		}
-	// 		this.setState({loading: false});
-	// 		this.setState({errorMessage: humanMessage});
-	// 	}
-	// };
-
-	// render(){
-
-	// 	return (
-	// 		<Layout>
-	// 			<h3>Management for Square: </h3>
-	// 			<Form onSubmit={this.onSubmit} error={Boolean(this.state.errorMessage)}>
-	// 				<Form.Field>
-	// 					<label>Home Score</label>
-	// 					<Input 
-	// 						labelPosition="right" 
-	// 						value={this.state.homeScore}
-	// 						onChange={event => this.setState({homeScore: event.target.value})} />
-	// 				</Form.Field>
-	// 				<Form.Field>
-	// 					<label>Away Score</label>
-	// 					<Input 
-	// 						labelPosition="right" 
-	// 						value={this.state.awayScore}
-	// 						onChange={event => this.setState({awayScore: event.target.value})} />
-	// 				</Form.Field>
-	// 				<Message error header="Oops!" content={this.state.errorMessage} />
-	// 				<Button loading={this.state.loading} primary>Declare Winner</Button>
-	// 			</Form>
-	// 		</Layout>
-	// 	);
-	// }
 
 	renderLockButton() {
 		const buttonText = (this.props.summary.locked) ? "Unlock" : "Lock";
@@ -181,8 +162,8 @@ class SquaresManager extends Component {
 						{this.props.summary.competitionName}
 					</Link>
 				 </h3>
-				 <Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
   				{this.renderLockButton()}
+  				{this.renderScoreForm()}
 				</Layout>
 				);
 	}
