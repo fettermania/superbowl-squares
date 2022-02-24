@@ -58,7 +58,7 @@ class SquaresList extends Component {
 				meta: icon,
 				description: 
 					(<Link  route={`/squares/${summary.squareAddress}`}>
-			    		 <a>{summary.awayName} at {summary.awayName}</a>
+			    		 <a>{summary.awayName} at {summary.homeName}</a>
 		    		 </Link>),
 		    	
 				extra: ("Manager " + summary.manager.substring(0,8)) + ", cost: " + summary.squarePrice + " wei",
