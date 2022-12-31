@@ -51,7 +51,7 @@ Running prod (e.g. on heroku):
 
     $ npm run start
 
-Note that next-routes requires us to run "node servrer.js" instead of "next" or "next start".
+Note that next-routes requires us to run "node server.js" instead of "next" or "next start".
 Perhaps this is because next-routes works outside of next. (not clear)
 
 Running "next" or "next start" seems to disable any functionality of routes.js.
