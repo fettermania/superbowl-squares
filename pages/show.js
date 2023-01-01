@@ -68,8 +68,11 @@ class SquaresDetail extends Component {
 	// TODO Getting accounts here - is that bad?
 	async componentDidMount() {
 		const accounts = await web3.eth.getAccounts();
-		this.setState({accounts: accounts});
+	   const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
+		this.setState({accounts: accounts,
+		   walletDetected: walletDetected});
 		this.setGameProgressState(this.props.summary.locked, this.props.summary.completed);
+
 	}
 
 	setTopError = (errorMessage) => {
@@ -200,7 +203,7 @@ class SquaresDetail extends Component {
 	}
 
 	render () {
-		const installText = (typeof window !== "undefined" && typeof window.ethereum !== "undefined") ?
+	const installText = this.state.walletDetected ?
 			(<div suppressHydrationWarning>Ethereum wallet detected (Use Goerli Test Network) ✅</div>)
 			: (<div suppressHydrationWarning>Ethereum wallet not detected (Use Goerli Test Network) ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
 
@@ -209,7 +212,7 @@ class SquaresDetail extends Component {
 			<h2>{this.props.summary.competitionName}</h2>
 			<h3>{this.props.summary.awayName} <em>(Away)</em> at {this.props.summary.homeName} <em>(Home)</em></h3>
 			
-		  	<h4 suppressHydrationWarning><em>{installText}</em></h4>
+		   <h4><em>{installText}</em></h4>
 			<Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
 		  	<p/>
 		  	{this.renderKey()}

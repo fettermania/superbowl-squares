@@ -36,10 +36,12 @@ class SquaresList extends Component {
 		return summary;
 	}
 	async componentDidMount() {
+		const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
 		const summaries = await Promise.all(
 			this.props.squareAddresses
 				.map(SquaresList.retrieveSummary));
-		this.setState({summaries: summaries});
+		this.setState({summaries: summaries,
+                       walletDetected: walletDetected});
 	}
 
 	// TODO : Disable if locked, or indicate as such	
@@ -69,7 +71,13 @@ class SquaresList extends Component {
 		return <Card.Group items={items} />;
 	}
 	render () {
-		return	<Layout>
+		const installText = this.state.walletDetected ?
+			(<div suppressHydrationWarning><em>Ethereum wallet detected (Use Goerli Test Network)</em> ✅</div>)
+			: (<div suppressHydrationWarning><em>Ethereum wallet not detected (Use Goerli Test Network)</em> ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
+
+ 		return	<Layout>
+		   <h4>{installText}</h4>
+		  	
 		  <div>
 		  		<Link route="/squares/new">
   				 <a> 
@@ -77,6 +85,7 @@ class SquaresList extends Component {
 					 			floated="right"
 					 			content="Create Square"
 					 			icon="add circle"
+					 			disabled={!this.state.walletDetected}
 					 			primary 
 					 		/>	
 				 	  </a> 
