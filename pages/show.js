@@ -201,8 +201,8 @@ class SquaresDetail extends Component {
 
 	render () {
 		const installText = (typeof window !== "undefined" && typeof window.ethereum !== "undefined") ?
-			(<div suppressHydrationWarning>Ethereum wallet detected (Use Rinkeby Test Network) ✅</div>)
-			: (<div suppressHydrationWarning>Ethereum wallet not detected (Use Rinkeby Test Network) ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
+			(<div suppressHydrationWarning>Ethereum wallet detected (Use Goerli Test Network) ✅</div>)
+			: (<div suppressHydrationWarning>Ethereum wallet not detected (Use Goerli Test Network) ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
 
 		return (<Layout>
 		  	{this.renderManagerButton()}
