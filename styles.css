@@ -1,0 +1,9 @@
+
+  .ui.container {
+  	min-width:768px;
+
+/*  	margin-left: 50px !important; 
+  	margin-right: 50px !important; */
+  	/* This hurts for some reason */
+/*    overflow-x: scroll !important; */ 
+  }

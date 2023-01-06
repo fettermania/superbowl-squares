@@ -56,23 +56,34 @@ Perhaps this is because next-routes works outside of next. (not clear)
 
 Running "next" or "next start" seems to disable any functionality of routes.js.
 
+## Code Deploy commands
 
-## Notes
+- git push heroku main && heroku logs -t
+- heroku ps
+- heroku ps:scale web=1 # start single web server
+- heroku ps:scale web=0 # stop web servers
 
-- Mainnet contract: 0x58163bbF45c107A796dE2A9D072441F4E7573aC3
+## Other Details
+- Mainnet (single game) contract : 0x58163bbF45c107A796dE2A9D072441F4E7573aC3  - looks dead
 - HEROKU instructions: https://devcenter.heroku.com/articles/deploying-nodejs
 - Units are in wei.  Typical is 1000000000000000.
-- git push heroku main && heroku logs -t
 
 ### Bugs and TODOs
 
+
+- Mobile layout is suboptimal
+- Add a link to the object on etherscan
+- Somehow keep the url squares.fettermania.com
+- Major bug: should we refund if no clear winner?
 - Generally, most of the non-financial state should be moved to a database, not the contract
 - Web3 is depreacted: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3
-- Mobile layout is suboptimal
-- Detect swtiching accounts
+- Detect swiching accounts
 - Detect updates in state from "server" 
-- Major bug: should we refund if no clear winner?
-- Show prices in either, not wei?
+- Show prices in ether, not wei?
+- Hover to show opponent ID on show.js
+- Note: Interacting with contract (even making selection) on Mainnet seems to be about .02 ether ~= $25, so no go there.
+- How do I open metamask right away when visiting the app?
+- winner icon
 
 ### Props
 
