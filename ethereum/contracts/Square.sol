@@ -22,6 +22,7 @@ contract Square {
   uint public squarePrice;
   address public manager;
   
+  // TODO Test this agasint a map again.
   address[100] public selectors;
   bool locked;
   bool completed; 
@@ -35,7 +36,7 @@ contract Square {
       squarePrice = price;
       manager = creator;
 
-      locked = false;
+      locked = false; // Optimize: Could make these one two-bit value
       completed = false;
   }
 
@@ -53,12 +54,13 @@ contract Square {
           );
   }
 
+  // TODO Make uint8 as well.
   function makeSelection(uint home, uint away) public payable {
       require(msg.value == squarePrice);
       require(!locked);
 
-      require(home >= 0 && home <= 9);
-      require(away >= 0 && away <= 9);
+      require(home <= 9);
+      require(away <= 9);
       require(selectors[home * 10 + away] == 0x0000000000000000000000000000000000000000);
       selectors[home * 10 + away] = msg.sender;
     }
@@ -72,15 +74,26 @@ contract Square {
   }
 
   // note "this" is current contract
-  function pickWinner(uint home, uint away) public onlyManagerCanCall {
-    require(home >= 0 && home <= 9);
-    require(away >= 0 && away <= 9);
+  function pickWinner(uint8 home, uint8 away) public onlyManagerCanCall {
+    require(home <= 9);
+    require(away <= 9);
     require(selectors[home * 10 + away] != 0x0000000000000000000000000000000000000000);
     
     address player = selectors[home * 10 + away];
     player.transfer(address(this).balance);
     locked = false;
     completed = true;
+  }
+
+// TODO Fix this.  Make a smaller number of transactions, and figure out how 
+// the last guy doesn't pay for all of the gas charges.
+  function refundAll() public onlyManagerCanCall {
+    for (uint i = 0; i < 100; i++)
+      if (selectors[i] != 0x0000000000000000000000000000000000000000) {
+        selectors[i].transfer(squarePrice);
+      }
+    locked = false; 
+    completed = true; 
   }
 
   modifier onlyManagerCanCall() {

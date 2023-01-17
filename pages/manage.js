@@ -18,6 +18,7 @@ class SquaresManager extends Component {
  		accounts: [],
  		errorMessage: '',
  		lockedLoading: false,
+ 		refundLoading: false,
  		winnerLoading: false
 	};
 
@@ -55,6 +56,41 @@ class SquaresManager extends Component {
 						break;
 				}
 				this.setState({errorMessage: humanMessage, lockedLoading: false});
+		}
+	}
+
+	onRefund = async () => {
+		const square = squaremodel(this.props.squareAddress);
+		try { 
+			this.setState({errorMessage: '', refundLoading: true});
+
+			await square.methods.refundAll()
+				.send({
+					from: this.state.accounts[0]
+				});				
+
+			// TODO Just let refresh take care of it
+			this.setState({refundLoading: false, 
+				erroMessage: ''});
+
+			// NOTE: Back to detail page on change
+			// TODO Completed message on detail page
+			Router.pushRoute(`/squares/${this.props.squareAddress}`);
+
+		} catch (err) 	{
+				let humanMessage;
+				switch (err.code) { 
+					case 'INVALID_ARGUMENT':
+						humanMessage = "Something wrong with the input";
+						break;
+					case 4001:
+						humanMessage = "Transaction rejected by metamask/provider";
+						break;
+					default:
+						humanMessage = "Unknown error.  Details:" + err.message;
+						break;
+				}
+				this.setState({errorMessage: humanMessage, refundLoading: false});
 		}
 	}
 
@@ -156,6 +192,18 @@ class SquaresManager extends Component {
                                         onClick={this.onLockChange}>{buttonText} </Button>
             );	
 	}
+
+	renderRefundButton() {
+		const buttonText = "Refund"
+        return (
+             <Button
+                loading={this.state.refundLoading} 
+                                        basic 
+                                        color="red" 
+                                        onClick={this.onRefund}>{buttonText} </Button>
+            );	
+	}
+	
 	render() {
 		return (<Layout>
 				<h3>Manager Zone for square:  
@@ -164,6 +212,7 @@ class SquaresManager extends Component {
 					</Link>
 				 </h3>
   				{this.renderLockButton()}
+  				{this.renderRefundButton()}
   				{this.renderScoreForm()}
 				</Layout>
 				);
