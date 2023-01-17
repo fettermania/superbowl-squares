@@ -25,8 +25,9 @@ contract Square {
   // TODO Test this agasint a map again.
   address[100] public selectors;
   bool locked;
-  bool completed; 
+  bool completed;  // TODO make int8
 
+  // TODO add hash and byte8[20] for rows
   // note: gloval variable msg auto-provided with any invocation
   // .data, .gas, .sender, .value
   constructor(string name, string home, string away, uint price, address creator) public {
@@ -37,7 +38,7 @@ contract Square {
       manager = creator;
 
       locked = false; // Optimize: Could make these one two-bit value
-      completed = false;
+      completed = false; // TODO Make completed int8, -1 for no winner, otherwise home * 10 + away
   }
 
   function getSummary() public view returns (
@@ -69,6 +70,7 @@ contract Square {
     return selectors;
   }
 
+ // SetLocked=true reveals the board 
   function setLocked(bool newState) public onlyManagerCanCall {
     locked = newState;
   }
@@ -81,7 +83,7 @@ contract Square {
     
     address player = selectors[home * 10 + away];
     player.transfer(address(this).balance);
-    locked = false;
+    //locked = false; // TODO remove this
     completed = true;
   }
 
@@ -92,7 +94,7 @@ contract Square {
       if (selectors[i] != 0x0000000000000000000000000000000000000000) {
         selectors[i].transfer(squarePrice);
       }
-    locked = false; 
+    //locked = false;  // TODO remove this
     completed = true; 
   }
 

@@ -70,20 +70,32 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 
 ### Bugs and TODOs
 
-
-- Mobile layout is suboptimal
+- Make Squares Random from seed
+  - Principle: If you have the code, the contract, and the ID of the creator, you still can't get the order.
+  - Principle: The order has to be shown to be selected when the squares start.
+  - Principle: The creator needs to know the order.  (Imagine you're making the posterboard in analogue version)
+  - Generate (creator page)
+     - Get timestamp seed
+     - Button: Get timestamp seed, Generate two random 0-9 lists, and an md5.  Note to save the lists.
+     - Spit the lists out to the owner and populate md5 in the create
+  - In solidity: Add a byte8[20] and md5 hash
+  - setLocked() -> startGame(byte8[10], byte8[10]).  Reject if not the same seed.  
+  - locked => gameStarted
+  - Display hash on game page.
+  - Update game page to show correct numbers on row and column.
+  - PickWinner uses row and column, not score.  So update Pick page to set final score, do logic in JS.
+- Show prices in ether, not wei
+- Hover to show opponent ID on show.js
+- Set routes for prod / test and keep there.
+- Finished page: Winner icon, 
 - Add a link to the object on etherscan
 - Somehow keep the url squares.fettermania.com
-- Major bug: should we refund if no clear winner?
-- Generally, most of the non-financial state should be moved to a database, not the contract
-- Web3 is depreacted: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3
-- Detect swiching accounts
-- Detect updates in state from "server" 
-- Show prices in ether, not wei?
-- Hover to show opponent ID on show.js
-- Note: Interacting with contract (even making selection) on Mainnet seems to be about .02 ether ~= $25, so no go there.
-- How do I open metamask right away when visiting the app?
-- winner icon
+- [MAYBE] Make cheaper: Note: Interacting with contract (even making selection) on Mainnet seems to be about .02 ether ~= $25, so no go there.
+- [WON'T DO] Generally, most of the non-financial state should be moved to a database, not the contract
+- [WON'T DO] Web3 is depreacted: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3
+- [WON'T DO] Detect swiching accounts
+- [WON't DO] Detect updates in state from "server" 
+- [WON'T DO] How do I open metamask right away when visiting the app?
 
 ### Props
 
