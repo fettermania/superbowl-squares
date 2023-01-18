@@ -69,19 +69,21 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 - Units are in wei.  Typical is 1000000000000000.
 
 ### Bugs and TODOs
-- 1/18: Where are all my requests coming from?
-- Remember: Build to ensure the client side of the contact is handled.
-- Make Squares (Better idea
-  - (locked == true) --> (locked != 0)
-  - setLocked(bool) -> setLocked()
-  - Use block.timestamp for random seed on create
-  - Return block.lockedTimestamp  in getSummary
+- 1/18: Where are all my requests coming from?  NOTE: Public infura keys often get abused.   Would need a server component to hide.
+- Remember: "npm compile.js" to ensure the client side of the ABI/contract is handled in build/.
+- Make Squares (Better idea)
+  - [DONE] (locked == true) --> (lockedTimestamp != 0)
+  - [DONE] setLocked(bool) -> setLocked()
+  - [DONE] Use block.timestamp for random seed on create
+  - [DONE] Return block.lockedTimestamp  in getSummary
   - Use that seed to generate sequence on client using JS
-  - Make Lock one-way in UI
+  - [DONE] Make Lock one-way in UI
   - Probably write some tests here.
-  - Move completed to int (-1: game incomplete, -2: No winner, 0-99: Row/col)
-  - Store winner in completed
+  - [DONE] Move completed to int (-1: game incomplete, 0-99: Row/col)
+  - [DONE] Store winner in completed
+  - Show winner in show.js
   - Display 0-9 hash on game page
+  - Translate 0-9 winner to which row/col to pick
 - [WON'T DO] Make Squares Random from seed
   - Principle: If you have the code, the contract, and the ID of the creator, you still can't get the order.
   - Principle: The order has to be shown to be selected when the squares start.

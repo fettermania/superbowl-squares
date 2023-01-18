@@ -31,7 +31,10 @@ class SquaresList extends Component {
           	manager: summaryRaw[4],
           	lockedTimestamp: summaryRaw[5],
           	completed: summaryRaw[6],
-          	squareAddress: address
+          	squareAddress: address,
+          	isLocked: summaryRaw[5] > 0,
+          	isCompleted: summaryRaw[6] >= 0
+
 		}
 		return summary;
 	}
@@ -48,7 +51,6 @@ class SquaresList extends Component {
 	renderSquaresList() {	
 		const items = this.state.summaries.map((summary, index) => {
 			let icon;
-			console.log("Summary completed is" + summary.completed);
 			if (summary.lockedTimestamp > 0) {
 				icon = <Icon color='red' name='lock'/>;
 			} else if (summary.completed >= 0) {

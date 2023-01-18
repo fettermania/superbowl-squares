@@ -15,7 +15,8 @@ class SquaresDetail extends Component {
 	state = {
 		accounts: [], // TODO Gross global variable
 		errorMessage: '',
-		locked: false,
+		isCompleted: false,
+		isLocked: false,
 		lockedLoading: false
 	};
 
@@ -48,21 +49,25 @@ class SquaresDetail extends Component {
 			awayName: summaryRaw[2],
 			squarePrice: summaryRaw[3],
           	manager: summaryRaw[4],
-          	locked: summaryRaw[5],
-      	    completed: summaryRaw[6]
+          	lockedTimestamp: summaryRaw[5], // TODO Note: 0 for now locked, otherwise timestamp
+      	    completed: summaryRaw[6], // TODO Note: -1 for not completed, otherwise the winner
+      	    isLocked: summaryRaw[5] > 0,
+       	    isCompleted: summaryRaw[6] >= 0   
 		}
 
+		console.log("summary is");
+		console.log(summaryRaw);
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, squareSelections, rows, summary};  
 	}
 
-	setGameProgressState(locked, completed) {
-		if (completed) {
-			this.setState({errorMessage: 'Contest completed', locked: true, completed: true});
-		} else if (locked) {
-			this.setState({errorMessage: 'Choices are locked', locked: true, completed: false});
+	setGameProgressState(isLocked, isCompleted) {
+		if (isCompleted) {
+			this.setState({errorMessage: 'Contest completed', isLocked: true, isCompleted: true});
+		} else if (isLocked) {
+			this.setState({errorMessage: 'Choices are locked', isLocked: true, isCompleted: false});
 		} else {
-			this.setState({errorMessage: '', locked: false, completed: false});
+			this.setState({errorMessage: '', isLocked: false, isCompleted: false});
 		}
 	}
 	// TODO Getting accounts here - is that bad?
@@ -71,7 +76,7 @@ class SquaresDetail extends Component {
 	   const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
 		this.setState({accounts: accounts,
 		   walletDetected: walletDetected});
-		this.setGameProgressState(this.props.summary.locked, this.props.summary.completed);
+		this.setGameProgressState(this.props.summary.isLocked, this.props.summary.isCompleted);
 
 	}
 
@@ -83,7 +88,7 @@ class SquaresDetail extends Component {
 	// TODO Add status on list page
     renderManagerButton() {
     	if (this.props.summary.manager === this.state.accounts[0]
-    		&& !this.props.summary.completed) {
+    		&& (this.props.summary.completed == -1)) {
     		return (
   	  		<div>
   	  			<p/>
@@ -128,9 +133,8 @@ class SquaresDetail extends Component {
 							row={index}
 							squareAddress={this.props.squareAddress}
 							squarePrice={this.props.summary.squarePrice}
-							locked={this.props.summary.locked}
-							completed={this.props.summary.completed}
-							setTopError={this.setTopError.bind(this)}
+							isLocked={this.props.summary.isLocked}
+							isCompleted={this.props.summary.isCompleted}
 							rowBuyerAddresses={rowSelections}
 							viewerAddress={this.state.accounts[0]}
 							/>);
@@ -138,7 +142,8 @@ class SquaresDetail extends Component {
 	}
 
 	renderSquareGrid() {
-		// TODO Fix this hardcoded nonsnese
+		// TODO Fix index to hidden - 1/18
+		// TODO Fix this hardcoded nonsense
 		const headerContent = Array(10).fill().map(
 			(n, index) => {
 				return <Grid.Column color="grey" key={index}>{index}</Grid.Column>; }

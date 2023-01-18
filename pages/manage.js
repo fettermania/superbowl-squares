@@ -14,28 +14,28 @@ class SquaresManager extends Component {
 	state = {
  		homeScore: '',
  		awayScore: '',
- 		locked: false,
+ 		isLocked: false,
  		accounts: [],
  		errorMessage: '',
  		lockedLoading: false,
- 		refundLoading: false,
  		winnerLoading: false
 	};
 
-	onLockChange = async () => {
+	// TODO: Do we have to getSummary here?
+	onLock = async () => {
 		const square = squaremodel(this.props.squareAddress);
 		try { 
 
 			this.setState({errorMessage: '', lockedLoading: true});
 
-			await square.methods.setLocked(!this.props.summary.locked)
+			await square.methods.setLocked()
 				.send({
 					from: this.state.accounts[0]
 				});				
 
 			// TODO Just let refresh take care of it
 			this.setState({lockedLoading: false, 
-				locked: !this.props.summary.locked,
+				isLocked: true,
 				erroMessage: ''});
 
 			// NOTE: Back to detail page on change
@@ -59,41 +59,6 @@ class SquaresManager extends Component {
 		}
 	}
 
-	onRefund = async () => {
-		const square = squaremodel(this.props.squareAddress);
-		try { 
-			this.setState({errorMessage: '', refundLoading: true});
-
-			await square.methods.refundAll()
-				.send({
-					from: this.state.accounts[0]
-				});				
-
-			// TODO Just let refresh take care of it
-			this.setState({refundLoading: false, 
-				erroMessage: ''});
-
-			// NOTE: Back to detail page on change
-			// TODO Completed message on detail page
-			Router.pushRoute(`/squares/${this.props.squareAddress}`);
-
-		} catch (err) 	{
-				let humanMessage;
-				switch (err.code) { 
-					case 'INVALID_ARGUMENT':
-						humanMessage = "Something wrong with the input";
-						break;
-					case 4001:
-						humanMessage = "Transaction rejected by metamask/provider";
-						break;
-					default:
-						humanMessage = "Unknown error.  Details:" + err.message;
-						break;
-				}
-				this.setState({errorMessage: humanMessage, refundLoading: false});
-		}
-	}
-
 	static async getInitialProps(props) {
 
 		// TODO How can we pass the object instead of just the address?
@@ -105,8 +70,10 @@ class SquaresManager extends Component {
 			homeName: summaryRaw[1],
 			awayName: summaryRaw[1],
           	manager: summaryRaw[4],
-		  	locked: summaryRaw[5],
-		  	completed: summaryRaw[6]
+		  	lockedTimestamp: summaryRaw[5],
+		  	completed: summaryRaw[6],
+		  	isLocked: summaryRaw[5] > 0,
+		  	isCompleted: summaryRaw[6] >= 0
 		}
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, summary};  
@@ -115,10 +82,10 @@ class SquaresManager extends Component {
 	async componentDidMount() {
 		const accounts = await web3.eth.getAccounts();
 		if ((this.props.summary.manager !== accounts[0])
-			|| this.props.summary.completed) {
+			|| (this.props.summary.isCompleted)) {
 		 	Router.pushRoute(`/squares/${this.props.squareAddress}`);
 		 } 
-		this.setState({accounts: accounts, locked: this.props.summary.locked});
+		this.setState({accounts: accounts, isLocked: this.props.summary.isLocked});
 	}
 	    
 
@@ -182,28 +149,19 @@ class SquaresManager extends Component {
 		);
 	}
 
+	// TODO Remove this if already Locked
 	renderLockButton() {
-		const buttonText = (this.props.summary.locked) ? "Unlock" : "Lock";
+		if (this.state.isLocked) { return; }
+		const buttonText = "Lock";
         return (
              <Button
                 loading={this.state.lockedLoading} 
-                                        basic 
+                						basic 
                                         color="red" 
-                                        onClick={this.onLockChange}>{buttonText} </Button>
+                                        onClick={this.onLock}>{buttonText} </Button>
             );	
 	}
 
-	renderRefundButton() {
-		const buttonText = "Refund"
-        return (
-             <Button
-                loading={this.state.refundLoading} 
-                                        basic 
-                                        color="red" 
-                                        onClick={this.onRefund}>{buttonText} </Button>
-            );	
-	}
-	
 	render() {
 		return (<Layout>
 				<h3>Manager Zone for square:  
@@ -212,7 +170,6 @@ class SquaresManager extends Component {
 					</Link>
 				 </h3>
   				{this.renderLockButton()}
-  				{this.renderRefundButton()}
   				{this.renderScoreForm()}
 				</Layout>
 				);
