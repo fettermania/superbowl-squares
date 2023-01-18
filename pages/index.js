@@ -51,10 +51,10 @@ class SquaresList extends Component {
 	renderSquaresList() {	
 		const items = this.state.summaries.map((summary, index) => {
 			let icon;
-			if (summary.lockedTimestamp > 0) {
-				icon = <Icon color='red' name='lock'/>;
-			} else if (summary.completed >= 0) {
+			if (summary.isCompleted) { // completed implies locked
 				icon = <Icon color='grey' name='check'/>
+			} else if (summary.isLocked) {
+				icon = <Icon color='red' name='lock'/>;
 			} else {
 				icon = <Icon color='green' name='angle right'/>
 			}
