@@ -19,3 +19,5 @@ describe ('Campaigns', () => {
 	});
 });
 
+
+var seded

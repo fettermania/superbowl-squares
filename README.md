@@ -69,8 +69,20 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 - Units are in wei.  Typical is 1000000000000000.
 
 ### Bugs and TODOs
-
-- Make Squares Random from seed
+- 1/18: Where are all my requests coming from?
+- Remember: Build to ensure the client side of the contact is handled.
+- Make Squares (Better idea
+  - (locked == true) --> (locked != 0)
+  - setLocked(bool) -> setLocked()
+  - Use block.timestamp for random seed on create
+  - Return block.lockedTimestamp  in getSummary
+  - Use that seed to generate sequence on client using JS
+  - Make Lock one-way in UI
+  - Probably write some tests here.
+  - Move completed to int (-1: game incomplete, -2: No winner, 0-99: Row/col)
+  - Store winner in completed
+  - Display 0-9 hash on game page
+- [WON'T DO] Make Squares Random from seed
   - Principle: If you have the code, the contract, and the ID of the creator, you still can't get the order.
   - Principle: The order has to be shown to be selected when the squares start.
   - Principle: The creator needs to know the order.  (Imagine you're making the posterboard in analogue version)

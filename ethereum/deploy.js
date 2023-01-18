@@ -10,7 +10,8 @@ const provider = new HDWalletProvider(
   process.env.METAMASK_PHRASE,
 //'https://mainnet.infura.io/v3/b2d352d974ab45d8bd72f4af53a01f16' // 2023 - Infura API key
 // 'https://rinkeby.infura.io/v3/b2d352d974ab45d8bd72f4af53a01f16'
- 'https://goerli.infura.io/v3/b2d352d974ab45d8bd72f4af53a01f16' // 2023
+// 'https://goerli.infura.io/v3/b2d352d974ab45d8bd72f4af53a01f16' // 2023
+'https://goerli.infura.io/v3/ff70651fd5594fbaa8937fc612054fa6' // 1/18/2023
   );
 
 const web3 = new Web3(provider);
