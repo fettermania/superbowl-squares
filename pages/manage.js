@@ -6,6 +6,7 @@ import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import web3 from '../ethereum/web3';
+import HiddenAxes from '../lib/hiddenaxes.js';
 
 		    		 
 
@@ -65,15 +66,19 @@ class SquaresManager extends Component {
 		const squareAddress = props.query.address;
 		const square = squaremodel(props.query.address);
 		const summaryRaw = await square.methods.getSummary().call();
+
+		const parsedTimestamp = parseInt(summaryRaw[5]);
+		const parsedCompleted = parseInt(summaryRaw[6]); // TODO - is this coming back a string because uint is uint256?
 		const summary = {
 			competitionName: summaryRaw[0],
 			homeName: summaryRaw[1],
-			awayName: summaryRaw[1],
+			awayName: summaryRaw[2],
+			squarePrice: summaryRaw[3],
           	manager: summaryRaw[4],
-		  	lockedTimestamp: summaryRaw[5],
-		  	completed: summaryRaw[6],
-		  	isLocked: summaryRaw[5] > 0,
-		  	isCompleted: summaryRaw[6] >= 0
+          	lockedTimestamp: parsedTimestamp, // TODO Note: 0 for now locked, otherwise timestamp
+      	    completed: parsedCompleted, // TODO Note: -1 for not completed, otherwise the winner
+      	    isLocked: parsedTimestamp > 0,
+       	    isCompleted: parsedCompleted >= 0   
 		}
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, summary};  
@@ -86,6 +91,9 @@ class SquaresManager extends Component {
 		 	Router.pushRoute(`/squares/${this.props.squareAddress}`);
 		 } 
 		this.setState({accounts: accounts, isLocked: this.props.summary.isLocked});
+		console.log("TODO: Apply hidden axes:")
+		console.log(HiddenAxes(this.props.summary.lockedTimestamp));
+
 	}
 	    
 

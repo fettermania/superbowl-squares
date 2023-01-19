@@ -7,6 +7,7 @@ import squaremodel from '../ethereum/squaremodel';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import web3 from '../ethereum/web3.js';
+import HiddenAxes from '../lib/hiddenaxes.js';
 
 class SquaresDetail extends Component {
 	// TODO move these
@@ -19,6 +20,7 @@ class SquaresDetail extends Component {
 		isLocked: false,
 		lockedLoading: false
 	};
+
 
 	static selectionsTo2D(squareSelections) {
 		var rows = new Array(10);
@@ -37,26 +39,26 @@ class SquaresDetail extends Component {
 	// NOTE Note: getInitialProps is a nextJS thing for server only!
 	// NOTE Use componentDidMount (a react thing)
 	static async getInitialProps(props) {
-
 		const squareAddress = props.query.address;
 		const square = squaremodel(props.query.address);
 		const squareSelections =  await square.methods.getSelectors().call();
 		const rows = SquaresDetail.selectionsTo2D(squareSelections);
 		const summaryRaw = await square.methods.getSummary().call();
+		const parsedTimestamp = parseInt(summaryRaw[5]);
+		const parsedCompleted = parseInt(summaryRaw[6]); // TODO - is this coming back a string because uint is uint256?
 		const summary = {
 			competitionName: summaryRaw[0],
 			homeName: summaryRaw[1],
 			awayName: summaryRaw[2],
 			squarePrice: summaryRaw[3],
           	manager: summaryRaw[4],
-          	lockedTimestamp: summaryRaw[5], // TODO Note: 0 for now locked, otherwise timestamp
-      	    completed: summaryRaw[6], // TODO Note: -1 for not completed, otherwise the winner
-      	    isLocked: summaryRaw[5] > 0,
-       	    isCompleted: summaryRaw[6] >= 0   
+          	lockedTimestamp: parsedTimestamp, // TODO Note: 0 for now locked, otherwise timestamp
+      	    completed: parsedCompleted, // TODO Note: -1 for not completed, otherwise the winner
+      	    isLocked: parsedTimestamp > 0,
+       	    isCompleted: parsedCompleted >= 0   
 		}
 
-		console.log("summary is");
-		console.log(summaryRaw);
+		
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, squareSelections, rows, summary};  
 	}
@@ -69,6 +71,7 @@ class SquaresDetail extends Component {
 		} else {
 			this.setState({errorMessage: '', isLocked: false, isCompleted: false});
 		}
+
 	}
 	// TODO Getting accounts here - is that bad?
 	async componentDidMount() {
@@ -77,6 +80,8 @@ class SquaresDetail extends Component {
 		this.setState({accounts: accounts,
 		   walletDetected: walletDetected});
 		this.setGameProgressState(this.props.summary.isLocked, this.props.summary.isCompleted);
+		console.log("TODO: Apply hidden axes:")
+		console.log(HiddenAxes(this.props.summary.lockedTimestamp));
 
 	}
 
