@@ -72,11 +72,14 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 - 1/18: Where are all my requests coming from?  NOTE: Public infura keys often get abused.   Would need a server component to hide.
 - Remember: "npm compile.js" to ensure the client side of the ABI/contract is handled in build/.
 - Make Squares (Better idea)
+  - Principle: Code and Contract are there for everyone to see and behind no servers.
+  - Principle: True values of columns and rows are hidden during buying (otherwise value unequal)
+  - Principle: Even the creator of the grid can't know the values before locking the scoring.
   - [DONE] (locked == true) --> (lockedTimestamp != 0)
   - [DONE] setLocked(bool) -> setLocked()
-  - [DONE] Use block.timestamp for random seed on create
+  - [DONE] Use block.timestamp for  random seed on create
   - [DONE] Return block.lockedTimestamp  in getSummary
-  - Use that seed to generate sequence on client using JS
+  - [DONE] Use that seed to generate sequence on client using JS
   - [DONE] Make Lock one-way in UI
   - Probably write some tests here.
   - [DONE] Move completed to int (-1: game incomplete, 0-99: Row/col)

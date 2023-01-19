@@ -46,6 +46,13 @@ class SquaresDetail extends Component {
 		const summaryRaw = await square.methods.getSummary().call();
 		const parsedTimestamp = parseInt(summaryRaw[5]);
 		const parsedCompleted = parseInt(summaryRaw[6]); // TODO - is this coming back a string because uint is uint256?
+		var hiddenAxes;
+		if (parsedTimestamp == 0) {
+			hiddenAxes =  [Array(10).fill('?'), Array(10).fill('?')];
+		} else {
+			hiddenAxes = HiddenAxes(parsedTimestamp);
+
+		}
 		const summary = {
 			competitionName: summaryRaw[0],
 			homeName: summaryRaw[1],
@@ -55,7 +62,8 @@ class SquaresDetail extends Component {
           	lockedTimestamp: parsedTimestamp, // TODO Note: 0 for now locked, otherwise timestamp
       	    completed: parsedCompleted, // TODO Note: -1 for not completed, otherwise the winner
       	    isLocked: parsedTimestamp > 0,
-       	    isCompleted: parsedCompleted >= 0   
+       	    isCompleted: parsedCompleted >= 0,
+       	    hiddenAxes: hiddenAxes 
 		}
 
 		
@@ -135,11 +143,12 @@ class SquaresDetail extends Component {
 		return this.props.rows.map((rowSelections, index) => {
 			return (<SquareRow 
 							key={index}
-							row={index}
+							row={this.props.summary.hiddenAxes[0][index]}
 							squareAddress={this.props.squareAddress}
 							squarePrice={this.props.summary.squarePrice}
 							isLocked={this.props.summary.isLocked}
 							isCompleted={this.props.summary.isCompleted}
+							setTopError={this.setTopError.bind(this)}
 							rowBuyerAddresses={rowSelections}
 							viewerAddress={this.state.accounts[0]}
 							/>);
@@ -151,7 +160,7 @@ class SquaresDetail extends Component {
 		// TODO Fix this hardcoded nonsense
 		const headerContent = Array(10).fill().map(
 			(n, index) => {
-				return <Grid.Column color="grey" key={index}>{index}</Grid.Column>; }
+				return <Grid.Column color="grey" key={index}>{this.props.summary.hiddenAxes[1][index]}</Grid.Column>; }
 				);
 
 		return (
