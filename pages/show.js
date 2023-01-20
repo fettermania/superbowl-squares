@@ -7,7 +7,7 @@ import squaremodel from '../ethereum/squaremodel';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import web3 from '../ethereum/web3.js';
-import HiddenAxes from '../lib/hiddenaxes.js';
+import {indexToLabelFromSeed, labelToIndexFromSeed} from '../lib/hiddenaxes.js';
 
 class SquaresDetail extends Component {
 	// TODO move these
@@ -50,7 +50,7 @@ class SquaresDetail extends Component {
 		if (parsedTimestamp == 0) {
 			hiddenAxes =  [Array(10).fill('?'), Array(10).fill('?')];
 		} else {
-			hiddenAxes = HiddenAxes(parsedTimestamp);
+			hiddenAxes = indexToLabelFromSeed(parsedTimestamp);
 
 		}
 		const summary = {
@@ -88,9 +88,6 @@ class SquaresDetail extends Component {
 		this.setState({accounts: accounts,
 		   walletDetected: walletDetected});
 		this.setGameProgressState(this.props.summary.isLocked, this.props.summary.isCompleted);
-		console.log("TODO: Apply hidden axes:")
-		console.log(HiddenAxes(this.props.summary.lockedTimestamp));
-
 	}
 
 	setTopError = (errorMessage) => {

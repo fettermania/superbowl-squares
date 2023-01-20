@@ -6,7 +6,7 @@ import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import web3 from '../ethereum/web3';
-import HiddenAxes from '../lib/hiddenaxes.js';
+import {indexToLabelFromSeed, labelToIndexFromSeed} from '../lib/hiddenaxes.js';
 
 		    		 
 
@@ -91,9 +91,6 @@ class SquaresManager extends Component {
 		 	Router.pushRoute(`/squares/${this.props.squareAddress}`);
 		 } 
 		this.setState({accounts: accounts, isLocked: this.props.summary.isLocked});
-		console.log("TODO: Apply hidden axes:")
-		console.log(HiddenAxes(this.props.summary.lockedTimestamp));
-
 	}
 	    
 
@@ -101,13 +98,19 @@ class SquaresManager extends Component {
 	onPickWinner = async (event) => {
 		event.preventDefault(); // NOTE - prevent HTML1 form submittal
 
+		// TODO Probably need some error checking here.
+		var squareFromScoresMappings = labelToIndexFromSeed(this.props.summary.lockedTimestamp);
+		var homeIndex = squareFromScoresMappings[0][this.state.homeScore % 10];
+		var awayIndex = squareFromScoresMappings[1][this.state.awayScore % 10];
+		
+		
 		const square = squaremodel(this.props.squareAddress);
 
 		try  {
 			this.setState({errorMessage: '', winnerLoading: true});
 			await square.methods.pickWinner(
-				this.state.homeScore % 10,
-				this.state.awayScore % 10)
+				homeIndex,
+				awayIndex)
 				.send({
 					from: this.state.accounts[0]
 				});
