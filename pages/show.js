@@ -138,12 +138,13 @@ class SquaresDetail extends Component {
   		 );
     }
 
- 
+
 	renderRows() {
 		return this.props.rows.map((rowSelections, index) => {
 			return (<SquareRow 
 							key={index}
-							row={this.props.summary.hiddenAxes[0][index]}
+							row={index}
+							displayRow={this.props.summary.hiddenAxes[0][index]}
 							squareAddress={this.props.squareAddress}
 							squarePrice={this.props.summary.squarePrice}
 							isLocked={this.props.summary.isLocked}
@@ -156,8 +157,7 @@ class SquaresDetail extends Component {
 	}
 
 	renderSquareGrid() {
-		// TODO Fix index to hidden - 1/18
-		// TODO Fix this hardcoded nonsense
+		// TODO LATER Fix this hardcoded 10 nonsense
 		const headerContent = Array(10).fill().map(
 			(n, index) => {
 				return <Grid.Column color="grey" key={index}>{this.props.summary.hiddenAxes[1][index]}</Grid.Column>; }

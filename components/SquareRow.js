@@ -26,7 +26,7 @@ class SquareRow extends Component {
 			// COLOR: Home column
 			<Grid.Row >
 				<Grid.Column color="black">
-					{this.props.row}
+					{this.props.displayRow}
 				</Grid.Column>
 				{rowContent}
 
