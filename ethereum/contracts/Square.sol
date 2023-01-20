@@ -81,7 +81,8 @@ contract Square {
   function pickWinner(uint8 homeRow, uint8 awayCol) public onlyManagerCanCall {
     require(homeRow <= 9);
     require(awayCol <= 9);
-    require(completed == -1);
+    require(completed == -1); // Must be unfinished
+    require(lockedTimestamp > 0); // Must be locked (and thus having scores shown)
 
     if(selectors[homeRow * 10 + awayCol] == 0x0000000000000000000000000000000000000000) {
       // Refund case
