@@ -155,7 +155,8 @@ class SquaresManager extends Component {
 							onChange={event => this.setState({awayScore: event.target.value})} />
 					</Form.Field>
 					<Message error header="Oops!" content={this.state.errorMessage} />
-					<Button loading={this.state.winnerLoading} primary>Declare Winner</Button>
+					<Button loading={this.state.winnerLoading} primary 
+					         disabled={!(this.props.summary.isLocked)}>Declare Winner</Button>
 				</Form>
 		);
 	}
@@ -169,6 +170,7 @@ class SquaresManager extends Component {
                 loading={this.state.lockedLoading} 
                 						basic 
                                         color="red" 
+                                        disabled={this.props.summary.isLocked}
                                         onClick={this.onLock}>{buttonText} </Button>
             );	
 	}

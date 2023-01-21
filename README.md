@@ -85,7 +85,7 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
   - [DONE] Move completed to int (-1: game incomplete, 0-99: Row/col)
   - [DONE] Store winner in completed
   - Show winner in show.js
-  - Only Show Lock, disable Declare and vice versa on manager page dpeending on condition
+  - [DONE] Only Show Lock or Declare winner on manager page on respective conditions !locked, locked
   - [DONE] Display 0-9 re-mapping on game page
   - [DONE] Translate 0-9 winner to which row/col to pick on manager page
 - [WON'T DO] Make Squares Random from seed
