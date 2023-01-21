@@ -5,7 +5,7 @@ import SquareFactory from './build/SquareFactory.json';
 
 const instance = new web3.eth.Contract(
 	JSON.parse(SquareFactory.interface),
-		'0x834733b008B45feA972B47FeffCB6b97eC5890Cc' // 1/19
+		'0xdB09Fa4d5f58c6CC467E150f936504202d39C919'
 	);
 
 export default instance;

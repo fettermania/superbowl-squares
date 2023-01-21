@@ -79,6 +79,9 @@ class SquaresDetail extends Component {
 			var homeScore = this.props.summary.hiddenAxes[0][winnerHomeIndex];
 			var awayScore = this.props.summary.hiddenAxes[1][winnerAwayIndex];
 			var winnerAddr = this.props.squareSelections[winnerHomeIndex * 10 + winnerAwayIndex];		
+			if (winnerAddr == "0x0000000000000000000000000000000000000000") {
+				winnerAddr = "None (purchases refunded)."
+			}
 			this.setState({errorMessage: 'Contest completed.  Home score end: ' + homeScore+ ', Away Score end: ' + awayScore + ', Winner: ' + winnerAddr, 
 				isLocked: true, isCompleted: true});
 		} else if (isLocked) {
