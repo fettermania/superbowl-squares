@@ -7,6 +7,7 @@ import squaremodel from '../ethereum/squaremodel';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import web3 from '../ethereum/web3.js';
+import {indexToLabelFromSeed, labelToIndexFromSeed} from '../lib/hiddenaxes.js';
 
 class SquaresDetail extends Component {
 	// TODO move these
@@ -15,9 +16,11 @@ class SquaresDetail extends Component {
 	state = {
 		accounts: [], // TODO Gross global variable
 		errorMessage: '',
-		locked: false,
+		isCompleted: false,
+		isLocked: false,
 		lockedLoading: false
 	};
+
 
 	static selectionsTo2D(squareSelections) {
 		var rows = new Array(10);
@@ -36,34 +39,54 @@ class SquaresDetail extends Component {
 	// NOTE Note: getInitialProps is a nextJS thing for server only!
 	// NOTE Use componentDidMount (a react thing)
 	static async getInitialProps(props) {
-
 		const squareAddress = props.query.address;
 		const square = squaremodel(props.query.address);
 		const squareSelections =  await square.methods.getSelectors().call();
 		const rows = SquaresDetail.selectionsTo2D(squareSelections);
 		const summaryRaw = await square.methods.getSummary().call();
+		const parsedTimestamp = parseInt(summaryRaw[5]);
+		const parsedCompleted = parseInt(summaryRaw[6]); // TODO - is this coming back a string because uint is uint256?
+		var hiddenAxes;
+		if (parsedTimestamp == 0) {
+			hiddenAxes =  [Array(10).fill('?'), Array(10).fill('?')];
+		} else {
+			hiddenAxes = indexToLabelFromSeed(parsedTimestamp);
+
+		}
 		const summary = {
 			competitionName: summaryRaw[0],
 			homeName: summaryRaw[1],
 			awayName: summaryRaw[2],
 			squarePrice: summaryRaw[3],
           	manager: summaryRaw[4],
-          	locked: summaryRaw[5],
-      	    completed: summaryRaw[6]
+          	lockedTimestamp: parsedTimestamp, // TODO Note: 0 for now locked, otherwise timestamp
+      	    completed: parsedCompleted, // TODO Note: -1 for not completed, otherwise the winner
+      	    isLocked: parsedTimestamp > 0,
+       	    isCompleted: parsedCompleted >= 0,
+       	    hiddenAxes: hiddenAxes 
 		}
 
+		
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, squareSelections, rows, summary};  
 	}
 
-	setGameProgressState(locked, completed) {
-		if (completed) {
-			this.setState({errorMessage: 'Contest completed', locked: true, completed: true});
-		} else if (locked) {
-			this.setState({errorMessage: 'Choices are locked', locked: true, completed: false});
+	setGameProgressState(isLocked, isCompleted) {
+		if (isCompleted) {
+			var winnerHomeIndex = Math.trunc(this.props.summary.completed / 10);
+			var winnerAwayIndex = Math.trunc(this.props.summary.completed % 10);
+			
+			var homeScore = this.props.summary.hiddenAxes[0][winnerHomeIndex];
+			var awayScore = this.props.summary.hiddenAxes[1][winnerAwayIndex];
+			var winnerAddr = this.props.squareSelections[winnerHomeIndex * 10 + winnerAwayIndex];		
+			this.setState({errorMessage: 'Contest completed.  Home score end: ' + homeScore+ ', Away Score end: ' + awayScore + ', Winner: ' + winnerAddr, 
+				isLocked: true, isCompleted: true});
+		} else if (isLocked) {
+			this.setState({errorMessage: 'Choices are locked', isLocked: true, isCompleted: false});
 		} else {
-			this.setState({errorMessage: '', locked: false, completed: false});
+			this.setState({errorMessage: '', isLocked: false, isCompleted: false});
 		}
+
 	}
 	// TODO Getting accounts here - is that bad?
 	async componentDidMount() {
@@ -71,8 +94,7 @@ class SquaresDetail extends Component {
 	   const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
 		this.setState({accounts: accounts,
 		   walletDetected: walletDetected});
-		this.setGameProgressState(this.props.summary.locked, this.props.summary.completed);
-
+		this.setGameProgressState(this.props.summary.isLocked, this.props.summary.isCompleted);
 	}
 
 	setTopError = (errorMessage) => {
@@ -83,7 +105,7 @@ class SquaresDetail extends Component {
 	// TODO Add status on list page
     renderManagerButton() {
     	if (this.props.summary.manager === this.state.accounts[0]
-    		&& !this.props.summary.completed) {
+    		&& (this.props.summary.completed == -1)) {
     		return (
   	  		<div>
   	  			<p/>
@@ -120,16 +142,17 @@ class SquaresDetail extends Component {
   		 );
     }
 
- 
+
 	renderRows() {
 		return this.props.rows.map((rowSelections, index) => {
 			return (<SquareRow 
 							key={index}
 							row={index}
+							displayRow={this.props.summary.hiddenAxes[0][index]}
 							squareAddress={this.props.squareAddress}
 							squarePrice={this.props.summary.squarePrice}
-							locked={this.props.summary.locked}
-							completed={this.props.summary.completed}
+							isLocked={this.props.summary.isLocked}
+							isCompleted={this.props.summary.isCompleted}
 							setTopError={this.setTopError.bind(this)}
 							rowBuyerAddresses={rowSelections}
 							viewerAddress={this.state.accounts[0]}
@@ -138,10 +161,10 @@ class SquaresDetail extends Component {
 	}
 
 	renderSquareGrid() {
-		// TODO Fix this hardcoded nonsnese
+		// TODO LATER Fix this hardcoded 10 nonsense
 		const headerContent = Array(10).fill().map(
 			(n, index) => {
-				return <Grid.Column color="grey" key={index}>{index}</Grid.Column>; }
+				return <Grid.Column color="grey" key={index}>{this.props.summary.hiddenAxes[1][index]}</Grid.Column>; }
 				);
 
 		return (

@@ -69,35 +69,28 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 - Units are in wei.  Typical is 1000000000000000.
 
 ### Bugs and TODOs
-- 1/18: Where are all my requests coming from?
-- Remember: Build to ensure the client side of the contact is handled.
-- Make Squares (Better idea
-  - (locked == true) --> (locked != 0)
-  - setLocked(bool) -> setLocked()
-  - Use block.timestamp for random seed on create
-  - Return block.lockedTimestamp  in getSummary
-  - Use that seed to generate sequence on client using JS
-  - Make Lock one-way in UI
-  - Probably write some tests here.
-  - Move completed to int (-1: game incomplete, -2: No winner, 0-99: Row/col)
-  - Store winner in completed
-  - Display 0-9 hash on game page
-- [WON'T DO] Make Squares Random from seed
-  - Principle: If you have the code, the contract, and the ID of the creator, you still can't get the order.
-  - Principle: The order has to be shown to be selected when the squares start.
-  - Principle: The creator needs to know the order.  (Imagine you're making the posterboard in analogue version)
-  - Generate (creator page)
-     - Get timestamp seed
-     - Button: Get timestamp seed, Generate two random 0-9 lists, and an md5.  Note to save the lists.
-     - Spit the lists out to the owner and populate md5 in the create
-  - In solidity: Add a byte8[20] and md5 hash
-  - setLocked() -> startGame(byte8[10], byte8[10]).  Reject if not the same seed.  
-  - locked => gameStarted
-  - Display hash on game page.
-  - Update game page to show correct numbers on row and column.
-  - PickWinner uses row and column, not score.  So update Pick page to set final score, do logic in JS.
-- Show prices in ether, not wei
+- 1/18: Where are all my requests coming from?  NOTE: Public infura keys often get abused.   Would need a server component to hide.
+- Remember: "npm compile.js" to ensure the client side of the ABI/contract is handled in build/.
+- Make Squares (Better idea)
+  - Principle: Code and Contract are there for everyone to see and behind no servers.
+  - Principle: True values of columns and rows are hidden during buying (otherwise value unequal)
+  - Principle: Even the creator of the grid can't know the values before locking the scoring.
+  - [DONE] (locked == true) --> (lockedTimestamp != 0)
+  - [DONE] setLocked(bool) -> setLocked()
+  - [DONE] Use block.timestamp for  random seed on create
+  - [DONE] Return block.lockedTimestamp  in getSummary
+  - [DONE] Use that seed to generate sequence on client using JS
+  - [DONE] Make Lock one-way in UI
+  - [DONE] Move completed to int (-1: game incomplete, 0-99: Row/col)
+  - [DONE] Store winner in completed
+  - [DONE] Show basic winner in show.js
+  - [DONE] Only Show Lock or Declare winner on manager page on respective conditions !locked, locked
+  - [DONE] Display 0-9 re-mapping on game page
+  - [DONE] Translate 0-9 winner to which row/col to pick on manager page
 - Hover to show opponent ID on show.js
+- Store actual final scores, refactor completed away somehow (two bytes)
+- Highlight winner in a better way.
+- Probably write some tests here.
 - Set routes for prod / test and keep there.
 - Finished page: Winner icon, 
 - Add a link to the object on etherscan
