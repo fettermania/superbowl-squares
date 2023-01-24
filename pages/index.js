@@ -15,7 +15,8 @@ class SquaresList extends Component {
 	// NOTE: getInitialProps is next js specific, for initial server-side data load
 	// Can't use componentDidMount fpr this!
 	static async getInitialProps() {
-		const squareAddresses = await factory.methods.getDeployedSquares().call();
+		const myFactory = factory('0xD1339a18eD8f8479628c06294C21180Ba60C4B5e');
+		const squareAddresses = await myFactory.methods.getDeployedSquares().call();
 
 		return {squareAddresses};
 	}

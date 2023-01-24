@@ -27,7 +27,9 @@ class SquaresNew extends Component {
 							errorMessage: ''});
 
 
-			await factory.methods.createSquare(
+			const myFactory = factory('0xD1339a18eD8f8479628c06294C21180Ba60C4B5e');
+
+			await myFactory.methods.createSquare(
 				this.state.competitionName,
 				this.state.homeName,
 				this.state.awayName,
