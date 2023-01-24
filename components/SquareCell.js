@@ -21,7 +21,6 @@ class SquareCell extends Component {
 
 		const square = squaremodel(this.props.squareAddress);
 		try { 
-
 			this.setState({loading: true});
 			this.props.setTopError('');
 
@@ -66,7 +65,7 @@ class SquareCell extends Component {
 		} else if (this.props.isLocked || this.props.isCompleted) {
 			button = <Button disabled icon color="grey"><Icon name='x'/></Button>
 		} else {
-			button = <Button icon loading={this.state.loading} icon color="green" onClick={this.onPurchase}>
+			button = <Button icon loading={this.state.loading} basic icon color="green" onClick={this.onPurchase}>
 				<Icon name='ethereum'/></Button>
 		}
 		return (<Grid.Column width={1} >

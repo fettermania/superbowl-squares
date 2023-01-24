@@ -143,7 +143,7 @@ class SquaresDetail extends Component {
 		    <Grid.Column width={8}>
     	  <Button.Group vertical labeled icon>
 		    <Button icon='x' disabled color='grey' content='Locked' />
-		    <Button icon='ethereum'  color='green' content='Open' />
+		    <Button icon='ethereum'  basic color='green' content='Open' />
 		    <Button icon='chevron left' color='grey' content='Away' />
 		    </Button.Group>
 		    </Grid.Column>
