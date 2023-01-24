@@ -16,15 +16,15 @@ contract SquareFactory {
 }
 
 contract Square {
-  string public competitionName;
-  string public homeName;
-  string public awayName;
-  uint public squarePrice;
-  address public manager;
+  string competitionName;
+  string homeName;
+  string awayName;
+  uint squarePrice;
+  address manager;
   
   uint lockedTimestamp; // Locked if this is not zero.
-  uint8 homeScoreFinal; // TODO change to "Winner" or something.  Indicates winner cell, or -1 (not completed)
-  uint8 awayScoreFinal;
+  uint8 homeScore; // TODO change to "Winner" or something.  Indicates winner cell, or -1 (not completed)
+  uint8 awayScore;
   bool isCompleted;
 
   // TODO Test this against a map again.
@@ -43,9 +43,9 @@ contract Square {
       //isCompleted = false; // dfault
   }
 
+// TODO remove this 1/23
   function getSummary() public view returns (
-    string, string, string, uint, address, uint, uint8, uint8, bool) {
-
+    string, string, string, uint, address, uint, uint8, uint8, bool, address[100] memory) {
       return (
           competitionName,
           homeName,
@@ -53,13 +53,13 @@ contract Square {
           squarePrice,
           manager,
           lockedTimestamp, // TODO Added
-          homeScoreFinal,
-          awayScoreFinal,
-          isCompleted
+          homeScore,
+          awayScore,
+          isCompleted, 
+          selectors
           );
   }
 
-  // TODO Make uint8 as well.
   function makeSelection(uint8 homeRow, uint8 awayCol) public payable {
       require(msg.value == squarePrice);
       require(lockedTimestamp == 0);
@@ -70,10 +70,6 @@ contract Square {
       selectors[homeRow * 10 + awayCol] = msg.sender;
     }
 
-  function getSelectors() public view returns (address[100] memory) {
-    return selectors;
-  }
-
  // SetLocked=true reveals the board 
   function setLocked() public onlyManagerCanCall {
    lockedTimestamp = block.timestamp;
@@ -82,7 +78,7 @@ contract Square {
   // TODO Ensure picking ROW and COL, not scores
   // note "this" is current contract
   // TODO Is repeating the array index logic cheaper than storing?
-  function submitScore(uint8 winnerHomeRow, uint8 winnerAwayCol, uint8 homeScore, uint8 awayScore) public onlyManagerCanCall {
+  function submitScore(uint8 winnerHomeRow, uint8 winnerAwayCol, uint8 homeScoreFinal, uint8 awayScoreFinal) public onlyManagerCanCall {
     require(winnerHomeRow <= 9);
     require(winnerAwayCol <= 9);
     require(isCompleted == false); // Must be unfinished
@@ -101,8 +97,8 @@ contract Square {
       player.transfer(address(this).balance);
     }
 
-    homeScoreFinal = homeScore;
-    awayScoreFinal = awayScore;
+    homeScore = homeScoreFinal;
+    awayScore = awayScoreFinal;
     isCompleted = true;
   }
 

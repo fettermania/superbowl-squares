@@ -41,17 +41,20 @@ class SquaresDetail extends Component {
 	static async getInitialProps(props) {
 		const squareAddress = props.query.address;
 		const square = squaremodel(props.query.address);
-		const squareSelections =  await square.methods.getSelectors().call();
-		const rows = SquaresDetail.selectionsTo2D(squareSelections);
 		const summaryRaw = await square.methods.getSummary().call();
+
 		const parsedTimestamp = parseInt(summaryRaw[5]);
 		var hiddenAxes;
 		if (parsedTimestamp == 0) {
 			hiddenAxes =  [Array(10).fill('?'), Array(10).fill('?')];
 		} else {
 			hiddenAxes = positionToScoreFromSeed(parsedTimestamp);
-
 		}
+
+		const squareSelections = summaryRaw[9];
+		const rows = SquaresDetail.selectionsTo2D(squareSelections);
+		
+
 		const summary = {
 			competitionName: summaryRaw[0],
 			homeName: summaryRaw[1],
