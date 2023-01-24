@@ -6,7 +6,7 @@ import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import web3 from '../ethereum/web3';
-import {indexToLabelFromSeed, labelToIndexFromSeed} from '../lib/hiddenaxes.js';
+import {positionToScoreFromSeed, scoreToPositionFromSeed} from '../lib/hiddenaxes.js';
 
 		    		 
 
@@ -68,7 +68,6 @@ class SquaresManager extends Component {
 		const summaryRaw = await square.methods.getSummary().call();
 
 		const parsedTimestamp = parseInt(summaryRaw[5]);
-		const parsedCompleted = parseInt(summaryRaw[6]); // TODO - is this coming back a string because uint is uint256?
 		const summary = {
 			competitionName: summaryRaw[0],
 			homeName: summaryRaw[1],
@@ -76,9 +75,10 @@ class SquaresManager extends Component {
 			squarePrice: summaryRaw[3],
           	manager: summaryRaw[4],
           	lockedTimestamp: parsedTimestamp, // TODO Note: 0 for now locked, otherwise timestamp
-      	    completed: parsedCompleted, // TODO Note: -1 for not completed, otherwise the winner
       	    isLocked: parsedTimestamp > 0,
-       	    isCompleted: parsedCompleted >= 0   
+			homeScore: summaryRaw[6],
+          	awayScore: summaryRaw[7],          	
+          	isCompleted: summaryRaw[8]  
 		}
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, summary};  
@@ -95,22 +95,24 @@ class SquaresManager extends Component {
 	    
 
 	// NOTE: Gotcha - need the arrow function for THIS to work.
-	onPickWinner = async (event) => {
+	onSubmitScore = async (event) => {
 		event.preventDefault(); // NOTE - prevent HTML1 form submittal
 
 		// TODO Probably need some error checking here.
-		var squareFromScoresMappings = labelToIndexFromSeed(this.props.summary.lockedTimestamp);
-		var homeIndex = squareFromScoresMappings[0][this.state.homeScore % 10];
-		var awayIndex = squareFromScoresMappings[1][this.state.awayScore % 10];
+		var positionFromScoresMappings = scoreToPositionFromSeed(this.props.summary.lockedTimestamp);
+		var homeIndex = positionFromScoresMappings[0][this.state.homeScore % 10];
+		var awayIndex = positionFromScoresMappings[1][this.state.awayScore % 10];
 		
 		
 		const square = squaremodel(this.props.squareAddress);
 
 		try  {
 			this.setState({errorMessage: '', winnerLoading: true});
-			await square.methods.pickWinner(
+			await square.methods.submitScore(
 				homeIndex,
-				awayIndex)
+				awayIndex,
+				this.state.homeScore,
+				this.state.awayScore)
 				.send({
 					from: this.state.accounts[0]
 				});
@@ -139,7 +141,7 @@ class SquaresManager extends Component {
 	renderScoreForm(){
 
 		return (
-				<Form onSubmit={this.onPickWinner} error={Boolean(this.state.errorMessage)}>
+				<Form onSubmit={this.onSubmitScore} error={Boolean(this.state.errorMessage)}>
 					<Form.Field>
 						<label>Home Score</label>
 						<Input 
@@ -164,7 +166,7 @@ class SquaresManager extends Component {
 	// TODO Remove this if already Locked
 	renderLockButton() {
 		if (this.state.isLocked) { return; }
-		const buttonText = "Lock";
+		const buttonText = "Lock and Reveal Grid";
         return (
              <Button
                 loading={this.state.lockedLoading} 

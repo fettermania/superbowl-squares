@@ -7,7 +7,7 @@ import squaremodel from '../ethereum/squaremodel';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import web3 from '../ethereum/web3.js';
-import {indexToLabelFromSeed, labelToIndexFromSeed} from '../lib/hiddenaxes.js';
+import {positionToScoreFromSeed, scoreToPositionFromSeed} from '../lib/hiddenaxes.js';
 
 class SquaresDetail extends Component {
 	// TODO move these
@@ -45,12 +45,11 @@ class SquaresDetail extends Component {
 		const rows = SquaresDetail.selectionsTo2D(squareSelections);
 		const summaryRaw = await square.methods.getSummary().call();
 		const parsedTimestamp = parseInt(summaryRaw[5]);
-		const parsedCompleted = parseInt(summaryRaw[6]); // TODO - is this coming back a string because uint is uint256?
 		var hiddenAxes;
 		if (parsedTimestamp == 0) {
 			hiddenAxes =  [Array(10).fill('?'), Array(10).fill('?')];
 		} else {
-			hiddenAxes = indexToLabelFromSeed(parsedTimestamp);
+			hiddenAxes = positionToScoreFromSeed(parsedTimestamp);
 
 		}
 		const summary = {
@@ -60,10 +59,12 @@ class SquaresDetail extends Component {
 			squarePrice: summaryRaw[3],
           	manager: summaryRaw[4],
           	lockedTimestamp: parsedTimestamp, // TODO Note: 0 for now locked, otherwise timestamp
-      	    completed: parsedCompleted, // TODO Note: -1 for not completed, otherwise the winner
       	    isLocked: parsedTimestamp > 0,
-       	    isCompleted: parsedCompleted >= 0,
-       	    hiddenAxes: hiddenAxes 
+			homeScore: summaryRaw[6],
+          	awayScore: summaryRaw[7],          	
+          	isCompleted: summaryRaw[8],
+          	hiddenAxes: hiddenAxes,
+
 		}
 
 		
@@ -73,16 +74,18 @@ class SquaresDetail extends Component {
 
 	setGameProgressState(isLocked, isCompleted) {
 		if (isCompleted) {
-			var winnerHomeIndex = Math.trunc(this.props.summary.completed / 10);
-			var winnerAwayIndex = Math.trunc(this.props.summary.completed % 10);
-			
-			var homeScore = this.props.summary.hiddenAxes[0][winnerHomeIndex];
-			var awayScore = this.props.summary.hiddenAxes[1][winnerAwayIndex];
+			var scoreToPositionFromSeedMaps = scoreToPositionFromSeed(this.props.summary.lockedTimestamp);
+			var winnerHomeIndex = scoreToPositionFromSeedMaps[0][this.props.summary.homeScore % 10];
+			var winnerAwayIndex = scoreToPositionFromSeedMaps[1][this.props.summary.awayScore % 10];
 			var winnerAddr = this.props.squareSelections[winnerHomeIndex * 10 + winnerAwayIndex];		
 			if (winnerAddr == "0x0000000000000000000000000000000000000000") {
 				winnerAddr = "None (purchases refunded)."
 			}
-			this.setState({errorMessage: 'Contest completed.  Home score end: ' + homeScore+ ', Away Score end: ' + awayScore + ', Winner: ' + winnerAddr, 
+			this.setState({errorMessage: 'Contest completed.  Home score: ' 
+				+ this.props.summary.homeScore 
+				+ ', Away Score: ' 
+				+  this.props.summary.awayScore 
+				+ ', Winner: ' + winnerAddr, 
 				isLocked: true, isCompleted: true});
 		} else if (isLocked) {
 			this.setState({errorMessage: 'Choices are locked', isLocked: true, isCompleted: false});
@@ -107,8 +110,8 @@ class SquaresDetail extends Component {
 	// TODO Add score selection
 	// TODO Add status on list page
     renderManagerButton() {
-    	if (this.props.summary.manager === this.state.accounts[0]
-    		&& (this.props.summary.completed == -1)) {
+    	if (this.props.summary.manager == this.state.accounts[0]
+    		&& (this.props.summary.isCompleted == false)) {
     		return (
   	  		<div>
   	  			<p/>

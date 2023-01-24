@@ -87,14 +87,17 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
   - [DONE] Only Show Lock or Declare winner on manager page on respective conditions !locked, locked
   - [DONE] Display 0-9 re-mapping on game page
   - [DONE] Translate 0-9 winner to which row/col to pick on manager page
+- [TODO] Store actual final scores, refactor completed away somehow (two bytes)
+- [TODO] Set routes for prod / test and keep there.
+- [TODO] Release testnet transaction for championship games.
+- [TODO] Deploy final contract on prod
+- [TODO] Add a link to the object on etherscan
+- [TODO] Explain the rules
+- [TODO] Highlight winner in a better way.
+- [TODO] Any bug handling with wallet not logged in, etc.
 - Hover to show opponent ID on show.js
-- Store actual final scores, refactor completed away somehow (two bytes)
-- Highlight winner in a better way.
-- Probably write some tests here.
-- Set routes for prod / test and keep there.
-- Finished page: Winner icon, 
-- Add a link to the object on etherscan
 - Somehow keep the url squares.fettermania.com
+- Probably write some tests here.
 - [MAYBE] Make cheaper: Note: Interacting with contract (even making selection) on Mainnet seems to be about .02 ether ~= $25, so no go there.
 - [WON'T DO] Generally, most of the non-financial state should be moved to a database, not the contract
 - [WON'T DO] Web3 is depreacted: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3

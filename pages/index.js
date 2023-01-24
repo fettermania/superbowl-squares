@@ -30,10 +30,11 @@ class SquaresList extends Component {
 			squarePrice: summaryRaw[3],
           	manager: summaryRaw[4],
           	lockedTimestamp: summaryRaw[5],
-          	completed: summaryRaw[6],
           	squareAddress: address,
           	isLocked: summaryRaw[5] > 0,
-          	isCompleted: summaryRaw[6] >= 0
+          	homeScore: summaryRaw[6],
+          	awayScore: summaryRaw[7],          	
+          	isCompleted: summaryRaw[8]
 
 		}
 		return summary;
