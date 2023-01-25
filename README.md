@@ -31,7 +31,8 @@ variable $METAMASK_PHRASE with its contents.
 
 Then: 
 
-	$ node deploy.js
+	$ node deploy.js mainnet # or
+  # node deploy.js goerli # using Infura URLs in ./ethereum/config.js
 
 Write down the address displayed and update ethereum/factory.js with this address.
 

@@ -6,6 +6,8 @@ import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import web3 from '../ethereum/web3';
 
+var config = require ('../ethereum/config.js');
+
 class SquaresNew extends Component {
 
 	state = {
@@ -27,7 +29,8 @@ class SquaresNew extends Component {
 							errorMessage: ''});
 
 
-			const myFactory = factory('0xD1339a18eD8f8479628c06294C21180Ba60C4B5e');
+			// TODO: take :network out of the URL instead of hardcoding 'goerli'
+			const myFactory = factory(config.factoryAddresses['goerli']);
 
 			await myFactory.methods.createSquare(
 				this.state.competitionName,
