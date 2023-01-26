@@ -5,7 +5,7 @@ import SquareRow from '../components/SquareRow';
 import squaremodel from '../ethereum/squaremodel';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
-import {web3, makeWeb3 } from '../ethereum/web3.js';
+import { makeWeb3 } from '../ethereum/web3.js';
 import {positionToScoreFromSeed, scoreToPositionFromSeed} from '../lib/hiddenaxes.js';
 
 // TODO 1/25 - 

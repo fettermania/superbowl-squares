@@ -8,6 +8,7 @@ const routes = require('next-routes')();
 // TODO in progress 1/23
 routes
 //    .add('Home', '/', '/')
+	.add('Home', '/home', '/home')
 	.add('Square Creation Dialog', '/squares/new', '/new')
 	.add('Individual Square', '/squares/:address', '/show')
 	.add('Individual Square Manager', '/squares/:address/manage', '/manage');
