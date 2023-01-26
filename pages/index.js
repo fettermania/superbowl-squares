@@ -11,7 +11,7 @@ class SquaresHome extends Component {
 		const installText = walletDetected ?
 			(<div suppressHydrationWarning>Ethereum wallet detected (Use Goerli Test Network) ✅</div>)
 			: (<div suppressHydrationWarning>Ethereum wallet not detected (Use Goerli Test Network) ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
-		return <Layout>
+		return <Layout network="">
 			<h2>Superbowl Squares</h2>
  		   <h4><em>{installText}</em></h4>
  		This is an Ethereum-backed version of Superbowl Squares.  It is open and can be used for non-Superbowl games as well.

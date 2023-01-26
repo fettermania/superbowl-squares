@@ -98,7 +98,7 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
      - index is: 
         - [DONE] Explain the rules
         - no wallet?  Install here and set network?
-        - Highlight which network you're using (Header)
+        - [DONE] Highlight which network you're using (Header)
   - [DONE] Routes: include network in URL like /:network/:address
   - Routes: if no legit network in URL, redirect to prod 
   - Banner: Encourage user to switch network if it doesn't match URL

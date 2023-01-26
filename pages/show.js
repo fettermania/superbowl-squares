@@ -262,7 +262,8 @@ class SquaresDetail extends Component {
 
 
 	render () {
-		return (<Layout>
+		return (
+		<Layout network={this.props.network}>		  	
 		  	{this.renderManagerButton()}
 			<h2>{this.state.summary.competitionName}</h2>
 			<h3>{this.state.summary.awayName} <em>(Away)</em> at {this.state.summary.homeName} <em>(Home)</em></h3>
