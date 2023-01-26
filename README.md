@@ -31,7 +31,8 @@ variable $METAMASK_PHRASE with its contents.
 
 Then: 
 
-	$ node deploy.js
+	$ node deploy.js mainnet # or
+  # node deploy.js goerli # using Infura URLs in ./ethereum/config.js
 
 Write down the address displayed and update ethereum/factory.js with this address.
 
@@ -89,16 +90,29 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
   - [DONE] Translate 0-9 winner to which row/col to pick on manager page
 - [DONE] Store actual final scores, refactor completed away somehow (two bytes)
 - Goerli vs. Mainnet
-  - [TODO] Set routes for prod / test and keep there.
+  - [DONE] Instantiate web3 from a URL parameter.
+  - [TODO] Make web3 a singleton per process (hard reload?)
+  - [DONE] Does pushRoute relaod the backend (specifically, the default web3 provider in web3.js)
+  - The Gate:
+     - [DONE] move former index to home.js
+     - index is: 
+        - [DONE] Explain the rules
+        - no wallet?  Install here and set network?
+        - Highlight which network you're using (Header)
+  - [DONE] Routes: include network in URL like /:network/:address
+  - Routes: if no legit network in URL, redirect to prod 
+  - Banner: Encourage user to switch network if it doesn't match URL
+    - [TODO] Any bug handling with wallet not logged in, etc.
+  - [DONE] Mapping of network  to known provider, factory singleton 
+  - [DONE] Set routes for prod / test and keep there.
   - [TODO] Release testnet transaction for championship games.
   - [TODO] Deploy final contract on prod
-  - [TODO] Add a link to the object on etherscan
-  - [TODO] Any bug handling with wallet not logged in, etc.
+  - [DONE] Add a link to the object on etherscan
+  - Node scripts  (deploy, compile) to take network as well
 - Explain
-  - [TODO] Explain the rules
   - [TODO] Highlight winner in a better way.
   - Explain the contract
-- Hover to show opponent ID on show.js
+- [DONE] Hover to show opponent ID on show.js
 - Somehow keep the url squares.fettermania.com
 - Probably write some tests here.
 - [DONE] Make cheaper:
@@ -112,3 +126,11 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 ### Props
 
 To <a href="https://github.com/StephenGrider/">Stephen Grider</a>'s <a href="https://www.udemy.com/course-dashboard-redirect/?course_id=1466612">Udemy course on Solidity</a> for laying the foundation.  Note that it was published in 2019 so it may be dated.
+
+
+### Notes
+
+- Getting network:
+ var net =  web3.eth.getChainId();
++  // or web3.eth.net.getId();
+https://docs.metamask.io/guide/provider-migration.html#summary-of-breaking-changes

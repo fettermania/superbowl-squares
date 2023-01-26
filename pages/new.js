@@ -4,7 +4,9 @@ import {Form, Button, Input, Message} from 'semantic-ui-react';
 import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
-import web3 from '../ethereum/web3';
+import { makeWeb3 } from '../ethereum/web3';
+
+var config = require ('../ethereum/config.js');
 
 class SquaresNew extends Component {
 
@@ -17,17 +19,30 @@ class SquaresNew extends Component {
  		loading: false
 	};
 
+	// NOTE: getInitialProps is next js specific, for initial server-side data load
+	// Can't use componentDidMount fpr this!
+	// Called on server, sent over to cleint
+	static async getInitialProps(props) {
+		var network = props.query.network;
+		return {network};
+	}
+
 	// NOTE: Gotcha - need the arrow function for THIS to work.
 	onSubmit = async (event) => {
 		event.preventDefault(); // NOTE - prevent HTML1 form submittal
 
 		try  {
-			const accounts = await web3.eth.getAccounts();
+
+			const myWeb3 = makeWeb3(this.props.network);
+
+			const accounts = await myWeb3.eth.getAccounts();
 			this.setState({loading: true,
 							errorMessage: ''});
 
 
-			await factory.methods.createSquare(
+			const myFactory = factory(config.factoryAddresses[this.props.network], myWeb3);
+
+			await myFactory.methods.createSquare(
 				this.state.competitionName,
 				this.state.homeName,
 				this.state.awayName,
@@ -37,7 +52,7 @@ class SquaresNew extends Component {
 				});
 
 				// NOTE: Redirect back to index route after completon.
-				Router.pushRoute('/');
+				Router.pushRoute(`/list/${this.props.network}`);
 
 		} catch (err) {
 			let humanMessage;

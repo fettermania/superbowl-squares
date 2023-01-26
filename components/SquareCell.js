@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Table, Grid, Card, Icon} from 'semantic-ui-react';
-import web3 from '../ethereum/web3';
+import { makeWeb3 } from '../ethereum/web3';
 import squaremodel from '../ethereum/squaremodel';
 import { Router } from '../routes';
 
@@ -19,7 +19,9 @@ class SquareCell extends Component {
 			return;
 		}
 
-		const square = squaremodel(this.props.squareAddress);
+		const network = this.props.network;
+		const myWeb3 = makeWeb3(network);
+		const square = squaremodel(this.props.squareAddress, myWeb3);
 		try { 
 			this.setState({loading: true});
 			this.props.setTopError('');
@@ -32,7 +34,10 @@ class SquareCell extends Component {
 			this.setState({loading: false, value: ''});
 			this.props.setTopError('');
 
-			Router.pushRoute(`/squares/${this.props.squareAddress}`);
+			// TODO: This forces a hard redirect to refresh full state.  
+			// This is kind of gross but the full state (in case someoene else is buying)
+			// does need to be updated, instead of just one cell's color.
+			Router.push(`/squares/${this.props.network}/${this.props.squareAddress}`);
 
 		} catch (err) 	{
 				let humanMessage;
@@ -61,7 +66,7 @@ class SquareCell extends Component {
 		if (boughtByMe) {
 			button = <Button disabled icon color="blue"><Icon name='user'/></Button>
 		} else if (!buyable) {
-			button = <Button disabled icon color="red"><Icon name='user secret'/></Button>
+			button = <Button icon data-tooltip={this.props.buyerAddress} data-position="right center" color="red"><Icon name='user secret'/></Button>
 		} else if (this.props.isLocked || this.props.isCompleted) {
 			button = <Button disabled icon color="grey"><Icon name='x'/></Button>
 		} else {

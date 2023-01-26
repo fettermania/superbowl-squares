@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { Button, Table, Grid, Card} from 'semantic-ui-react';
-import web3 from '../ethereum/web3';
 import SquareCell from './SquareCell';
 
 // TODO note: BUG - same account can contribute more than once, 
@@ -13,6 +12,7 @@ class SquareRow extends Component {
 					row={this.props.row}
 					col={index}
 					key={index}
+					network={this.props.network}
 					isCompleted={this.props.isCompleted}
 					isLocked={this.props.isLocked}
 					setTopError={this.props.setTopError}
