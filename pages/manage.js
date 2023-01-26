@@ -2,10 +2,9 @@ import React, {Component} from 'react';
 import {Form, Button, Input, Message} from 'semantic-ui-react';
 import squaremodel from '../ethereum/squaremodel';
 
-import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
-import web3 from '../ethereum/web3';
+import {web3, makeWeb3 } from '../ethereum/web3';
 import {positionToScoreFromSeed, scoreToPositionFromSeed} from '../lib/hiddenaxes.js';
 
 		    		 
@@ -24,7 +23,11 @@ class SquaresManager extends Component {
 
 	// TODO: Do we have to getSummary here?
 	onLock = async () => {
-		const square = squaremodel(this.props.squareAddress);
+
+		// TODO 1/25 - need web3 here
+		const network = 'goerli'; // TODO 1/25
+		const myWeb3 = makeWeb3(network);
+		const square = squaremodel(this.props.squareAddress, myWeb3);
 		try { 
 
 			this.setState({errorMessage: '', lockedLoading: true});
@@ -62,9 +65,14 @@ class SquaresManager extends Component {
 
 	static async getInitialProps(props) {
 
+		// TODO 1/25 - need web3 here
+
+		const network = 'goerli'; // TODO 1/25
+		const myWeb3 = makeWeb3(network);
+	
 		// TODO How can we pass the object instead of just the address?
 		const squareAddress = props.query.address;
-		const square = squaremodel(props.query.address);
+		const square = squaremodel(props.query.address, myWeb3);
 		const summaryRaw = await square.methods.getSummary().call();
 
 		const parsedTimestamp = parseInt(summaryRaw[5]);
@@ -85,7 +93,14 @@ class SquaresManager extends Component {
 	}
 
 	async componentDidMount() {
-		const accounts = await web3.eth.getAccounts();
+
+
+		// TODO 1/25 - this one needs to have the window as a provider, yes?
+
+		const network = 'goerli';
+		const myWeb3 = makeWeb3(network);
+
+		const accounts = await myWeb3.eth.getAccounts();
 		if ((this.props.summary.manager !== accounts[0])
 			|| (this.props.summary.isCompleted)) {
 		 	Router.pushRoute(`/squares/${this.props.squareAddress}`);
@@ -103,9 +118,13 @@ class SquaresManager extends Component {
 		var homeIndex = positionFromScoresMappings[0][this.state.homeScore % 10];
 		var awayIndex = positionFromScoresMappings[1][this.state.awayScore % 10];
 		
-		
-		const square = squaremodel(this.props.squareAddress);
+		// TODO 1/25 - need web3 here
 
+		const network = 'goerli'; // TODO 1/25
+		const myWeb3 = makeWeb3(network);
+		const square = squaremodel(this.props.squareAddress, myWeb3);
+		
+	
 		try  {
 			this.setState({errorMessage: '', winnerLoading: true});
 			await square.methods.submitScore(

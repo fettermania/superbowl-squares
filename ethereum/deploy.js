@@ -21,15 +21,15 @@ const provider = new HDWalletProvider(
     config.infuraUrls[argNetwork]
   );
 
-const web3 = new Web3(provider);
+const serverWeb3 = new Web3(provider);
 
 const deploy = async () => {
-  const accounts = await web3.eth.getAccounts();
+  const accounts = await serverWeb3.eth.getAccounts();
 
   console.log('Attempting to deploy from account', accounts[0]);
   console.log('Through interface', config.infuraUrls[argNetwork])
   try {
-    const result = await new web3.eth.Contract(JSON.parse(compiledSquareFactory.interface))
+    const result = await new serverWeb3.eth.Contract(JSON.parse(compiledSquareFactory.interface))
     //  .deploy({ data: evm.bytecode.object })
       .deploy({ data: compiledSquareFactory.bytecode })
         .send({ gas: '1000000', from: accounts[0] });

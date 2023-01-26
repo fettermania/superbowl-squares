@@ -4,10 +4,11 @@ import {Form, Button, Input, Message} from 'semantic-ui-react';
 import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
-import web3 from '../ethereum/web3';
+import {web3, makeWeb3 } from '../ethereum/web3';
 
 var config = require ('../ethereum/config.js');
 
+// TODO 1/25 - calling this doesn mnot geInitialProps
 class SquaresNew extends Component {
 
 	state = {
@@ -24,13 +25,19 @@ class SquaresNew extends Component {
 		event.preventDefault(); // NOTE - prevent HTML1 form submittal
 
 		try  {
-			const accounts = await web3.eth.getAccounts();
+
+				// TODO 1/25 - need web3 here
+			const myWeb3 = makeWeb3(network);
+
+			const accounts = await myWeb3.eth.getAccounts();
 			this.setState({loading: true,
 							errorMessage: ''});
 
 
+			// TODO 1/25 - need web3 here, with props
 			// TODO: take :network out of the URL instead of hardcoding 'goerli'
-			const myFactory = factory(config.factoryAddresses['goerli']);
+			const network = 'goerli'; // TODO 1/25
+			const myFactory = factory(config.factoryAddresses['goerli'], myWeb3);
 
 			await myFactory.methods.createSquare(
 				this.state.competitionName,

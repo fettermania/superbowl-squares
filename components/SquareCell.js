@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Table, Grid, Card, Icon} from 'semantic-ui-react';
-import web3 from '../ethereum/web3';
+import {web3, makeWeb3 } from '../ethereum/web3';
 import squaremodel from '../ethereum/squaremodel';
 import { Router } from '../routes';
 
@@ -19,7 +19,10 @@ class SquareCell extends Component {
 			return;
 		}
 
-		const square = squaremodel(this.props.squareAddress);
+		// TODO 1/25 - need web3 provider injected here
+		const network = 'goerli'; // TODO 1/25
+		const myWeb3 = makeWeb3(network);
+		const square = squaremodel(this.props.squareAddress, myWeb3);
 		try { 
 			this.setState({loading: true});
 			this.props.setTopError('');

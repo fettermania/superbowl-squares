@@ -90,6 +90,15 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
   - [DONE] Translate 0-9 winner to which row/col to pick on manager page
 - [DONE] Store actual final scores, refactor completed away somehow (two bytes)
 - Goerli vs. Mainnet
+  - Instantiate web3 from a URL parameter
+  - Does pushRoute relaod the backend (specifically, the default web3 provider in web3.js)
+  - The Gate:
+     - move former index to home.js
+     - index is: 
+        - [TODO] Explain the rules
+        - no wallet?  Install here and set network?
+        - network set to goerli?  Redirect to /goerli/
+        - network set to mainnet?  Redirect to /mainnet/
   - Routes: include network in URL like /:network/:address
   - Routes: if no network in URL, redirect to prod 
   - Banner: Encourage user to switch network if it doesn't match URL
@@ -101,7 +110,6 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
   - [TODO] Add a link to the object on etherscan
   - Node scripts  (deploy, compile) to take network as well
 - Explain
-  - [TODO] Explain the rules
   - [TODO] Highlight winner in a better way.
   - Explain the contract
 - [DONE] Hover to show opponent ID on show.js
@@ -125,3 +133,4 @@ To <a href="https://github.com/StephenGrider/">Stephen Grider</a>'s <a href="htt
 - Getting network:
  var net =  web3.eth.getChainId();
 +  // or web3.eth.net.getId();
+https://docs.metamask.io/guide/provider-migration.html#summary-of-breaking-changes

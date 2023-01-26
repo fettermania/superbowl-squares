@@ -1,24 +1,29 @@
 import Web3 from "web3";
 var config = require ('./config.js');
 
-let web3;
 
-// NOTE: GOTCHA -  global window not availble on node.  Just in browser. 
-if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+// TODO 1/25 - try singleton later
+//let madeWeb3 = null;
+function makeWeb3(networkString) {
+  // if (madeWeb3) {
+  //   return madeWeb3;
+  // }
 
-// <BEGIN Web3 required update>
-  // We are in the browser and metamask is running.
-  window.ethereum.request({ method: "eth_requestAccounts" });
-  web3 = new Web3(window.ethereum);
+  var madeWeb3;
 
-} else {
+  if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
 
-  // TODO 1/24 - does this matter?
-  // We are on the server *OR* the user is not running metamask
-  const provider = new Web3.providers.HttpProvider(
-	"https://goerli.infura.io/v3/ff70651fd5594fbaa8937fc612054fa6"
-  );
-  web3 = new Web3(provider);
+    // <BEGIN Web3 required update>
+    // We are in the browser and metamask is running.
+    window.ethereum.request({ method: "eth_requestAccounts" });
+    madeWeb3 = new Web3(window.ethereum);
+  } else {
+    var provider = new Web3.providers.HttpProvider(
+      config.infuraUrls[networkString]
+    );
+    madeWeb3 = new Web3(provider);
+  }
+  return madeWeb3;
 }
  
-export default web3;
+export { makeWeb3 };

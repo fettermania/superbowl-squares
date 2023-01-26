@@ -3,12 +3,12 @@ import { Card, Button, Grid, Message, Image, Icon, Label } from 'semantic-ui-rea
 
 import SquareRow from '../components/SquareRow';
 import squaremodel from '../ethereum/squaremodel';
-//import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
-import web3 from '../ethereum/web3.js';
+import {web3, makeWeb3 } from '../ethereum/web3.js';
 import {positionToScoreFromSeed, scoreToPositionFromSeed} from '../lib/hiddenaxes.js';
 
+// TODO 1/25 - 
 class SquaresDetail extends Component {
 	// TODO move these
 	static nullAddress = '0x0000000000000000000000000000000000000000';
@@ -18,7 +18,8 @@ class SquaresDetail extends Component {
 		errorMessage: '',
 		isCompleted: false,
 		isLocked: false,
-		lockedLoading: false
+		lockedLoading: false,
+		myWeb3: null
 	};
 
 
@@ -38,9 +39,16 @@ class SquaresDetail extends Component {
 
 	// NOTE Note: getInitialProps is a nextJS thing for server only!
 	// NOTE Use componentDidMount (a react thing)
+
+	// TODO 1/25 - need web3 here
 	static async getInitialProps(props) {
+
+		//const network = props.query.network; // TODO 1/25
+		const network = 'goerli';
 		const squareAddress = props.query.address;
-		const square = squaremodel(props.query.address);
+
+		const myWeb3 = makeWeb3(network);
+		const square = squaremodel(props.query.address, myWeb3);
 		const summaryRaw = await square.methods.getSummary().call();
 
 		const parsedTimestamp = parseInt(summaryRaw[5]);
@@ -97,9 +105,12 @@ class SquaresDetail extends Component {
 		}
 
 	}
-	// TODO Getting accounts here - is that bad?
+	// TODO 1/25 - need web3 here
 	async componentDidMount() {
-		const accounts = await web3.eth.getAccounts();
+		const network = 'goerli';
+		const myWeb3 = makeWeb3(network);
+
+		const accounts = await myWeb3.eth.getAccounts(); // TODO 1/25
 	   const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
 		this.setState({accounts: accounts,
 		   walletDetected: walletDetected});

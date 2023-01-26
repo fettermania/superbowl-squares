@@ -3,18 +3,12 @@ import { Card, Button, Icon } from 'semantic-ui-react';
 
 import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
-import { Link }  from '../routes';
+import { Link, Router }  from '../routes';
 import squaremodel from '../ethereum/squaremodel';
+import {web3, makeWeb3 } from '../ethereum/web3';
+import {getEthNetwork, whereAmI } from '../lib/networkstring.js';
 
 var config = require ('../ethereum/config.js');
-
-
-console.log("Factory is");
-console.log(config.factoryAddresses['goerli']);
-
-console.log("Infura is");
-console.log(config.infuraUrls['goerli']);
-
 
 class SquaresList extends Component {
 
@@ -24,16 +18,31 @@ class SquaresList extends Component {
 
 	// NOTE: getInitialProps is next js specific, for initial server-side data load
 	// Can't use componentDidMount fpr this!
-	static async getInitialProps() {
+	// Called on server, sent over to cleint
+	static async getInitialProps(props) {
 		// TODO: take :network out of the URL instead of hardcoding 'goerli'
-		const myFactory = factory(config.factoryAddresses['goerli']);
-		const squareAddresses = await myFactory.methods.getDeployedSquares().call();
 
-		return {squareAddresses};
+
+		console.log("index.js: getInitialProps called from" + whereAmI());
+
+		// TODO 1/25
+		const network = 'goerli'; // TODO 1/25
+		const myWeb3 = makeWeb3(network);
+		const myFactory = factory(config.factoryAddresses['goerli'], myWeb3);
+		const squareAddresses = await myFactory.methods.getDeployedSquares().call();
+		const networkQuery = props.query.network;
+
+		
+		return {squareAddresses, networkQuery};
 	}
 
 	static async retrieveSummary(address) {
-		const square = squaremodel(address);
+
+		// TODO 1/25 - need web3 here
+
+		const network = 'goerli'; // TODO 1/25
+		const myWeb3 = makeWeb3(network);
+		const square = squaremodel(address, myWeb3);
 		const summaryRaw = await square.methods.getSummary().call();
 		const summary = {
 			competitionName: summaryRaw[0],
@@ -52,7 +61,9 @@ class SquaresList extends Component {
 		return summary;
 	}
 	async componentDidMount() {
+
 		const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
+
 		const summaries = await Promise.all(
 			this.props.squareAddresses
 				.map(SquaresList.retrieveSummary));
