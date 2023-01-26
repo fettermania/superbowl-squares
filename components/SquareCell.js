@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Table, Grid, Card, Icon} from 'semantic-ui-react';
-import {web3, makeWeb3 } from '../ethereum/web3';
+import { makeWeb3 } from '../ethereum/web3';
 import squaremodel from '../ethereum/squaremodel';
 import { Router } from '../routes';
 
@@ -19,8 +19,7 @@ class SquareCell extends Component {
 			return;
 		}
 
-		// TODO 1/25 - need web3 provider injected here
-		const network = 'goerli'; // TODO 1/25
+		const network = this.props.network;
 		const myWeb3 = makeWeb3(network);
 		const square = squaremodel(this.props.squareAddress, myWeb3);
 		try { 
@@ -35,7 +34,10 @@ class SquareCell extends Component {
 			this.setState({loading: false, value: ''});
 			this.props.setTopError('');
 
-			Router.pushRoute(`/squares/${this.props.squareAddress}`);
+			// TODO: This forces a hard redirect to refresh full state.  
+			// This is kind of gross but the full state (in case someoene else is buying)
+			// does need to be updated, instead of just one cell's color.
+			Router.push(`/squares/${this.props.network}/${this.props.squareAddress}`);
 
 		} catch (err) 	{
 				let humanMessage;

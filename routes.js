@@ -7,15 +7,11 @@ const routes = require('next-routes')();
 
 // TODO in progress 1/23
 routes
-//    .add('Home', '/', '/')
-	.add('Home', '/home', '/home')
-	.add('Square Creation Dialog', '/squares/new', '/new')
-	.add('Individual Square', '/squares/:address', '/show')
-	.add('Individual Square Manager', '/squares/:address/manage', '/manage');
- //    .add('Home', '/:network/', '/')
-	// .add('Square Creation Dialog', '/:network/squares/new', '/new')
-	// .add('Individual Square', '/:network/squares/:address', '/show')
-	// .add('Individual Square Manager', '/:network/squares/:address/manage', '/manage');
+	.add('Home', '/', '/')
+	.add('List', '/list/:network', '/list')
+	.add('Square Creation Dialog', '/squares/:network/new', '/new')
+	.add('Individual Square', '/squares/:network/:address', '/show')
+	.add('Individual Square Manager', '/squares/:network/:address/manage', '/manage');
 
 // NOTE: this is an OBJECT that generates helpers we use everywhere.
 module.exports = routes;

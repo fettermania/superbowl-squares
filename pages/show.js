@@ -7,11 +7,13 @@ import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import { makeWeb3 } from '../ethereum/web3.js';
 import {positionToScoreFromSeed, scoreToPositionFromSeed} from '../lib/hiddenaxes.js';
+import {generateEtherscanURL} from '../lib/networkstring.js';
 
-// TODO 1/25 - 
 class SquaresDetail extends Component {
 	// TODO move these
 	static nullAddress = '0x0000000000000000000000000000000000000000';
+
+	static defaultHiddenAxes = [Array(10).fill('?'), Array(10).fill('?')];
 
 	state = {
 		accounts: [], // TODO Gross global variable
@@ -19,7 +21,22 @@ class SquaresDetail extends Component {
 		isCompleted: false,
 		isLocked: false,
 		lockedLoading: false,
-		myWeb3: null
+		myWeb3: null,
+		summary: {
+			competitionName: '',
+			homeName: '',
+			awayName: '',
+			squarePrice: 0,
+          	manager: '',
+          	lockedTimestamp: 0, // TODO Note: 0 for now locked, otherwise timestamp
+      	    isLocked: false,
+			homeScore: 0,
+          	awayScore: 0,
+          	isCompleted: 0,
+          	hiddenAxes: SquaresDetail.defaultHiddenAxes
+		},
+		squareSelections : [],
+		rows : []
 	};
 
 
@@ -36,25 +53,51 @@ class SquaresDetail extends Component {
 		return rows;
 	}
 
+	static async getInitialProps(props) {
+
+		var network = props.query.network;
+		var squareAddress=props.query.address;
+
+		return {network, squareAddress};
+	}
+
 
 	// NOTE Note: getInitialProps is a nextJS thing for server only!
 	// NOTE Use componentDidMount (a react thing)
+	setGameProgressState(isLocked, isCompleted) {
+		if (isCompleted) {
+			var scoreToPositionFromSeedMaps = scoreToPositionFromSeed(this.state.summary.lockedTimestamp);
+			var winnerHomeIndex = scoreToPositionFromSeedMaps[0][this.state.summary.homeScore % 10];
+			var winnerAwayIndex = scoreToPositionFromSeedMaps[1][this.state.summary.awayScore % 10];
+			var winnerAddr = this.state.squareSelections[winnerHomeIndex * 10 + winnerAwayIndex];		
+			if (winnerAddr == "0x0000000000000000000000000000000000000000") {
+				winnerAddr = "None (purchases refunded)."
+			}
+			this.setState({errorMessage: 'Contest completed.  Home score: ' 
+				+ this.state.summary.homeScore 
+				+ ', Away Score: ' 
+				+  this.state.summary.awayScore 
+				+ ', Winner: ' + winnerAddr, 
+				isLocked: true, isCompleted: true});
+		} else if (isLocked) {
+			this.setState({errorMessage: 'Choices are locked', isLocked: true, isCompleted: false});
+		} else {
+			this.setState({errorMessage: '', isLocked: false, isCompleted: false});
+		}
 
-	// TODO 1/25 - need web3 here
-	static async getInitialProps(props) {
+	}
 
-		//const network = props.query.network; // TODO 1/25
-		const network = 'goerli';
-		const squareAddress = props.query.address;
-
-		const myWeb3 = makeWeb3(network);
-		const square = squaremodel(props.query.address, myWeb3);
+	
+	async componentDidMount() {
+	
+		const myWeb3 = makeWeb3(this.props.network);
+		const square = squaremodel(this.props.squareAddress, myWeb3);
 		const summaryRaw = await square.methods.getSummary().call();
 
 		const parsedTimestamp = parseInt(summaryRaw[5]);
 		var hiddenAxes;
 		if (parsedTimestamp == 0) {
-			hiddenAxes =  [Array(10).fill('?'), Array(10).fill('?')];
+			hiddenAxes = SquaresDetail.defaultHiddenAxes;
 		} else {
 			hiddenAxes = positionToScoreFromSeed(parsedTimestamp);
 		}
@@ -78,43 +121,14 @@ class SquaresDetail extends Component {
 
 		}
 
-		
-		// sugar for  { squareSelections : squareSelections}
-		return {squareAddress, squareSelections, rows, summary};  
-	}
-
-	setGameProgressState(isLocked, isCompleted) {
-		if (isCompleted) {
-			var scoreToPositionFromSeedMaps = scoreToPositionFromSeed(this.props.summary.lockedTimestamp);
-			var winnerHomeIndex = scoreToPositionFromSeedMaps[0][this.props.summary.homeScore % 10];
-			var winnerAwayIndex = scoreToPositionFromSeedMaps[1][this.props.summary.awayScore % 10];
-			var winnerAddr = this.props.squareSelections[winnerHomeIndex * 10 + winnerAwayIndex];		
-			if (winnerAddr == "0x0000000000000000000000000000000000000000") {
-				winnerAddr = "None (purchases refunded)."
-			}
-			this.setState({errorMessage: 'Contest completed.  Home score: ' 
-				+ this.props.summary.homeScore 
-				+ ', Away Score: ' 
-				+  this.props.summary.awayScore 
-				+ ', Winner: ' + winnerAddr, 
-				isLocked: true, isCompleted: true});
-		} else if (isLocked) {
-			this.setState({errorMessage: 'Choices are locked', isLocked: true, isCompleted: false});
-		} else {
-			this.setState({errorMessage: '', isLocked: false, isCompleted: false});
-		}
-
-	}
-	// TODO 1/25 - need web3 here
-	async componentDidMount() {
-		const network = 'goerli';
-		const myWeb3 = makeWeb3(network);
-
-		const accounts = await myWeb3.eth.getAccounts(); // TODO 1/25
+       const accounts = await myWeb3.eth.getAccounts();
 	   const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
 		this.setState({accounts: accounts,
-		   walletDetected: walletDetected});
-		this.setGameProgressState(this.props.summary.isLocked, this.props.summary.isCompleted);
+		   walletDetected: walletDetected,
+			summary: summary,
+			rows: rows,
+			squareSelections: squareSelections});
+		this.setGameProgressState(summary.isLocked, summary.isCompleted);
 	}
 
 	setTopError = (errorMessage) => {
@@ -124,12 +138,12 @@ class SquaresDetail extends Component {
 	// TODO Add score selection
 	// TODO Add status on list page
     renderManagerButton() {
-    	if (this.props.summary.manager == this.state.accounts[0]
-    		&& (this.props.summary.isCompleted == false)) {
+    	if (this.state.summary.manager == this.state.accounts[0]
+    		&& (this.state.summary.isCompleted == false)) {
     		return (
   	  		<div>
   	  			<p/>
-	    		<Link route={`/squares/${this.props.squareAddress}/manage`}>
+	    		<Link route={`/squares/${this.props.network}/${this.props.squareAddress}/manage`}>
 					 		<Button 
 					 			color="red"
 					 			floated="right"
@@ -164,15 +178,16 @@ class SquaresDetail extends Component {
 
 
 	renderRows() {
-		return this.props.rows.map((rowSelections, index) => {
+		return this.state.rows.map((rowSelections, index) => {
 			return (<SquareRow 
 							key={index}
 							row={index}
-							displayRow={this.props.summary.hiddenAxes[0][index]}
+							network={this.props.network}
+							displayRow={this.state.summary.hiddenAxes[0][index]}
 							squareAddress={this.props.squareAddress}
-							squarePrice={this.props.summary.squarePrice}
-							isLocked={this.props.summary.isLocked}
-							isCompleted={this.props.summary.isCompleted}
+							squarePrice={this.state.summary.squarePrice}
+							isLocked={this.state.summary.isLocked}
+							isCompleted={this.state.summary.isCompleted}
 							setTopError={this.setTopError.bind(this)}
 							rowBuyerAddresses={rowSelections}
 							viewerAddress={this.state.accounts[0]}
@@ -184,7 +199,7 @@ class SquaresDetail extends Component {
 		// TODO LATER Fix this hardcoded 10 nonsense
 		const headerContent = Array(10).fill().map(
 			(n, index) => {
-				return <Grid.Column color="grey" key={index}>{this.props.summary.hiddenAxes[1][index]}</Grid.Column>; }
+				return <Grid.Column color="grey" key={index}>{this.state.summary.hiddenAxes[1][index]}</Grid.Column>; }
 				);
 
 		return (
@@ -200,12 +215,12 @@ class SquaresDetail extends Component {
 	}
 
 	renderStatsBlock() {
-		const squaresTaken = this.props.squareSelections.filter(address => 
+		const squaresTaken = this.state.squareSelections.filter(address => 
 			address != SquaresDetail.nullAddress);
 
 		const countSquaresTaken = squaresTaken.length;
 		// TODO Does this ever return multiple accounts?
-		const countSquaresYouBought = this.props.squareSelections.filter(address => 
+		const countSquaresYouBought = this.state.squareSelections.filter(address => 
 			address == this.state.accounts[0]).length;
 
 		const acctName = (this.state.accounts[0]) ? (this.state.accounts[0].substr(2,4) ) : "none";
@@ -215,7 +230,7 @@ class SquaresDetail extends Component {
 		const items = [
 
 	   {
-        header: this.props.summary.squarePrice,
+        header: this.state.summary.squarePrice,
         description: 'Entry price (in wei)',
      	},
 	   {
@@ -223,7 +238,7 @@ class SquaresDetail extends Component {
         description: 'Squares Taken'
      	},
 		{
-        header: (this.props.summary.squarePrice * countSquaresTaken),
+        header: (this.state.summary.squarePrice * countSquaresTaken),
         description: 'Total at stake (in wei)'
      	},
       {
@@ -232,7 +247,7 @@ class SquaresDetail extends Component {
         style: {overflowWrap: 'break-word'}
       },
   		{
-    header:this.props.summary.squarePrice * countSquaresYouBought,
+    header:this.state.summary.squarePrice * countSquaresYouBought,
         description: 'Your total stake (in wei)'
      	},
        {
@@ -245,23 +260,19 @@ class SquaresDetail extends Component {
 
 	}
 
-	render () {
-	const installText = this.state.walletDetected ?
-			(<div suppressHydrationWarning>Ethereum wallet detected (Use Goerli Test Network) ✅</div>)
-			: (<div suppressHydrationWarning>Ethereum wallet not detected (Use Goerli Test Network) ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
 
+	render () {
 		return (<Layout>
 		  	{this.renderManagerButton()}
-			<h2>{this.props.summary.competitionName}</h2>
-			<h3>{this.props.summary.awayName} <em>(Away)</em> at {this.props.summary.homeName} <em>(Home)</em></h3>
-			
-		   <h4><em>{installText}</em></h4>
+			<h2>{this.state.summary.competitionName}</h2>
+			<h3>{this.state.summary.awayName} <em>(Away)</em> at {this.state.summary.homeName} <em>(Home)</em></h3>
+			<a href={generateEtherscanURL(this.props.squareAddress, this.props.network)}>(etherscan link)</a>
+
 			<Message error hidden={!Boolean(this.state.errorMessage)} content={this.state.errorMessage} />
 		  	<p/>
 		  	{this.renderKey()}
   			<p/>
 		  	{this.renderSquareGrid()}
-			
 		  	<h3>Stats</h3>
   			{this.renderStatsBlock()}
 			

@@ -90,24 +90,24 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
   - [DONE] Translate 0-9 winner to which row/col to pick on manager page
 - [DONE] Store actual final scores, refactor completed away somehow (two bytes)
 - Goerli vs. Mainnet
-  - Instantiate web3 from a URL parameter
-  - Does pushRoute relaod the backend (specifically, the default web3 provider in web3.js)
+  - [DONE] Instantiate web3 from a URL parameter.
+  - [TODO] Make web3 a singleton per process (hard reload?)
+  - [DONE] Does pushRoute relaod the backend (specifically, the default web3 provider in web3.js)
   - The Gate:
-     - move former index to home.js
+     - [DONE] move former index to home.js
      - index is: 
-        - [TODO] Explain the rules
+        - [DONE] Explain the rules
         - no wallet?  Install here and set network?
-        - network set to goerli?  Redirect to /goerli/
-        - network set to mainnet?  Redirect to /mainnet/
-  - Routes: include network in URL like /:network/:address
-  - Routes: if no network in URL, redirect to prod 
+        - Highlight which network you're using (Header)
+  - [DONE] Routes: include network in URL like /:network/:address
+  - Routes: if no legit network in URL, redirect to prod 
   - Banner: Encourage user to switch network if it doesn't match URL
     - [TODO] Any bug handling with wallet not logged in, etc.
-  - Mapping of network  to known provider, factory singleton 
-  - [TODO] Set routes for prod / test and keep there.
+  - [DONE] Mapping of network  to known provider, factory singleton 
+  - [DONE] Set routes for prod / test and keep there.
   - [TODO] Release testnet transaction for championship games.
   - [TODO] Deploy final contract on prod
-  - [TODO] Add a link to the object on etherscan
+  - [DONE] Add a link to the object on etherscan
   - Node scripts  (deploy, compile) to take network as well
 - Explain
   - [TODO] Highlight winner in a better way.
