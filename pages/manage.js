@@ -87,6 +87,7 @@ class SquaresManager extends Component {
 
 	async componentDidMount() {
 
+  	  try { 
 		const myWeb3 = makeWeb3(this.props.network);
 	
 		const square = squaremodel(this.props.squareAddress, myWeb3);
@@ -113,6 +114,9 @@ class SquaresManager extends Component {
 
 		 // TODO: is this isLocked necssary or  working?
 		this.setState({accounts: accounts, summary: summary, isLocked: summary.isLocked});
+	  } catch (e) {
+			Router.push('/');
+		}
 	}
 	    
 

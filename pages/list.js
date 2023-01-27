@@ -46,19 +46,22 @@ class SquaresList extends Component {
 		return summary;
 	}
 	async componentDidMount() {
+		try { 
+			const myWeb3 = makeWeb3(this.props.network);
+			const myFactory = factory(config.factoryAddresses[this.props.network], myWeb3);
+ 			const squareAddresses = await myFactory.methods.getDeployedSquares().call();
 
-		const myWeb3 = makeWeb3(this.props.network);
-		const myFactory = factory(config.factoryAddresses[this.props.network], myWeb3);
-		const squareAddresses = await myFactory.methods.getDeployedSquares().call();
+			const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
 
-		const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
-
-		const summaries = await Promise.all(
-			squareAddresses
-				.map(SquaresList.retrieveSummary, this.props.network));
-		this.setState({squareAddresses: squareAddresses, 
+			const summaries = await Promise.all(
+				squareAddresses
+					.map(SquaresList.retrieveSummary, this.props.network));
+			this.setState({squareAddresses: squareAddresses, 
 						summaries: summaries,
                        walletDetected: walletDetected});
+		} catch (e) {
+			Router.push('/');
+		}
 	}
 
 	// TODO : Disable if locked, or indicate as such	
@@ -90,7 +93,7 @@ class SquaresList extends Component {
 	render () {
 
  		return	<Layout network={this.props.network}>	
- 		 	  	
+
 		  <div>
 	    		<Link route={`/squares/${this.props.network}/new`}>
 

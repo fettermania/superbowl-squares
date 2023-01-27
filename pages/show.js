@@ -90,6 +90,7 @@ class SquaresDetail extends Component {
 	
 	async componentDidMount() {
 	
+   	  try { 
 		const myWeb3 = makeWeb3(this.props.network);
 		const square = squaremodel(this.props.squareAddress, myWeb3);
 		const summaryRaw = await square.methods.getSummary().call();
@@ -129,6 +130,9 @@ class SquaresDetail extends Component {
 			rows: rows,
 			squareSelections: squareSelections});
 		this.setGameProgressState(summary.isLocked, summary.isCompleted);
+	  } catch (e) {
+		Router.push('/');
+  	  }
 	}
 
 	setTopError = (errorMessage) => {

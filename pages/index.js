@@ -2,98 +2,99 @@ import React, {Component} from 'react';
 import { Card, Button, Icon } from 'semantic-ui-react';
 
 import Layout from '../components/Layout';
+import WalletBar from '../components/WalletBar';
 
 class SquaresHome extends Component {
 
 
 	render () {
-	   const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
-		const installText = walletDetected ?
-			(<div suppressHydrationWarning>Ethereum wallet detected (Use Goerli Test Network) ✅</div>)
-			: (<div suppressHydrationWarning>Ethereum wallet not detected (Use Goerli Test Network) ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
 		return <Layout network="">
 			<h2>Superbowl Squares</h2>
- 		   <h4><em>{installText}</em></h4>
+		<WalletBar />
  		This is an Ethereum-backed version of Superbowl Squares.  It is open and can be used for non-Superbowl games as well.
 		
  		<p/>
-		<b>Setting your Wallet up</b>
+		<h3>Setting your Wallet up</h3>
 
 			<div className="ui bulleted list">
 		 		<div className="item">
-		 			In order to play, you should install an Ethereum-compatible Wallet like <a href="http://metamask.io">MetaMask</a>.
+		 			In order to play, install an <strong>Ethereum-compatible Wallet</strong> like <a href="http://metamask.io">MetaMask</a>.
 		 		</div>
 		 		 <div className="item">
-	 					Then, use the top nav to interact  with test ether in the <a href="/list/goerli">Goerli testnet</a> 
-	 					(in the nav) or for real on the <a href="/list/mainnet">Mainnet</a>.  
+	 					The top nav buttons <strong>choose a network</strong>, using test ether in the <a href="/list/goerli">Goerli testnet</a>, 	 					
+	 					or real ether on the <a href="/list/mainnet">Mainnet</a>.  
 	 					Make sure your wallet is set in accordance.
 				</div>
 				 <div className="item">
-	 					If you see an error navigating to goerli while your wallet is on mainnet, for example, switch one or the other and then refresh the page.  Switching wallet users requires a refresh as well.
+	 					If you see an error navigating to goerli while your wallet is on mainnet, for example, switch one or the other and then <strong>refresh the page</strong>.  Switching wallet users requires a refresh as well.
+				</div>	
+				 <div className="item">
+	 					Usually, bad URLs or mismatched wallet settings <strong>send you home (here)</strong>.
 				</div>	
 			</div>
 
  		<p/>
-		<b>Playing</b>
+		<h3>Playing</h3>
 
 			<div className="ui bulleted list">
 		 		<div className="item">
-		 			The goal of this every winner-take-all game is to pick the square corresponding to the correct score ending of some sporting event.  
+		 			The goal of this every winner-take-all game is to <strong>pick the square</strong> corresponding to the correct score ending of some sporting event.  
 		 			So, picking the square Home (3), Away (7) would win with scores of 13-7, 3-27, 43-77, etc.
 		 		</div>
 				<div className="item">
-		 			Each entry costs some amount of ether, uniform for that game, detailed at the bottom of the "show" page.
+		 			The bottom of the game page shows the <strong>entry fee</strong> that all squares in the game share.
 		 		</div>
 		 		<div className="item">
-		 			Since scores in NFL football are not evenly distributed (3-7 much more likely than 8-8), the identites of the squares, though fixed,
-		 			are not revealed until the contest is locked by the administrator.  Because these seed for the identities generator isn't set  
+		 			Since scores in NFL football are not evenly distributed (3-7 much more likely than 8-8), <strong>the identites of the squares, though fixed,
+		 			are not revealed until the contest is locked</strong> by the administrator.  Because these seed for the identities generator isn't set  
 		 			<a href="https://github.com/fettermania/superbowl-squares/blob/main/ethereum/contracts/Square.sol#L75"> until the moment of locking, </a>
 		 			the adminstrator has no advantage. You maximum distrust crypto kids should be happy.
 		 		</div>
 		 		<div className="item">
-		 			If the winning square of the sports contest has no owner, all ticket prices (minus any gas) are refunded.
+		 			If the winning square of the sports contest has no owner, <strong>all ticket prices (minus any gas) are refunded.</strong>
 		 		</div>
 		 	</div>
 
-		<b>Admin</b>
+		<h3>Admin</h3>
 
 			<div className="ui bulleted list">
 		 		<div className="item">
-		 			The admin has the ability to <b>create a contest</b> (setting its price, name, and home / away team names), <b>permanently lock the entries</b>, and <b>submit the score</b>
-		 		</div>
-		 		<div className="item">
-		 			<b>Create</b> a new set of squares from the blue button the main page of your network (/goerli/ or /mainnet/).  
+		 			<b>Create</b> a new set of squares from the blue button on the main page of your network (/goerli/ or /mainnet/).  
 		 			Set the price (in wei) and names accordingly.  These cannot be changed (maximum distrust!)
 		 		</div> 
 		 		<div className="item">
-		 			<b>Spread the word</b> or don't.  These contests are by design open to all, and they all appear in the main list.
+		 			Creating a contest (and paying to submit it to the chain) <strong>makes you its sole admin</strong>.
+	 			</div>
+		 		<div className="item">
+		 			<b>Spread the word</b> or don't.  These contests are by design open to all, and all contests appear in the main list for its network.
 				</div> 
 				<div className="item">
 		 			<b>Lock entries</b> behind the Manage button (visible to admin only) on the contest page.  There is no specified time for this, but it should happen before the game begins.
 				</div> 
 				<div className="item">
-		 			<b>Submit Score</b> when the game has completed.  This either sends the balance of the contract to the winner or refunds all if that square has no owner.
+		 			<b>Submit the score</b> when the game has completed.  This either sends the balance of the contract to the winner or refunds all if that square has no owner.
 				</div> 
 			</div>
 
-		<b>Etc</b>
+		<h3>Etc</h3>
 
 			<div className="ui bulleted list">
 				<div className="item">
-		 			This dApp operates entirely on the Ethereum blockchain.  All storage, including metadata, is on-chain.  Identites are provided by your wallet only.
+		 			This dApp operates <strong>entirely on the Ethereum blockchain</strong>.  All storage, including metadata, is on-chain.  Identites are provided by your wallet only.
 		 		</div>
 		 		<div className="item">
-		 			The contracts are designed to be immutable except for squares before lock.  They cannot be adjusted from the Bnegals to the Bengals, for the same reason they can't be adjusted from the Bengals to the Ravens.
+		 			The contracts are <strong>designed to be unchangeable</strong> except for buying squares before lock.  Strings cannot, say, be adjusted from the <em>Bnegals to the </em>Bengals, for the same reason they can't be adjusted from the <em>Bengals</em> to the <em>Ravens</em>.
 		 		</div>
 		 		<div className="item">
-		 			This is maintained by fettermania@gmail.com.  Hit me up with any questions or problems.  
+		 			This is maintained by <strong>fettermania@gmail.com</strong>.  Hit me up with any questions or problems.  
 		 		</div>
 		 		<div className="item">
-		 			The gas costs of all non-ticket calls, including game creation, locking, and submitting score, are borne by the administrator.  Night and early morning in the US are cheapest.
+		 			The gas costs of all non-ticket calls, including game creation, locking, and submitting score, are <strong>paid by the administrator</strong>.  
+		 			Night and early morning in the US are cheapest.
 		 			Expect the gas price creating a contest to be $20-30 and buying a square to be $1-2 (on top of the part going into the pot)
 		 		</div>
 		 		<div className="item">
-		 			The code for everythig is <a href="https://github.com/fettermania/superbowl-squares/">on github</a>.  The contracts (e.g. <a href="https://etherscan.io/address/0x6dded5d52d379ba501420b8570c9dc478895198a">this one</a>) are inspectable as well.
+		 			<strong>All code and contracts are visible</strong>. The code for everything is <a href="https://github.com/fettermania/superbowl-squares/">on github</a>.  The contracts (e.g. <a href="https://etherscan.io/address/0x6dded5d52d379ba501420b8570c9dc478895198a">this one</a>) are inspectable as well.
 		 		</div>
 		 	</div>
 
