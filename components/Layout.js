@@ -9,21 +9,21 @@ import Header from './Header';
 
 // NOTE: Different than lecture.  Need named variable to export for React v17+ linter.
  const Layout = (props) => {
- 	return (
- 		<Container fluid>
- 		    <Head>
-   			  <link async
-	    	    rel="stylesheet"
-  		        href="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.css"
-  			  />
-  			 </Head>
+    return (
+        <Container fluid>
+            <Head>
+              <link async
+                rel="stylesheet"
+                href="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.css"
+              />
+             </Head>
 
- 		   <Header 
- 		   	network={props.network}
- 		   />
- 		   {props.children}
- 		</Container>
- 		);
+           <Header 
+            network={props.network}
+           />
+           {props.children}
+        </Container>
+        );
  };
 
  export default Layout;

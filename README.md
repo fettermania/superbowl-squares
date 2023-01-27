@@ -15,9 +15,9 @@ http://192.168.1.177:3000
 
 Install the software:
 
-	$ npm install
-	$ cd ethereum
-	$ node compile.js  # generates output at build/
+  $ npm install
+  $ cd ethereum
+  $ node compile.js  # generates output at build/
  
 Deploy an instance of the squareFactory contract to the ethereum network.  Two options here.
 
@@ -31,7 +31,7 @@ variable $METAMASK_PHRASE with its contents.
 
 Then: 
 
-	$ node deploy.js mainnet # or
+  $ node deploy.js mainnet # or
   # node deploy.js goerli # using Infura URLs in ./ethereum/config.js
 
 Write down the address displayed and update ethereum/factory.js with this address.
@@ -70,53 +70,13 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 - Units are in wei.  Typical is 1000000000000000.
 
 ### Bugs and TODOs
+- [TODO] Release testnet transaction for championship games.
 - 1/18: Where are all my requests coming from?  NOTE: Public infura keys often get abused.   Would need a server component to hide.
 - Remember: "npm compile.js" to ensure the client side of the ABI/contract is handled in build/.
-- Make Squares (Better idea)
-  - Principle: Code and Contract are there for everyone to see and behind no servers.
-  - Principle: True values of columns and rows are hidden during buying (otherwise value unequal)
-  - Principle: Even the creator of the grid can't know the values before locking the scoring.
-  - [DONE] (locked == true) --> (lockedTimestamp != 0)
-  - [DONE] setLocked(bool) -> setLocked()
-  - [DONE] Use block.timestamp for  random seed on create
-  - [DONE] Return block.lockedTimestamp  in getSummary
-  - [DONE] Use that seed to generate sequence on client using JS
-  - [DONE] Make Lock one-way in UI
-  - [DONE] Move completed to int (-1: game incomplete, 0-99: Row/col)
-  - [DONE] Store winner in completed
-  - [DONE] Show basic winner in show.js
-  - [DONE] Only Show Lock or Declare winner on manager page on respective conditions !locked, locked
-  - [DONE] Display 0-9 re-mapping on game page
-  - [DONE] Translate 0-9 winner to which row/col to pick on manager page
-- [DONE] Store actual final scores, refactor completed away somehow (two bytes)
-- Goerli vs. Mainnet
-  - [DONE] Instantiate web3 from a URL parameter.
-  - [TODO] Make web3 a singleton per process (hard reload?)
-  - [DONE] Does pushRoute relaod the backend (specifically, the default web3 provider in web3.js)
-  - The Gate:
-     - [DONE] move former index to home.js
-     - index is: 
-        - [DONE] Explain the rules
-        - no wallet?  Install here and set network?
-        - [DONE] Highlight which network you're using (Header)
-  - [DONE] Routes: include network in URL like /:network/:address
-  - Routes: if no legit network in URL, redirect to prod 
-  - Banner: Encourage user to switch network if it doesn't match URL
-    - [TODO] Any bug handling with wallet not logged in, etc.
-  - [DONE] Mapping of network  to known provider, factory singleton 
-  - [DONE] Set routes for prod / test and keep there.
-  - [TODO] Release testnet transaction for championship games.
-  - [TODO] Deploy final contract on prod
-  - [DONE] Add a link to the object on etherscan
-  - [DONE] Node scripts (deploy, compile) to take network as well
-- Explain
-  - [TODO] Highlight winner in a better way.
-  - [DONE] Explain the contract
-- [DONE] Hover to show opponent ID on show.js
+- [TODO] Deploy final contract on prod
+- [TODO] Highlight winner in a better way.
 - Somehow keep the url squares.fettermania.com
 - Probably write some tests here.
-- [DONE] Make cheaper:
-  - Monday at 7 PM: about $1 for square buy, lock about $.80, new square $18.75, new factory $23.00
 - [WON'T DO] Generally, most of the non-financial state should be moved to a database, not the contract
 - [WON'T DO] Web3 is depreacted: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3
 - [WON'T DO] Detect swiching accounts

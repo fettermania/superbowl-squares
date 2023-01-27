@@ -12,8 +12,8 @@ const output = solc.compile(source, 1).contracts;
 
 // NOTE: how do we get compile errors?
 if (Object.keys(output).length == 0) {
-	console.log("COMPILE FAILURE");
-	throw new Error("Compile Error");
+    console.log("COMPILE FAILURE");
+    throw new Error("Compile Error");
 } 
 
 // else continue
@@ -24,9 +24,9 @@ fs.ensureDirSync(buildPath);
 
 // Loop over each contract (Campaign, CampaignFactory) 
 for(let contract in output) {
-	fs.outputJsonSync(
-		path.resolve(buildPath, contract.replace(':', '') + '.json'), // GROSS, change :Square.json to Square.json
-		output[contract]
-	);
+    fs.outputJsonSync(
+        path.resolve(buildPath, contract.replace(':', '') + '.json'), // GROSS, change :Square.json to Square.json
+        output[contract]
+    );
 }
 

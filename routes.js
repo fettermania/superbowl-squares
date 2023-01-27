@@ -2,10 +2,7 @@
 const routes = require('next-routes')();
 
 
-// TODONEW: get rid of all routes?  Just index page?
 // NOTE: This matches IN ORDER, so above shadows below.
-
-// TODO in progress 1/23
 routes
 	.add('Home', '/', '/')
 	.add('List', '/list/:network', '/list')
@@ -15,5 +12,3 @@ routes
 
 // NOTE: this is an OBJECT that generates helpers we use everywhere.
 module.exports = routes;
-
-// TODO See if routes can work.

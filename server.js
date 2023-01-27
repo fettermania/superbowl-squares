@@ -11,7 +11,7 @@ port = process.env.PORT || 80;
 
 app.prepare().then(() => {
   createServer(handler).listen(port, (err) => {
-  	if (err) throw err;
-  	console.log("Ready on port " + port);
+    if (err) throw err;
+    console.log("Ready on port " + port);
   })
 })
