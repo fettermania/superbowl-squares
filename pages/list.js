@@ -85,7 +85,7 @@ class SquaresList extends Component {
                          <a>{summary.awayName} at {summary.homeName}</a>
                      </Link>),
                 
-                extra: ("Manager " + summary.manager.substring(0,8)) + ", cost: " + summary.squarePrice + " wei",
+                extra: ("Manager " + summary.manager.substring(0,8)) + ", cost: " + (summary.squarePrice / 1000000000000000000) + " eth",
                 fluid:true
               };
             })
