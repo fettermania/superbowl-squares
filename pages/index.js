@@ -11,25 +11,25 @@ class SquaresHome extends Component {
         return <Layout network="">
             <h2>Superbowl Squares</h2>
         <WalletBar />
-        This is an Ethereum-backed version of Superbowl Squares.  It is open and can be used for non-Superbowl games as well.
+        This is an Ethereum-backed version of Superbowl Squares.  Buy a square and see if you win, just like at the water cooler.
+
+        It is completely chain-backed, open, and can be used for non-Superbowl games as well.
         
         <p/>
-        <h3>Setting your Wallet up</h3>
-
-            <div className="ui bulleted list">
+        <h3>Choosing Goerli (test) or Mainnet (real money)</h3>
+            <div className="ui bulleted listf">
                 <div className="item">
                     In order to play, install an <strong>Ethereum-compatible Wallet</strong> like <a href="http://metamask.io">MetaMask</a>.
                 </div>
                  <div className="item">
                         The top nav buttons <strong>choose a network</strong>, using test ether in the <a href="/list/goerli">Goerli testnet</a>,                       
-                        or real ether on the <a href="/list/mainnet">Mainnet</a>.  
-                        Make sure your wallet is set in accordance.
+                        or real ether on the <a href="/list/mainnet">Mainnet</a>.  Set your wallet to your desired network and go from there.
                 </div>
                  <div className="item">
-                        If you see an error navigating to goerli while your wallet is on mainnet, for example, switch one or the other and then <strong>refresh the page</strong>.  Switching wallet users requires a refresh as well.
+                     <strong>Switching wallet users</strong> requires a page refresh.
                 </div>  
                  <div className="item">
-                        Usually, bad URLs or mismatched wallet settings <strong>send you home (here)</strong>.
+                    Usually, bad URLs or mismatched wallet settings <strong>send you home (here)</strong>.
                 </div>  
             </div>
 
@@ -59,7 +59,7 @@ class SquaresHome extends Component {
 
             <div className="ui bulleted list">
                 <div className="item">
-                    <b>Create</b> a new set of squares from the blue button on the main page of your network (/goerli/ or /mainnet/).  
+                    <b>Create</b> a new set of squares from the blue button on the main page of your network (/list/goerli/ or /list/mainnet/).  
                     Set the price (in wei) and names accordingly.  These cannot be changed (maximum distrust!)
                 </div> 
                 <div className="item">
@@ -83,7 +83,10 @@ class SquaresHome extends Component {
                     This dApp operates <strong>entirely on the Ethereum blockchain</strong>.  All storage, including metadata, is on-chain.  Identites are provided by your wallet only.
                 </div>
                 <div className="item">
-                    The contracts are <strong>designed to be unchangeable</strong> except for buying squares before lock.  Strings cannot, say, be adjusted from the <em>Bnegals to the </em>Bengals, for the same reason they can't be adjusted from the <em>Bengals</em> to the <em>Ravens</em>.
+                    The contracts are <strong>designed to be unchangeable</strong> except for buying squares before lock.  
+                    Strings cannot, say, be adjusted from the <em>Bnegals</em> to the <em>Bengals</em>, 
+                    for the same reason they can't be adjusted from the <em>Bengals</em> to the <em>Ravens</em>.
+
                 </div>
                 <div className="item">
                     This is maintained by <strong>fettermania@gmail.com</strong>.  Hit me up with any questions or problems.  
