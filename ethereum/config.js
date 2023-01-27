@@ -1,6 +1,6 @@
 var factoryAddresses = {
     'mainnet': '0x6dded5d52d379ba501420b8570c9dc478895198a',
-    'goerli': '0xd52cE536dA452cda10b3d144248738568541291B'
+    'goerli': '0xAb57C6C995a6Ea749076d9d140B76bAa04D6A300'
 };
 
 var infuraUrls = {
