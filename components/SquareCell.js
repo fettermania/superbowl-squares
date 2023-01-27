@@ -6,7 +6,6 @@ import { Router } from '../routes';
 
 class SquareCell extends Component {
     
-    // TODO move this
     static nullAddress = '0x0000000000000000000000000000000000000000';
 
     state = {

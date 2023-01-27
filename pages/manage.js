@@ -25,7 +25,7 @@ class SquaresManager extends Component {
             awayName: '',
             squarePrice: 0,
             manager: '',
-            lockedTimestamp: 0, // TODO Note: 0 for now locked, otherwise timestamp
+            lockedTimestamp: 0, // Note: 0 for now locked, otherwise timestamp
             isLocked: false,
             homeScore: 0,
             awayScore: 0,
@@ -34,7 +34,6 @@ class SquaresManager extends Component {
         },
     };
 
-    // TODO: Do we have to getSummary here?
     onLock = async () => {
         const myWeb3 = makeWeb3(this.props.network);
         const square = squaremodel(this.props.squareAddress, myWeb3);
@@ -47,13 +46,12 @@ class SquaresManager extends Component {
                     from: this.state.accounts[0]
                 });             
 
-            // TODO Just let refresh take care of it
+            // TODO: Gross but Just let refresh take care of it
             this.setState({lockedLoading: false, 
                 isLocked: true,
                 erroMessage: ''});
 
             // NOTE: Back to detail page on change
-            // TODO Completed message on detail page
             Router.pushRoute(`/squares/${this.props.network}/${this.props.squareAddress}`);
 
         } catch (err)   {
@@ -76,11 +74,9 @@ class SquaresManager extends Component {
     static async getInitialProps(props) {
 
     
-        // TODO How can we pass the object instead of just the address?
         const network = props.query.network;
         const squareAddress = props.query.address;
 
-        // sugar for  { squareSelections : squareSelections}
         return {squareAddress, network};
 
     }
@@ -100,7 +96,7 @@ class SquaresManager extends Component {
             awayName: summaryRaw[2],
             squarePrice: summaryRaw[3],
             manager: summaryRaw[4],
-            lockedTimestamp: parsedTimestamp, // TODO Note: 0 for now locked, otherwise timestamp
+            lockedTimestamp: parsedTimestamp, // Note: 0 for now locked, otherwise timestamp
             isLocked: parsedTimestamp > 0,
             homeScore: summaryRaw[6],
             awayScore: summaryRaw[7],           
@@ -112,7 +108,7 @@ class SquaresManager extends Component {
             Router.pushRoute(`/squares/${this.props.network}/${this.props.squareAddress}`);
          } 
 
-         // TODO: is this isLocked necssary or  working?
+         // TODO: is this isLocked necssary to separate out?
         this.setState({accounts: accounts, summary: summary, isLocked: summary.isLocked});
       } catch (e) {
             Router.push('/');
@@ -124,10 +120,14 @@ class SquaresManager extends Component {
     onSubmitScore = async (event) => {
         event.preventDefault(); // NOTE - prevent HTML1 form submittal
 
-        // TODO Probably need some error checking here.
         var positionFromScoresMappings = scoreToPositionFromSeed(this.state.summary.lockedTimestamp);
         var homeIndex = positionFromScoresMappings[0][this.state.homeScore % 10];
         var awayIndex = positionFromScoresMappings[1][this.state.awayScore % 10];
+
+        if (!(homeIndex > 0) || !(awayIndex > 0)) {
+            this.setState({errorMessage: "Something wrong with the input", winnerLoading: false});
+            return;
+        }
         
         const network = this.props.network;
         const myWeb3 = makeWeb3(network);
@@ -151,7 +151,6 @@ class SquaresManager extends Component {
         } catch (err) {
             let humanMessage;
 
-            // NOTE: Fetterman wrote this sugar.
             switch (err.code) {
                 case 'INVALID_ARGUMENT':
                     humanMessage = "Something wrong with the input";
@@ -160,7 +159,8 @@ class SquaresManager extends Component {
                     humanMessage = "Transaction rejected by metamask/provider";
                     break;
                 default:
-                    humanMessage = "Unknown error.  Details:" + err.message;
+                	humanMessage = "Error code: " + err;
+                //    humanMessage = "Error:" + +homeIndex + "X" + err.message;
             }
             this.setState({errorMessage: humanMessage, winnerLoading: false});
         }

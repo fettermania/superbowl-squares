@@ -32,6 +32,17 @@ class SquaresNew extends Component {
         event.preventDefault(); // NOTE - prevent HTML1 form submittal
 
         try  {
+            var competitionNameTrimmed = this.state.competitionName.trim();
+            var homeNameTrimmed = this.state.homeName.trim();
+            var awayNameTrimmed = this.state.awayName.trim();
+            
+            if ((competitionNameTrimmed.length == 0) 
+                || (homeNameTrimmed.length == 0) 
+                || (awayNameTrimmed.length == 0)) {
+                this.setState({loading: false});
+                this.setState({errorMessage: "Something wrong with the input"});
+                return;
+            }
 
             const myWeb3 = makeWeb3(this.props.network);
 
@@ -43,12 +54,12 @@ class SquaresNew extends Component {
             const myFactory = factory(config.factoryAddresses[this.props.network], myWeb3);
 
             await myFactory.methods.createSquare(
-                this.state.competitionName,
-                this.state.homeName,
-                this.state.awayName,
+                competitionNameTrimmed,
+                homeNameTrimmed,
+                awayNameTrimmed,
                 this.state.squarePrice)
                 .send({
-                    from: accounts[0] // TODO  
+                    from: accounts[0] 
                 });
 
                 // NOTE: Redirect back to index route after completon.

@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import { Button, Table, Grid, Card} from 'semantic-ui-react';
 import SquareCell from './SquareCell';
 
-// TODO note: BUG - same account can contribute more than once, 
-//  counting them as two contributors
 class SquareRow extends Component {
     
     render() {

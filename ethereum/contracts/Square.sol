@@ -23,11 +23,10 @@ contract Square {
   address manager;
   
   uint lockedTimestamp; // Locked if this is not zero.
-  uint8 homeScore; // TODO change to "Winner" or something.  Indicates winner cell, or -1 (not completed)
+  uint8 homeScore; 
   uint8 awayScore;
   bool isCompleted;
 
-  // TODO Test this against a map again.
   address[100] public selectors;
 
   // note: gloval variable msg auto-provided with any invocation
@@ -43,7 +42,7 @@ contract Square {
       //isCompleted = false; // dfault
   }
 
-// TODO remove this 1/23
+  // Note: This is technically extra code but about as cheap as making everything a public variable.
   function getSummary() public view returns (
     string, string, string, uint, address, uint, uint8, uint8, bool, address[100] memory) {
       return (
@@ -52,7 +51,7 @@ contract Square {
           awayName,
           squarePrice,
           manager,
-          lockedTimestamp, // TODO Added
+          lockedTimestamp,
           homeScore,
           awayScore,
           isCompleted, 
@@ -70,14 +69,11 @@ contract Square {
       selectors[homeRow * 10 + awayCol] = msg.sender;
     }
 
- // SetLocked=true reveals the board 
+ // setLocked reveals/generates the board labels
   function setLocked() public onlyManagerCanCall {
    lockedTimestamp = block.timestamp;
   }
 
-  // TODO Ensure picking ROW and COL, not scores
-  // note "this" is current contract
-  // TODO Is repeating the array index logic cheaper than storing?
   function submitScore(uint8 winnerHomeRow, uint8 winnerAwayCol, uint8 homeScoreFinal, uint8 awayScoreFinal) public onlyManagerCanCall {
     require(winnerHomeRow <= 9);
     require(winnerAwayCol <= 9);
@@ -86,7 +82,7 @@ contract Square {
 
     if(selectors[winnerHomeRow * 10 + winnerAwayCol] == 0x0000000000000000000000000000000000000000) {
       // Refund case
-      // TODO Fix this.  Make a smaller number of transactions
+      // TODO Optimization:  Group so one transaction per winner (maybe not even cheaper?)
       for (uint i = 0; i < 100; i++) {
         if (selectors[i] != 0x0000000000000000000000000000000000000000) {
           selectors[i].transfer(squarePrice);

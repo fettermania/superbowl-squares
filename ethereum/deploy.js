@@ -15,7 +15,6 @@ if (!config.infuraUrls[argNetwork]) {
 
 const compiledSquareFactory = require('./build/SquareFactory.json');
 
-// TODO Get new rinkeby?
 const provider = new HDWalletProvider(
   process.env.METAMASK_PHRASE,
     config.infuraUrls[argNetwork]

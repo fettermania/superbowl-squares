@@ -2,7 +2,6 @@ import Web3 from "web3";
 var config = require ('./config.js');
 
 
-// TODO 1/25 - try singleton later
 let madeWeb3 = null;
 function makeWeb3(networkString) {
   if (madeWeb3) {

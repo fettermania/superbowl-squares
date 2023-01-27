@@ -1,7 +1,6 @@
 const {createServer} = require('http');
 const next = require('next')
 
-// TODONEW: Need to flip this for "production mode" next.js - what is this?
 const app = next({dev: process.env.NODE_ENV !== 'production'})
 
 const routes = require('./routes');

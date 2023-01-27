@@ -63,8 +63,11 @@ class SquaresList extends Component {
         }
     }
 
-    // TODO : Disable if locked, or indicate as such    
-    renderSquaresList() {   
+    renderSquaresList() { 
+    	if (this.state.summaries.length == 0) {
+    		return <em>No contests submitted yet.  Get a wallet and get after it.</em>;	
+    	}
+
         const items = this.state.summaries.map((summary, index) => {
             let icon;
             if (summary.isCompleted) { // completed implies locked

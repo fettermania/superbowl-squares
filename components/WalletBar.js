@@ -6,20 +6,25 @@ import { makeWeb3 } from '../ethereum/web3';
 class WalletBar extends Component {
 
   state = {
-    message: 'Ethereum wallet not detected ❌.   Check out metamask.io or similar'
+    message: 'Ethereum wallet not detected ❌.   Check out metamask.io or similar',
+    color: 'red'
   };
 
 
   async onChainDetect(chainId) {
-    var message = '';
+    var message;
+    var color;
     if (chainId === 5) {
-      message = "Ethereum wallet detected (Using Goerli Test Network) ✅";
+      message = "Ethereum wallet detected.  Use Goerli Test Network above. ✅";
+      color = 'green';
     } else if (chainId === 1) { 
-      message = "Ethereum wallet detected (Using Mainnet) ✅";
+      message = "Ethereum wallet detected.  Use Mainnet above. ✅";
+      color = 'green';
     } else {
-      message = "Ethereum wallet detected (Switch to Goerli or Mainnet) ❌";
+      message = "Ethereum wallet detected.  Log in and switch to Goerli or Mainnet. ❌";
+      color = 'red';
     }
-    this.setState({message: message});
+    this.setState({message: message, color: color});
   }
 
   async componentDidMount() {
@@ -31,7 +36,7 @@ class WalletBar extends Component {
   } 
 
   render () {
-    return <h4><em><div suppressHydrationWarning>{this.state.message}</div></em></h4>;
+    return <h4><em><div suppressHydrationWarning style={{color: this.state.color}}>{this.state.message}</div></em></h4>;
   }
 };
 

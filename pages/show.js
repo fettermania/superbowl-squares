@@ -16,7 +16,7 @@ class SquaresDetail extends Component {
     static defaultHiddenAxes = [Array(10).fill('?'), Array(10).fill('?')];
 
     state = {
-        accounts: [], // TODO Gross global variable
+        accounts: [], 
         errorMessage: '',
         isCompleted: false,
         isLocked: false,
@@ -28,7 +28,7 @@ class SquaresDetail extends Component {
             awayName: '',
             squarePrice: 0,
             manager: '',
-            lockedTimestamp: 0, // TODO Note: 0 for now locked, otherwise timestamp
+            lockedTimestamp: 0, // Note: 0 for now locked, otherwise timestamp
             isLocked: false,
             homeScore: 0,
             awayScore: 0,
@@ -47,7 +47,7 @@ class SquaresDetail extends Component {
             rows[row] = new Array(10);
             for (var col = 0; col < 10; col++) {
                 rows[row][col] = squareSelections[i];
-                i++; // TODO this is dirty but who cares
+                i++; // TODO this is dirty but fix later
             }
         }
         return rows;
@@ -113,7 +113,7 @@ class SquaresDetail extends Component {
             awayName: summaryRaw[2],
             squarePrice: summaryRaw[3],
             manager: summaryRaw[4],
-            lockedTimestamp: parsedTimestamp, // TODO Note: 0 for now locked, otherwise timestamp
+            lockedTimestamp: parsedTimestamp, // Note: 0 for now locked, otherwise timestamp
             isLocked: parsedTimestamp > 0,
             homeScore: summaryRaw[6],
             awayScore: summaryRaw[7],           
@@ -139,8 +139,6 @@ class SquaresDetail extends Component {
         this.setState({errorMessage: errorMessage});
     }
 
-    // TODO Add score selection
-    // TODO Add status on list page
     renderManagerButton() {
         if (this.state.summary.manager == this.state.accounts[0]
             && (this.state.summary.isCompleted == false)) {
@@ -229,7 +227,7 @@ class SquaresDetail extends Component {
 
         const acctName = (this.state.accounts[0]) ? (this.state.accounts[0].substr(2,4) ) : "none";
 
-        const totalAccounts = ( new Set(squaresTaken)).size;
+        const totalAccounts = (new Set(squaresTaken)).size;
         const squaresLeft = 100 - squaresTaken;
         const items = [
 
