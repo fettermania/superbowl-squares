@@ -230,18 +230,18 @@ class SquaresDetail extends Component {
         const totalAccounts = (new Set(squaresTaken)).size;
         const squaresLeft = 100 - squaresTaken;
         const items = [
-
+        // TODO clean up wei/ether
        {
-        header: this.state.summary.squarePrice,
-        description: 'Entry price (in wei)',
+        header: this.state.summary.squarePrice /1000000000000000000,
+        description: 'Entry price (in eth)',
         },
        {
         header: countSquaresTaken,
         description: 'Squares Taken'
         },
         {
-        header: (this.state.summary.squarePrice * countSquaresTaken),
-        description: 'Total at stake (in wei)'
+        header: (this.state.summary.squarePrice * countSquaresTaken) /1000000000000000000,
+        description: 'Total at stake (in eth)'
         },
       {
         header: countSquaresYouBought,
@@ -249,8 +249,8 @@ class SquaresDetail extends Component {
         style: {overflowWrap: 'break-word'}
       },
         {
-    header:this.state.summary.squarePrice * countSquaresYouBought,
-        description: 'Your total stake (in wei)'
+    header:this.state.summary.squarePrice * countSquaresYouBought /1000000000000000000,
+        description: 'Your total stake (in eth)'
         },
        {
         header: totalAccounts,
