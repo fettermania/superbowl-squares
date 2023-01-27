@@ -108,10 +108,10 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
   - [TODO] Release testnet transaction for championship games.
   - [TODO] Deploy final contract on prod
   - [DONE] Add a link to the object on etherscan
-  - Node scripts  (deploy, compile) to take network as well
+  - [DONE] Node scripts (deploy, compile) to take network as well
 - Explain
   - [TODO] Highlight winner in a better way.
-  - Explain the contract
+  - [DONE] Explain the contract
 - [DONE] Hover to show opponent ID on show.js
 - Somehow keep the url squares.fettermania.com
 - Probably write some tests here.
