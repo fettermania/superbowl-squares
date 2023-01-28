@@ -9,8 +9,8 @@ class SquaresHome extends Component {
 
     render () {
         return <Layout network="">
-            <h2>Superbowl Squares</h2>
         <WalletBar />
+        <h2>Superbowl Squares</h2>
         This is an Ethereum-backed version of Superbowl Squares.  Buy a square and see if you win, just like at the water cooler.
 
         It is completely chain-backed, open, and can be used for non-Superbowl games as well.
