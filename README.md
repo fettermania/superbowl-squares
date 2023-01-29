@@ -67,7 +67,6 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 ## Other Details
 - Mainnet (single game) contract : 0x58163bbF45c107A796dE2A9D072441F4E7573aC3  - looks dead
 - HEROKU instructions: https://devcenter.heroku.com/articles/deploying-nodejs
-- Units are in wei.  Typical is 1000000000000000.
 
 ### Bugs and TODOs
 - [TODO] Release testnet transaction for championship games.
