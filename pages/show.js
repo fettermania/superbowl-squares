@@ -8,6 +8,7 @@ import { Link, Router }  from '../routes';
 import { makeWeb3 } from '../ethereum/web3.js';
 import {positionToScoreFromSeed, scoreToPositionFromSeed} from '../lib/hiddenaxes.js';
 import {generateEtherscanURL} from '../lib/networkstring.js';
+import Web3 from "web3";
 
 class SquaresDetail extends Component {
     // TODO move these
@@ -232,7 +233,7 @@ class SquaresDetail extends Component {
         const items = [
         // TODO clean up wei/ether
        {
-        header: this.state.summary.squarePrice /1000000000000000000,
+        header: Web3.utils.fromWei(this.state.summary.squarePrice.toString()),
         description: 'Entry price (in eth)',
         },
        {
@@ -240,7 +241,7 @@ class SquaresDetail extends Component {
         description: 'Squares Taken'
         },
         {
-        header: (this.state.summary.squarePrice * countSquaresTaken) /1000000000000000000,
+        header: Web3.utils.fromWei((this.state.summary.squarePrice * countSquaresTaken).toString()),
         description: 'Total at stake (in eth)'
         },
       {
@@ -249,7 +250,7 @@ class SquaresDetail extends Component {
         style: {overflowWrap: 'break-word'}
       },
         {
-    header:this.state.summary.squarePrice * countSquaresYouBought /1000000000000000000,
+    header: Web3.utils.fromWei((this.state.summary.squarePrice * countSquaresYouBought).toString()),
         description: 'Your total stake (in eth)'
         },
        {

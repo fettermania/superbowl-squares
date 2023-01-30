@@ -6,6 +6,7 @@ import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import squaremodel from '../ethereum/squaremodel';
 import { makeWeb3 } from '../ethereum/web3';
+import Web3 from "web3";
 
 var config = require ('../ethereum/config.js');
 
@@ -85,7 +86,7 @@ class SquaresList extends Component {
                          <a>{summary.awayName} at {summary.homeName}</a>
                      </Link>),
                 
-                extra: ("Manager " + summary.manager.substring(0,8)) + ", cost: " + (summary.squarePrice / 1000000000000000000) + " eth",
+                extra: ("Manager " + summary.manager.substring(0,8)) + ", cost: " + Web3.utils.fromWei(summary.squarePrice.toString()) + " eth",
                 fluid:true
               };
             })

@@ -5,6 +5,7 @@ import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import { makeWeb3 } from '../ethereum/web3';
+import Web3 from "web3";
 
 var config = require ('../ethereum/config.js');
 
@@ -57,7 +58,7 @@ class SquaresNew extends Component {
                 competitionNameTrimmed,
                 homeNameTrimmed,
                 awayNameTrimmed,
-                this.state.squarePrice * 1000000000000000000)
+                Web3.utils.toWei(this.state.squarePrice.toString()))
                 .send({
                     from: accounts[0] 
                 });

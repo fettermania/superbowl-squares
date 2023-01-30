@@ -123,8 +123,8 @@ class SquaresManager extends Component {
         var positionFromScoresMappings = scoreToPositionFromSeed(this.state.summary.lockedTimestamp);
         var homeIndex = positionFromScoresMappings[0][this.state.homeScore % 10];
         var awayIndex = positionFromScoresMappings[1][this.state.awayScore % 10];
-
-        if (!(homeIndex > 0) || !(awayIndex > 0)) {
+        
+        if (!(homeIndex >= 0) || !(awayIndex >= 0)) {
             this.setState({errorMessage: "Something wrong with the input", winnerLoading: false});
             return;
         }
