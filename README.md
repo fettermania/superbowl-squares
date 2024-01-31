@@ -69,18 +69,22 @@ Running "next" or "next start" seems to disable any functionality of routes.js.
 - HEROKU instructions: https://devcenter.heroku.com/articles/deploying-nodejs
 
 ### Bugs and TODOs
-- [TODO] Release testnet transaction for championship games.
-- 1/18: Where are all my requests coming from?  NOTE: Public infura keys often get abused.   Would need a server component to hide.
-- Remember: "npm compile.js" to ensure the client side of the ABI/contract is handled in build/.
-- [TODO] Deploy final contract on prod
-- [TODO] Highlight winner in a better way.
-- Somehow keep the url squares.fettermania.com
+- [DONE] Release testnet transaction for championship games.
+- [WON'T DO] 1/18: Where are all my requests coming from?  NOTE: Public infura keys often get abused.   Would need a server component to hide.
+- [NOTE] Remember: "npm compile.js" to ensure the client side of the ABI/contract is handled in build/.
+- [DONE] Deploy final contract on prod
+- [WON'T DO] Highlight winner in a better way.
+- [DONE] Somehow keep the url squares.fettermania.com
+  - Note: Upgraded to heroku basic, genereate a herokudns.com link, set as target in Route53 CNAME record
 - Probably write some tests here.
-- [WON'T DO] Generally, most of the non-financial state should be moved to a database, not the contract
+- [WON'T DO] Generally, most of the non-financial state should be moved to a database, not the contract.  
+  - Note: This is part of the decentralized, maximum distrust model though.
 - [WON'T DO] Web3 is depreacted: https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3
+  - [WON'T DO] Ethereum course is 2+ years old.  Might need to update version of superbowlsquares somewday
 - [WON'T DO] Detect swiching accounts
-- [WON't DO] Detect updates in state from "server" 
+- [WON'T DO] Detect updates in state from "server" 
 - [WON'T DO] How do I open metamask right away when visiting the app?
+
 
 ### Props
 
