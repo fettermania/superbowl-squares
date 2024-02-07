@@ -137,6 +137,7 @@ class SquaresDetail extends Component {
 							isCompleted={this.props.summary.isCompleted}
 							rowBuyerAddresses={rowSelections}
 							viewerAddress={this.state.accounts[0]}
+							setTopError={this.setTopError} // 2024 new
 							/>);
 		});
 	}

@@ -14,6 +14,7 @@ class SquareCell extends Component {
 	};
 
 	onPurchase = async () => {
+//		console.log(this.props) // 2024
 		if (!this.props.viewerAddress) {
 			this.props.setTopError('No viewer address.  Connect your ethereum wallet.');
 			return;

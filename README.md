@@ -1,5 +1,18 @@
 # superbowl-squares
 
+# 2/6/24
+
+- Try at git hash bf425c66ae038449999b99bb0d264acae81b45b8
+  
+- Create pre-hiddenaxes branch, named 2024 classic
+  - node  deploy: Contract deployed to 0xDe21879501eb20c6fB435717C7d116174993e414
+  - Game:  0x0aC28bB5ef2083dE4663FaebcF8d74cf24454378
+
+- Can we push it to Heroku?
+- Can we create a game there?
+- Can we reapply old diffs?
+
+
 ## Use: Web Browser (Desktop)
 
 Use metamask.io.
