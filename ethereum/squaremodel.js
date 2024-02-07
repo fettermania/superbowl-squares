@@ -6,8 +6,9 @@ import SquareJSON from './build/Square.json';
 // // let address = '0x2b92288b6C2D24f99F9Cc12b79Cf31E64B797514'; // RINKEBY - v1
 
 //let address = '0x58163bbF45c107A796dE2A9D072441F4E7573aC3';  // MAINNET - one square
-let address = '0xd7A8A1DB8601bBaBf7c34F5b324D9BE224087544'; // 2023 GOERLI - one example of a square
+// let address = '0xd7A8A1DB8601bBaBf7c34F5b324D9BE224087544'; // 2023 GOERLI - one example of a square
 
+let address = '0xB20A1D8DA8b18152399656daC8A9135674bee04D'; // 2024 GOERLI - one example of a square
 // TODO 2023 - we don't need to request this every time.
 
 // // Note: expots a function, not a class

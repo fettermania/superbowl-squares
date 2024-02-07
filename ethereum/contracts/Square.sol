@@ -22,8 +22,11 @@ contract Square {
   uint public squarePrice;
   address public manager;
   
-  uint lockedTimestamp; // Locked if this is not zero.
-  int8 completed; // TODO change to "Winner" or something.  Indicates winner cell, or -1 (not completed)
+  // TODO these are all public?
+  uint public lockedTimestamp; // Locked if this is not zero.
+  uint8 public homeScore;
+  uint8 public awayScore;
+  bool public isCompleted;
 
   // TODO Test this against a map again.
   address[100] public selectors;
@@ -38,11 +41,11 @@ contract Square {
       manager = creator;
 
       //lockedTimestamp = 0 ; //default
-      completed = -1;   
+      //isCompleted = false;// default
   }
 
   function getSummary() public view returns (
-    string, string, string, uint, address, uint, int8) {
+    string, string, string, uint, address, uint, uint8, uint8, bool) {
 
       return (
           competitionName,
@@ -50,8 +53,10 @@ contract Square {
           awayName,
           squarePrice,
           manager,
-          lockedTimestamp, // TODO Added
-          completed // NOTE: This is either -1 (not done) or home*10 + away.  So 41-33 means completed = 13
+          lockedTimestamp,
+          homeScore,
+          awayScore,
+          isCompleted // Now a bool
           );
   }
 
@@ -75,16 +80,16 @@ contract Square {
    lockedTimestamp = block.timestamp;
   }
 
-  // TODO Ensure picking ROW and COL, not scores
   // note "this" is current contract
-  // TODO Is repeating the array index logic cheaper than storing?
-  function pickWinner(uint8 homeRow, uint8 awayCol) public onlyManagerCanCall {
-    require(homeRow <= 9);
-    require(awayCol <= 9);
-    require(completed == -1);
+  function submitScore(uint8 homeScoreSubmitted, uint8 awayScoreSubmitted) public onlyManagerCanCall {
+    require(isCompleted == false);
   // require(lockedTimestamp > 0); // Not strictly necessary - 2024.
 
-    if(selectors[homeRow * 10 + awayCol] == 0x0000000000000000000000000000000000000000) {
+    homeScore = homeScoreSubmitted;
+    awayScore = awayScoreSubmitted;
+
+    uint8 winnerIndex = (homeScoreSubmitted % 10) * 10 + (awayScoreSubmitted % 10);
+    if(selectors[winnerIndex] == 0x0000000000000000000000000000000000000000) {
       // Refund case
       // TODO Fix this.  Make a smaller number of transactions
       for (uint i = 0; i < 100; i++) {
@@ -93,12 +98,11 @@ contract Square {
         }
       }
     } else { 
-      address player = selectors[homeRow * 10 + awayCol];
+      address player = selectors[winnerIndex];
       player.transfer(address(this).balance);
     }
 
-    // Note: this may not correspond to a purchased ticket!
-    completed = int8(homeRow * 10 + awayCol);
+    isCompleted = true;
   }
 
   modifier onlyManagerCanCall() {

@@ -68,12 +68,13 @@ class SquaresManager extends Component {
 		const summary = {
 			competitionName: summaryRaw[0],
 			homeName: summaryRaw[1],
-			awayName: summaryRaw[1],
+			awayName: summaryRaw[2],
           	manager: summaryRaw[4],
 		  	lockedTimestamp: summaryRaw[5],
-		  	completed: summaryRaw[6],
 		  	isLocked: summaryRaw[5] > 0,
-		  	isCompleted: summaryRaw[6] >= 0
+			homeScore: summaryRaw[6],
+			awayScore: summaryRaw[7],
+		  	isCompleted: summaryRaw[8]
 		}
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, summary};  
@@ -90,16 +91,16 @@ class SquaresManager extends Component {
 	    
 
 	// NOTE: Gotcha - need the arrow function for THIS to work.
-	onPickWinner = async (event) => {
+	onSubmitScore = async (event) => {
 		event.preventDefault(); // NOTE - prevent HTML1 form submittal
 
 		const square = squaremodel(this.props.squareAddress);
 
 		try  {
 			this.setState({errorMessage: '', winnerLoading: true});
-			await square.methods.pickWinner(
-				this.state.homeScore % 10,
-				this.state.awayScore % 10)
+			await square.methods.submitScore(
+				this.state.homeScore,
+				this.state.awayScore)
 				.send({
 					from: this.state.accounts[0]
 				});
@@ -128,7 +129,7 @@ class SquaresManager extends Component {
 	renderScoreForm(){
 
 		return (
-				<Form onSubmit={this.onPickWinner} error={Boolean(this.state.errorMessage)}>
+				<Form onSubmit={this.onSubmitScore} error={Boolean(this.state.errorMessage)}>
 					<Form.Field>
 						<label>Home Score</label>
 						<Input 

@@ -39,7 +39,9 @@ Install the software:
 
 	$ npm install
 	$ cd ethereum
-	$ node compile.js  # generates output at build/
+	$ node compile.js  # generates output at build/  
+
+GOTCHA: Don't forget to node compile.js after changing contracts!  Note sure if SquareModel.js needs to be updated.
  
 Deploy an instance of the squareFactory contract to the ethereum network.  Two options here.
 

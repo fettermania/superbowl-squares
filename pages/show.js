@@ -50,27 +50,24 @@ class SquaresDetail extends Component {
 			squarePrice: summaryRaw[3],
           	manager: summaryRaw[4],
           	lockedTimestamp: summaryRaw[5], // TODO Note: 0 for now locked, otherwise timestamp
-      	    completed: summaryRaw[6], // TODO Note: -1 for not completed, otherwise the winner
-      	    isLocked: summaryRaw[5] > 0,
-       	    isCompleted: summaryRaw[6] >= 0   
+      	    homeScore: summaryRaw[6], 
+      	    awayScore: summaryRaw[7],
+       	    isCompleted: summaryRaw[8]
 		}
 
-		console.log("summary is");
-		console.log(summaryRaw);
 		// sugar for  { squareSelections : squareSelections}
 		return {squareAddress, squareSelections, rows, summary};  
 	}
 
 	setGameProgressState(isLocked, isCompleted) {
 		if (isCompleted == true) {
-			var homescore = Math.floor(this.props.summary.completed / 10);
-			var awayscore = this.props.summary.completed % 10;
-			var winneraddress = this.props.squareSelections[homescore*10+awayscore];
+			var homescore = this.props.summary.homeScore;
+			var awayscore = this.props.summary.awayScore;
+			var winneraddress = this.props.squareSelections[(homescore%10)*10+(awayscore%10)];
 			var completedMessage = "Contest completed. "
-				+  this.props.summary.awayName + " score ends " + awayscore + ". "
-				+  this.props.summary.homeName + " score ends " + homescore + "."
-			var winnerMessage = (winneraddress == SquaresDetail.nullAddress) ? " No winner. Refunds dispensed." : " Winner is " + winneraddress + ".";
-			this.setState({errorMessage: completedMessage + winnerMessage, isLocked: true, isCompleted: true});
+				+  this.props.summary.awayName + " scores " + awayscore + ". "
+				+  this.props.summary.homeName + " scores " + homescore + "."
+			var winnerMessage = (winneraddress == SquaresDetail.nullAddress) ? " No winner. Refunds dispensed." : " Winner is " + winneraddress + ".";		this.setState({errorMessage: completedMessage + winnerMessage, isLocked: true, isCompleted: true});
 		} else if (isLocked) {
 			this.setState({errorMessage: 'Choices are locked', isLocked: true, isCompleted: false});
 		} else {
@@ -91,11 +88,10 @@ class SquaresDetail extends Component {
         this.setState({errorMessage: errorMessage});
     }
 
-	// TODO Add score selection
-	// TODO Add status on list page
     renderManagerButton() {
+
     	if (this.props.summary.manager === this.state.accounts[0]
-    		&& (this.props.summary.completed == -1)) {
+    		&& (this.props.summary.isCompleted == false)) {
     		return (
   	  		<div>
   	  			<p/>
