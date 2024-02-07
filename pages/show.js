@@ -112,7 +112,7 @@ class SquaresDetail extends Component {
     		<Grid>
     		<Grid.Column width={8}>
     	  <Button.Group vertical labeled icon>
-		    <Button icon='user secret' disabled color='red' content='Opponents' />
+  		    <Button icon='user secret' color='red' content='Opponent' data-tooltip="0x0pponentAddress" />
 		    <Button icon='user' disabled color='blue' content='You' />
 		    <Button icon='chevron down' color='black' content='Home' />
 		    </Button.Group>
