@@ -51,7 +51,7 @@ contract Square {
           squarePrice,
           manager,
           lockedTimestamp, // TODO Added
-          completed
+          completed // NOTE: This is either -1 (not done) or home*10 + away.  So 41-33 means completed = 13
           );
   }
 
@@ -82,6 +82,7 @@ contract Square {
     require(homeRow <= 9);
     require(awayCol <= 9);
     require(completed == -1);
+  // require(lockedTimestamp > 0); // Not strictly necessary - 2024.
 
     if(selectors[homeRow * 10 + awayCol] == 0x0000000000000000000000000000000000000000) {
       // Refund case

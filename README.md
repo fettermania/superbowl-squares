@@ -1,16 +1,25 @@
 # superbowl-squares
 
+- Wei: 1000000000000000 for .001 eth
 # 2/6/24
 
-- Try at git hash bf425c66ae038449999b99bb0d264acae81b45b8
+- [DONE] Try at git hash bf425c66ae038449999b99bb0d264acae81b45b8
   
-- Create pre-hiddenaxes branch, named 2024 classic
+- [DONE] Create pre-hiddenaxes branch, named 2024 classic
   - node  deploy: Contract deployed to 0xDe21879501eb20c6fB435717C7d116174993e414
   - Game:  0x0aC28bB5ef2083dE4663FaebcF8d74cf24454378
 
-- Can we push it to Heroku?
-- Can we create a game there?
+- [DONE] Can we push it to Heroku?
+
+  - https://stackoverflow.com/questions/2971550/how-to-push-different-local-git-branches-to-heroku-master
+ - git push heroku classic:main
+- [DONE] Can we create a game there?
+- [TODO] What scenarios can we test?
+
 - Can we reapply old diffs?
+  - Network switcher
+  - Refund if no winner
+  - Home page
 
 
 ## Use: Web Browser (Desktop)

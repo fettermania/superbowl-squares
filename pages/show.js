@@ -62,8 +62,15 @@ class SquaresDetail extends Component {
 	}
 
 	setGameProgressState(isLocked, isCompleted) {
-		if (isCompleted) {
-			this.setState({errorMessage: 'Contest completed', isLocked: true, isCompleted: true});
+		if (isCompleted == true) {
+			var homescore = Math.floor(this.props.summary.completed / 10);
+			var awayscore = this.props.summary.completed % 10;
+			var winneraddress = this.props.squareSelections[homescore*10+awayscore];
+			var completedMessage = "Contest completed. "
+				+  this.props.summary.awayName + " score ends " + awayscore + ". "
+				+  this.props.summary.homeName + " score ends " + homescore + "."
+			var winnerMessage = (winneraddress == SquaresDetail.nullAddress) ? " No winner. Refunds dispensed." : " Winner is " + winneraddress + ".";
+			this.setState({errorMessage: completedMessage + winnerMessage, isLocked: true, isCompleted: true});
 		} else if (isLocked) {
 			this.setState({errorMessage: 'Choices are locked', isLocked: true, isCompleted: false});
 		} else {
