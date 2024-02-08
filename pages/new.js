@@ -55,7 +55,7 @@ class SquaresNew extends Component {
 				this.state.competitionNameTrimmed,
 				this.state.homeNameTrimmed,
 				this.state.awayNameTrimmed,
-				this.state.squarePrice)
+				this.state.squarePrice * 1000000000000000000)
 				.send({
 					from: accounts[0] // TODO  
 				});
@@ -110,9 +110,9 @@ class SquaresNew extends Component {
 							onChange={event => this.setState({awayName: event.target.value})} />
 					</Form.Field>
 					<Form.Field>
-					<label>Square Price (1000000000000000 wei = .001 eth)</label>
+					<label>Square Price (e.g. .001 eth)</label>
 						<Input 
-							label="wei" 
+							label="eth" 
 							labelPosition="right" 
 							value={this.state.squarePrice}
 							onChange={event => this.setState({squarePrice: event.target.value})} />

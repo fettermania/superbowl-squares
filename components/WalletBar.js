@@ -1,25 +1,30 @@
 import React, {Component} from 'react';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Message } from 'semantic-ui-react';
 import { Link } from '../routes';
 import { makeWeb3 } from '../ethereum/web3';
 
 class WalletBar extends Component {
 
   state = {
-    message: 'Ethereum wallet not detected ❌.   Check out metamask.io or similar'
+    message: 'Ethereum wallet not detected.   Check out metamask.io or similar',
+    className: 'error'
   };
 
 
   async onChainDetect(chainId) {
-    var message = '';
+    var message;
+    var className;
     if (chainId === 5) {
-      message = "Ethereum wallet detected (Using Goerli Test Network) ✅";
+      message = "Ethereum wallet detected.  Use Goerli Test Network above.";
+      className = 'positive';
     } else if (chainId === 1) { 
-      message = "Ethereum wallet detected (Using Mainnet) ✅";
+      message = "Ethereum wallet detected.  Use Mainnet above.";
+      className = 'positive';
     } else {
-      message = "Ethereum wallet detected (Switch to Goerli or Mainnet) ❌";
+      message = "Ethereum wallet detected.  Log in and switch to Goerli or Mainnet.";
+      className = 'error';
     }
-    this.setState({message: message});
+    this.setState({message: message, className: className});
   }
 
   async componentDidMount() {
@@ -31,7 +36,7 @@ class WalletBar extends Component {
   } 
 
   render () {
-    return <h4><em><div suppressHydrationWarning>{this.state.message}</div></em></h4>;
+    return <Message className={this.state.className} content={this.state.message} />
   }
 };
 
