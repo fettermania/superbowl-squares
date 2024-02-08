@@ -1,11 +1,12 @@
 import Web3 from "web3";
- 
+var config = require ('./config.js');
+
 let web3;
 
 // NOTE: GOTCHA -  global window not availble on node.  Just in browser. 
 if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
 
-// <BEGIN Web3 required update>
+  // TODO 1/24 - does this matter?
   // We are in the browser and metamask is running.
   window.ethereum.request({ method: "eth_requestAccounts" });
   web3 = new Web3(window.ethereum);

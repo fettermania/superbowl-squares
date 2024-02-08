@@ -1,4 +1,5 @@
 # superbowl-squares
+- TODO Start at implementing 60797101eb57ecf4db1b2d003b8690ccf8db52c3 PLUS a05f1f1d7b406ad10ac065290397252de8a2370a
 
 - Wei: 1000000000000000 for .001 eth
 # 2/6/24
@@ -55,7 +56,10 @@ variable $METAMASK_PHRASE with its contents.
 
 Then: 
 
-	$ node deploy.js
+  # using Infura URLs in ./ethereum/config.js
+
+  $ node deploy.js mainnet 
+  # or node deploy.js goerli 
 
 Write down the address displayed and update ethereum/factory.js with this address.
 

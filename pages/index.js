@@ -6,6 +6,16 @@ import Layout from '../components/Layout';
 import { Link }  from '../routes';
 import squaremodel from '../ethereum/squaremodel';
 
+var config = require ('../ethereum/config.js');
+
+
+console.log("Factory is");
+console.log(config.factoryAddresses['goerli']);
+
+console.log("Infura is");
+console.log(config.infuraUrls['goerli']);
+
+
 class SquaresList extends Component {
 
 	state = {
@@ -15,8 +25,10 @@ class SquaresList extends Component {
 	// NOTE: getInitialProps is next js specific, for initial server-side data load
 	// Can't use componentDidMount fpr this!
 	static async getInitialProps() {
-		const squareAddresses = await factory.methods.getDeployedSquares().call();
-
+		// TODO: take :network out of the URL instead of hardcoding 'goerli'
+		const myFactory = factory(config.factoryAddresses['goerli']);
+		const squareAddresses = await myFactory.methods.getDeployedSquares().call();
+		
 		return {squareAddresses};
 	}
 
