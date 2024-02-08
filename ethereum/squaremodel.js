@@ -1,4 +1,4 @@
-import web3 from './web3';
+import {web3, makeweb3 }  from './web3';
 import SquareJSON from './build/Square.json';
 
 // // TODONEW : DSF singleton
@@ -20,8 +20,9 @@ let address = '0xB20A1D8DA8b18152399656daC8A9135674bee04D'; // 2024 GOERLI - one
 
 // Note: expots a function, not a class
 
-export default (address) => {
-	return new web3.eth.Contract(
+// TODO 1/25 - insert web3 as argument
+export default (address, myWeb3) => {
+	return new myWeb3.eth.Contract(
 		JSON.parse(SquareJSON.interface),
 		address);
 };	

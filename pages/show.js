@@ -6,7 +6,7 @@ import squaremodel from '../ethereum/squaremodel';
 //import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
-import web3 from '../ethereum/web3.js';
+import {web3, makeWeb3 } from '../ethereum/web3.js';
 
 class SquaresDetail extends Component {
 	// TODO move these
@@ -17,7 +17,8 @@ class SquaresDetail extends Component {
 		errorMessage: '',
 		isCompleted: false,
 		isLocked: false,
-		lockedLoading: false
+		lockedLoading: false,
+		myWeb3: null
 	};
 
 	static selectionsTo2D(squareSelections) {
@@ -36,12 +37,18 @@ class SquaresDetail extends Component {
 
 	// NOTE Note: getInitialProps is a nextJS thing for server only!
 	// NOTE Use componentDidMount (a react thing)
+	// TODO 1/25 - need web3 here
 	static async getInitialProps(props) {
 
+		//const network = props.query.network; // TODO 1/25
+		const network = 'goerli';
+		const myWeb3 = makeWeb3(network);
+		const square = squaremodel(props.query.address, myWeb3);
+
 		const squareAddress = props.query.address;
-		const square = squaremodel(props.query.address);
 		const squareSelections =  await square.methods.getSelectors().call();
 		const rows = SquaresDetail.selectionsTo2D(squareSelections);
+
 		const summaryRaw = await square.methods.getSummary().call();
 		const summary = {
 			competitionName: summaryRaw[0],
@@ -74,10 +81,13 @@ class SquaresDetail extends Component {
 			this.setState({errorMessage: '', isLocked: false, isCompleted: false});
 		}
 	}
-	// TODO Getting accounts here - is that bad?
+	// TODO 1/25 - need web3 here
 	async componentDidMount() {
-		const accounts = await web3.eth.getAccounts();
-	   const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
+		const network = 'goerli';
+		const myWeb3 = makeWeb3(network);
+
+		const accounts = await myWeb3.eth.getAccounts(); // TODO 1/25
+ 	    const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
 		this.setState({accounts: accounts,
 		   walletDetected: walletDetected});
 		this.setGameProgressState(this.props.summary.isLocked, this.props.summary.isCompleted);

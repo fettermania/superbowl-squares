@@ -1,7 +1,9 @@
 # superbowl-squares
-- TODO Start at implementing 60797101eb57ecf4db1b2d003b8690ccf8db52c3 PLUS a05f1f1d7b406ad10ac065290397252de8a2370a
+- TODO Start at implementing 34987c1148f
 
 - Wei: 1000000000000000 for .001 eth
+f02e80ce137b596113dd68257577f5a9961680d7, 60797101eb57ecf4db1b2d003b8690ccf8db52c3, a05f1f1d7b406ad10ac065290397252de8a2370a
+
 # 2/6/24
 
 - [DONE] Try at git hash bf425c66ae038449999b99bb0d264acae81b45b8

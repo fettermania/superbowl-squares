@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Button, Table, Grid, Card, Icon} from 'semantic-ui-react';
-import web3 from '../ethereum/web3';
+import {web3, makeWeb3 } from '../ethereum/web3';
 import squaremodel from '../ethereum/squaremodel';
 import { Router } from '../routes';
 
@@ -20,8 +20,11 @@ class SquareCell extends Component {
 			return;
 		}
 
-		const square = squaremodel(this.props.squareAddress);
-		try { 
+			// TODO 1/25 - need web3 provider injected here
+			const network = 'goerli'; // TODO 1/25
+			const myWeb3 = makeWeb3(network);
+			const square = squaremodel(this.props.squareAddress, myWeb3);
+			try { 
 
 			this.setState({loading: true});
 			this.props.setTopError('');
@@ -66,7 +69,7 @@ class SquareCell extends Component {
 			button = <Button icon data-tooltip={this.props.buyerAddress} data-position="right center" color="red"><Icon name='user secret'/></Button>		} else if (this.props.isLocked || this.props.isCompleted) {
 			button = <Button disabled icon color="grey"><Icon name='x'/></Button>
 		} else {
-			button = <Button icon loading={this.state.loading} icon color="green" onClick={this.onPurchase}>
+			button = <Button icon loading={this.state.loading} color="green" onClick={this.onPurchase}>
 				<Icon name='ethereum'/></Button>
 		}
 		return (<Grid.Column width={1} >
