@@ -110,7 +110,7 @@ class SquaresNew extends Component {
 							onChange={event => this.setState({awayName: event.target.value})} />
 					</Form.Field>
 					<Form.Field>
-						<label>Square Price</label>
+					<label>Square Price (1000000000000000 wei = .001 eth)</label>
 						<Input 
 							label="wei" 
 							labelPosition="right" 
