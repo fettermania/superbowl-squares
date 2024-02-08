@@ -5,6 +5,7 @@ import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
 import {makeWeb3 } from '../ethereum/web3';
+import Web3 from "web3";
 
 var config = require ('../ethereum/config.js');
 
@@ -30,7 +31,6 @@ class SquaresNew extends Component {
 	// NOTE: Gotcha - need the arrow function for THIS to work.
 	onSubmit = async (event) => {
 		event.preventDefault(); // NOTE - prevent HTML1 form submittal
-
 		try  {
 			var competitionNameTrimmed = this.state.competitionName.trim();
             var homeNameTrimmed = this.state.homeName.trim();
@@ -51,15 +51,16 @@ class SquaresNew extends Component {
 
 			const myFactory = factory(config.factoryAddresses[this.props.network], myWeb3);
 			
+
 			await myFactory.methods.createSquare(
 				competitionNameTrimmed,
 				homeNameTrimmed,
 				awayNameTrimmed,
-				this.state.squarePrice * 1000000000000000000)
+				Web3.utils.toWei(this.state.squarePrice.toString()))
 				.send({
 					from: accounts[0] // TODO  
 				});
-
+			console.log("GOT PAST SUBMIT")
 				// NOTE: Redirect back to index route after completon.
 				Router.pushRoute(`/list/${this.props.network}`);
 		} catch (err) {
