@@ -6,7 +6,7 @@ import squaremodel from '../ethereum/squaremodel';
 //import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
-import {web3, makeWeb3 } from '../ethereum/web3.js';
+import { makeWeb3 } from '../ethereum/web3.js';
 
 class SquaresDetail extends Component {
 	// TODO move these
