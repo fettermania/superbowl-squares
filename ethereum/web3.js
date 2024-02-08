@@ -3,16 +3,13 @@ var config = require ('./config.js');
 
 
 // TODO 1/25 - try singleton later
-//let madeWeb3 = null;
+let madeWeb3 = null;
 function makeWeb3(networkString) {
-  // if (madeWeb3) {
-  //   return madeWeb3;
-  // }
-
-  var madeWeb3;
+  if (madeWeb3) {
+    return madeWeb3;
+  }
 
   if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-
     // <BEGIN Web3 required update>
     // We are in the browser and metamask is running.
     window.ethereum.request({ method: "eth_requestAccounts" });
@@ -25,7 +22,7 @@ function makeWeb3(networkString) {
   }
   return madeWeb3;
 }
-
+ 
 export { makeWeb3 };
 
 //  	"https://goerli.infura.io/v3/b2d352d974ab45d8bd72f4af53a01f16" // 2023
