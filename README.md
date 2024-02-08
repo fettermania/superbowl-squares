@@ -1,5 +1,5 @@
 # superbowl-squares
-- TODO Start at implementing 34987c1148f
+- TODO Start at implementing 16752dff46e2ef682c50a01b75611e395cd28ca4
 
 - Wei: 1000000000000000 for .001 eth
 f02e80ce137b596113dd68257577f5a9961680d7, 60797101eb57ecf4db1b2d003b8690ccf8db52c3, a05f1f1d7b406ad10ac065290397252de8a2370a
