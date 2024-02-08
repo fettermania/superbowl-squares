@@ -52,9 +52,9 @@ class SquaresNew extends Component {
 			const myFactory = factory(config.factoryAddresses[this.props.network], myWeb3);
 			
 			await myFactory.methods.createSquare(
-				this.state.competitionNameTrimmed,
-				this.state.homeNameTrimmed,
-				this.state.awayNameTrimmed,
+				competitionNameTrimmed,
+				homeNameTrimmed,
+				awayNameTrimmed,
 				this.state.squarePrice * 1000000000000000000)
 				.send({
 					from: accounts[0] // TODO  
