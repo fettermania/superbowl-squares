@@ -7,8 +7,15 @@ const Header = (props) => {
   return (
     <Menu style={{ marginTop: '10px' }}>
     	<Link route={`/`}>
-    		<a className="item">Superbowl Squares</a>
+      <a className="item">Home (Rules)</a>
 		 </Link>
+    	<Link route={`/list/goerli`}>
+    		<a className="item">Superbowl Squares (Goerli)</a>
+		 </Link>
+
+    	<Link route={`/list/mainnet`}>
+    		<a className="item">Superbowl Squares (Mainnet)</a>
+      </Link>
           
        <Menu.Menu position='right'>
           <a className="item">fettermania@gmail.com</a>

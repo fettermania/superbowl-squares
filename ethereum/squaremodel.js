@@ -1,4 +1,3 @@
-import {web3, makeweb3 }  from './web3';
 import SquareJSON from './build/Square.json';
 
 // // TODONEW : DSF singleton

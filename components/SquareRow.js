@@ -12,6 +12,7 @@ class SquareRow extends Component {
 					row={this.props.row}
 					col={index}
 					key={index}
+					network={this.props.network}
 					isCompleted={this.props.isCompleted}
 					isLocked={this.props.isLocked}
 					setTopError={this.props.setTopError}

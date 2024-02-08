@@ -4,7 +4,7 @@ import squaremodel from '../ethereum/squaremodel';
 
 import Layout from '../components/Layout';
 import { Link, Router }  from '../routes';
-import {web3, makeWeb3 } from '../ethereum/web3';
+import {makeWeb3 } from '../ethereum/web3';
 		    		 
 
 class SquaresManager extends Component {
@@ -16,15 +16,26 @@ class SquaresManager extends Component {
  		accounts: [],
  		errorMessage: '',
  		lockedLoading: false,
- 		winnerLoading: false
+		 winnerLoading: false,
+ 		summary: {
+			competitionName: '',
+			homeName: '',
+			awayName: '',
+			squarePrice: 0,
+          	manager: '',
+          	lockedTimestamp: 0, // TODO Note: 0 for now locked, otherwise timestamp
+      	    isLocked: false,
+			homeScore: 0,
+          	awayScore: 0,
+          	isCompleted: 0,
+		},
 	};
 
 	// TODO: Do we have to getSummary here?
 	onLock = async () => {
 
 		// TODO 1/25 - need web3 here
-		const network = 'goerli'; // TODO 1/25
-		const myWeb3 = makeWeb3(network);
+		const myWeb3 = makeWeb3(this.props.network);
 		const square = squaremodel(this.props.squareAddress, myWeb3);
 		try { 
 
@@ -42,7 +53,7 @@ class SquaresManager extends Component {
 
 			// NOTE: Back to detail page on change
 			// TODO Completed message on detail page
-			Router.pushRoute(`/squares/${this.props.squareAddress}`);
+			Router.pushRoute(`/squares/${this.props.network}/${this.props.squareAddress}`);
 
 		} catch (err) 	{
 				let humanMessage;
@@ -64,40 +75,39 @@ class SquaresManager extends Component {
 	static async getInitialProps(props) {
 		// TODO 1/25 - need web3 here
 
-		const network = 'goerli'; // TODO 1/25
-		const myWeb3 = makeWeb3(network);
-
+		const network = props.query.network;
 		// TODO How can we pass the object instead of just the address?
 		const squareAddress = props.query.address;
-		const square = squaremodel(props.query.address, myWeb3);
-		const summaryRaw = await square.methods.getSummary().call();
-		const summary = {
-			competitionName: summaryRaw[0],
-			homeName: summaryRaw[1],
-			awayName: summaryRaw[2],
-          	manager: summaryRaw[4],
-		  	lockedTimestamp: summaryRaw[5],
-		  	isLocked: summaryRaw[5] > 0,
-			homeScore: summaryRaw[6],
-			awayScore: summaryRaw[7],
-		  	isCompleted: summaryRaw[8]
-		}
 		// sugar for  { squareSelections : squareSelections}
-		return {squareAddress, summary};  
+		return {squareAddress, network};
 	}
 
-	async componentDidMount() {
-		// TODO 1/25 - this one needs to have the window as a provider, yes?
+async componentDidMount() {
 
-		const network = 'goerli';
-		const myWeb3 = makeWeb3(network);
+	const myWeb3 = makeWeb3(this.props.network);
+
+	const square = squaremodel(this.props.squareAddress, myWeb3);
+	const summaryRaw = await square.methods.getSummary().call();
+	const summary = {
+		competitionName: summaryRaw[0],
+		homeName: summaryRaw[1],
+		awayName: summaryRaw[2],
+		manager: summaryRaw[4],
+		lockedTimestamp: summaryRaw[5],
+		isLocked: summaryRaw[5] > 0,
+		homeScore: summaryRaw[6],
+		awayScore: summaryRaw[7],
+		isCompleted: summaryRaw[8]
+	}
+
 
 		const accounts = await myWeb3.eth.getAccounts();
-		if ((this.props.summary.manager !== accounts[0])
-			|| (this.props.summary.isCompleted)) {
-		 	Router.pushRoute(`/squares/${this.props.squareAddress}`);
-		 } 
-		this.setState({accounts: accounts, isLocked: this.props.summary.isLocked});
+		if ((summary.manager !== accounts[0]) || summary.isCompleted) {
+			Router.pushRoute(`/squares/${this.props.network}/${this.props.squareAddress}`);
+		} 
+
+		// TODO: is this isLocked necssary or  working?
+	   this.setState({accounts: accounts, summary: summary, isLocked: summary.isLocked});
 	}
 	    
 
@@ -107,7 +117,7 @@ class SquaresManager extends Component {
 
 		// TODO 1/25 - need web3 here
 
-		const network = 'goerli'; // TODO 1/25
+		const network = this.props.network;
 		const myWeb3 = makeWeb3(network);
 		const square = squaremodel(this.props.squareAddress, myWeb3);
 
@@ -121,7 +131,7 @@ class SquaresManager extends Component {
 				});
 
 				// NOTE: Redirect back to index route after completon.
-				Router.pushRoute(`/squares/${this.props.squareAddress}`);
+				Router.pushRoute(`/squares/${this.props.network}/${this.props.squareAddress}`);
 
 		} catch (err) {
 			let humanMessage;
@@ -145,6 +155,8 @@ class SquaresManager extends Component {
 
 		return (
 				<Form onSubmit={this.onSubmitScore} error={Boolean(this.state.errorMessage)}>
+					<Button loading={this.state.winnerLoading} primary 
+					         disabled={!(this.state.isLocked)}>Declare Winner</Button>
 					<Form.Field>
 						<label>Home Score</label>
 						<Input 
@@ -160,7 +172,6 @@ class SquaresManager extends Component {
 							onChange={event => this.setState({awayScore: event.target.value})} />
 					</Form.Field>
 					<Message error header="Oops!" content={this.state.errorMessage} />
-					<Button loading={this.state.winnerLoading} primary>Declare Winner</Button>
 				</Form>
 		);
 	}
@@ -174,6 +185,7 @@ class SquaresManager extends Component {
                 loading={this.state.lockedLoading} 
                 						basic 
                                         color="red" 
+										disabled={this.state.isLocked}
                                         onClick={this.onLock}>{buttonText} </Button>
             );	
 	}
@@ -181,8 +193,8 @@ class SquaresManager extends Component {
 	render() {
 		return (<Layout>
 				<h3>Manager Zone for square:  
-					<Link route={`/squares/${this.props.squareAddress}`}>
-						{this.props.summary.competitionName}
+					<Link route={`/squares/${this.props.network}/${this.props.squareAddress}`}>
+						{this.state.summary.competitionName}
 					</Link>
 				 </h3>
   				{this.renderLockButton()}
