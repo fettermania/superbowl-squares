@@ -47,22 +47,29 @@ class SquaresList extends Component {
 	}
 	async componentDidMount() {
 
-		const myWeb3 = makeWeb3(this.props.network);
-		const myFactory = factory(config.factoryAddresses[this.props.network], myWeb3);
-		const squareAddresses = await myFactory.methods.getDeployedSquares().call();
+		try { 
+			const myWeb3 = makeWeb3(this.props.network);
+			const myFactory = factory(config.factoryAddresses[this.props.network], myWeb3);
+ 			const squareAddresses = await myFactory.methods.getDeployedSquares().call();
 
-		const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
+			const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
 
-		const summaries = await Promise.all(
-			squareAddresses
-				.map(SquaresList.retrieveSummary, this.props.network));
-		this.setState({squareAddresses: squareAddresses, 
-						summaries: summaries,
-                       walletDetected: walletDetected});
+			const summaries = await Promise.all(
+				squareAddresses
+					.map(SquaresList.retrieveSummary, this.props.network));
+			this.setState({squareAddresses: squareAddresses, 
+				summaries: summaries,
+				walletDetected: walletDetected});
+		} catch (e) {
+			Router.push('/');
+		}
 	}
 
 	// TODO : Disable if locked, or indicate as such	
 	renderSquaresList() {	
+		if (this.state.summaries.length == 0) {
+    		return <em>No contests submitted yet.  Get a wallet and get after it.</em>;	
+    	}
 		const items = this.state.summaries.map((summary, index) => {
 			let icon;
 			if (summary.isCompleted) { // completed implies locked

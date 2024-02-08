@@ -77,42 +77,45 @@ class SquaresDetail extends Component {
 	}
 	// TODO 1/25 - need web3 here
 	async componentDidMount() {
-	
-		const myWeb3 = makeWeb3(this.props.network);
-		const square = squaremodel(this.props.squareAddress, myWeb3);
-		const summaryRaw = await square.methods.getSummary().call();
+		try { 
+			const myWeb3 = makeWeb3(this.props.network);
+			const square = squaremodel(this.props.squareAddress, myWeb3);
+			const summaryRaw = await square.methods.getSummary().call();
 
-		console.log("Raw Summary")
-		console.log(summaryRaw)
-		const parsedTimestamp = parseInt(summaryRaw[5]);
-		const squareSelections = await square.methods.getSelectors().call();
-//		const squareSelections = summaryRaw[9];
-		const rows = SquaresDetail.selectionsTo2D(squareSelections);
-		
+			console.log("Raw Summary")
+			console.log(summaryRaw)
+			const parsedTimestamp = parseInt(summaryRaw[5]);
+			const squareSelections = await square.methods.getSelectors().call();
+	//		const squareSelections = summaryRaw[9];
+			const rows = SquaresDetail.selectionsTo2D(squareSelections);
+			
 
-		const summary = {
-			competitionName: summaryRaw[0],
-			homeName: summaryRaw[1],
-			awayName: summaryRaw[2],
-			squarePrice: summaryRaw[3],
-          	manager: summaryRaw[4],
-          	lockedTimestamp: parsedTimestamp, // TODO Note: 0 for now locked, otherwise timestamp
-      	    isLocked: parsedTimestamp > 0,
-			homeScore: summaryRaw[6],
-          	awayScore: summaryRaw[7],          	
-          	isCompleted: summaryRaw[8],
-          	//hiddenAxes: hiddenAxes,
+			const summary = {
+				competitionName: summaryRaw[0],
+				homeName: summaryRaw[1],
+				awayName: summaryRaw[2],
+				squarePrice: summaryRaw[3],
+				manager: summaryRaw[4],
+				lockedTimestamp: parsedTimestamp, // TODO Note: 0 for now locked, otherwise timestamp
+				isLocked: parsedTimestamp > 0,
+				homeScore: summaryRaw[6],
+				awayScore: summaryRaw[7],          	
+				isCompleted: summaryRaw[8],
+				//hiddenAxes: hiddenAxes,
 
-		}
+			}
 
-       const accounts = await myWeb3.eth.getAccounts();
-	   const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
-		this.setState({accounts: accounts,
-		   walletDetected: walletDetected,
-			summary: summary,
-			rows: rows,
-			squareSelections: squareSelections});
-		this.setGameProgressState(summary.isLocked, summary.isCompleted);
+		const accounts = await myWeb3.eth.getAccounts();
+		const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
+			this.setState({accounts: accounts,
+			walletDetected: walletDetected,
+				summary: summary,
+				rows: rows,
+				squareSelections: squareSelections});
+			this.setGameProgressState(summary.isLocked, summary.isCompleted);
+		}  catch (e) {
+		Router.push('/');
+  	  }
 	}
 
 	setTopError = (errorMessage) => {

@@ -84,6 +84,7 @@ class SquaresManager extends Component {
 
 async componentDidMount() {
 
+	try {
 	const myWeb3 = makeWeb3(this.props.network);
 
 	const square = squaremodel(this.props.squareAddress, myWeb3);
@@ -108,7 +109,10 @@ async componentDidMount() {
 
 		// TODO: is this isLocked necssary or  working?
 	   this.setState({accounts: accounts, summary: summary, isLocked: summary.isLocked});
+	} catch (e) {
+		Router.push('/');
 	}
+}
 	    
 
 	// NOTE: Gotcha - need the arrow function for THIS to work.
@@ -116,6 +120,11 @@ async componentDidMount() {
 		event.preventDefault(); // NOTE - prevent HTML1 form submittal 
 
 		// TODO 1/25 - need web3 here
+
+        if (!(this.state.homeScore >= 0) || !(this.state.awayScore >= 0)) {
+            this.setState({errorMessage: "Something wrong with the input", winnerLoading: false});
+            return;
+        }
 
 		const network = this.props.network;
 		const myWeb3 = makeWeb3(network);
@@ -145,7 +154,7 @@ async componentDidMount() {
 					humanMessage = "Transaction rejected by metamask/provider";
 					break;
 				default:
-					humanMessage = "Unknown error.  Details:" + err.message;
+					humanMessage = "Unknown error.  Details:" + err;
 			}
 			this.setState({errorMessage: humanMessage, winnerLoading: false});
 		}
