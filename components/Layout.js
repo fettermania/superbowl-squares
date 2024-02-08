@@ -19,7 +19,7 @@ import Header from './Header';
   			 </Head>
 
 
- 		   <Header />
+ 		   <Header network={props.network}/>
  		   {props.children}
  		</Container>
  		);

@@ -4,18 +4,22 @@ import { Link } from '../routes';
 
 // NOTE: Link tag injects the route in children
 const Header = (props) => {
+
+	// NOTE This is gross but good enough for now
+	var mainnetClass = ((props.network == 'mainnet') ? "active item" : "item");
+	var goerliClass = ((props.network == 'goerli') ? "active item" : "item");
   return (
     <Menu style={{ marginTop: '10px' }}>
-    	<Link route={`/`}>
-      <a className="item">Home (Rules)</a>
-		 </Link>
-    	<Link route={`/list/goerli`}>
-    		<a className="item">Superbowl Squares (Goerli)</a>
-		 </Link>
+    	<div className="item">
+    		<a className="item" href="/">Home (Rules)</a>
+		 </div>
+    	<div className="item">
+    		<a className={goerliClass} href="/list/goerli">Superbowl Squares (Goerli)</a>
+		 </div>
 
-    	<Link route={`/list/mainnet`}>
-    		<a className="item">Superbowl Squares (Mainnet)</a>
-      </Link>
+    	<div className="item">
+    		<a className={mainnetClass} href="/list/mainnet">Superbowl Squares (Mainnet)</a>
+		 </div>
           
        <Menu.Menu position='right'>
           <a className="item">fettermania@gmail.com</a>

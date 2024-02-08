@@ -6,7 +6,7 @@ import Layout from '../components/Layout';
 class SquaresHome extends Component {
 
 	render () {
- 		return <Layout>
+ 		return <Layout network="">
  		This is an Ethereum-backed version of Superbowl Squares.  It is open and can be used for non-Superbowl games as well.
 		
  		<p/>

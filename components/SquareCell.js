@@ -40,7 +40,7 @@ class SquareCell extends Component {
 			// This is kind of gross but the full state (in case someoene else is buying)
 			// does need to be updated, instead of just one cell's color.
 			// TODO 2024 This doesn't work from here but DOES work from Manage flow 
-			Router.pushRoute(`/squares/${this.props.network}/${this.props.squareAddress}`);
+			Router.push(`/squares/${this.props.network}/${this.props.squareAddress}`);
 		} catch (err) 	{
 				let humanMessage;
 				switch (err.code) { 
@@ -68,7 +68,8 @@ class SquareCell extends Component {
 		if (boughtByMe) {
 			button = <Button disabled icon color="blue"><Icon name='user'/></Button>
 		} else if (!buyable) {
-			button = <Button icon data-tooltip={this.props.buyerAddress} data-position="right center" color="red"><Icon name='user secret'/></Button>		} else if (this.props.isLocked || this.props.isCompleted) {
+			button = <Button icon data-tooltip={this.props.buyerAddress} data-position="right center" color="red"><Icon name='user secret'/></Button>		
+		} else if (this.props.isLocked || this.props.isCompleted) {
 			button = <Button disabled icon color="grey"><Icon name='x'/></Button>
 		} else {
 			button = <Button icon loading={this.state.loading} color="green" onClick={this.onPurchase}>

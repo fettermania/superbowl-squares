@@ -74,7 +74,7 @@ class SquaresNew extends Component {
 		// NOTE: Form ... error prop needed to show error message
 		// NOTE: !!foo is equivalent to Boolean(foo)
 		return (
-			<Layout>
+			<Layout network={this.props.network}>		  	
 				<h3>Create a Square</h3>
 				<Form onSubmit={this.onSubmit} error={Boolean(this.state.errorMessage)}>
 					<Form.Field>

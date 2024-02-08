@@ -248,7 +248,7 @@ class SquaresDetail extends Component {
 			(<div suppressHydrationWarning>Ethereum wallet detected (Use Goerli Test Network) ✅</div>)
 			: (<div suppressHydrationWarning>Ethereum wallet not detected (Use Goerli Test Network) ❌.  Check out <a href="http://metamask.io">Metamask</a> or similar</div>);
 
-		return (<Layout>
+		return (<Layout network={this.props.network}>		  	
 		  	{this.renderManagerButton()}
 			<h2>{this.state.summary.competitionName}</h2>
 			<h3>{this.state.summary.awayName} <em>(Away)</em> at {this.state.summary.homeName} <em>(Home)</em></h3>

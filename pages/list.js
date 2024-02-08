@@ -89,8 +89,8 @@ class SquaresList extends Component {
 	}
 	render () {
 
- 		return	<Layout>		  	
-		  <div>
+		return	<Layout network={this.props.network}>	
+			<div>
 	    		<Link route={`/squares/${this.props.network}/new`}>
 
   				 <a> 

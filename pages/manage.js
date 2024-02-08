@@ -191,7 +191,7 @@ async componentDidMount() {
 	}
 
 	render() {
-		return (<Layout>
+		return (<Layout network={this.props.network}>		  	
 				<h3>Manager Zone for square:  
 					<Link route={`/squares/${this.props.network}/${this.props.squareAddress}`}>
 						{this.state.summary.competitionName}
