@@ -16,20 +16,21 @@ contract SquareFactory {
 }
 
 contract Square {
-  string public competitionName;
-  string public homeName;
-  string public awayName;
-  uint public squarePrice;
-  address public manager;
+  string competitionName;
+  string homeName;
+  string awayName;
+  uint squarePrice;
+  address manager;
   
   // TODO these are all public?
-  uint public lockedTimestamp; // Locked if this is not zero.
-  uint8 public homeScore;
-  uint8 public awayScore;
-  bool public isCompleted;
+  uint lockedTimestamp; // Locked if this is not zero.
+  uint8 homeScore;
+  uint8 awayScore;
+  bool isCompleted;
+
+  address[100] selectors;
 
   // TODO Test this against a map again.
-  address[100] public selectors;
 
   // note: gloval variable msg auto-provided with any invocation
   // .data, .gas, .sender, .value
@@ -45,7 +46,7 @@ contract Square {
   }
 
   function getSummary() public view returns (
-    string, string, string, uint, address, uint, uint8, uint8, bool) {
+    string, string, string, uint, address, uint, uint8, uint8, bool, address[100]) {
 
       return (
           competitionName,
@@ -56,7 +57,8 @@ contract Square {
           lockedTimestamp,
           homeScore,
           awayScore,
-          isCompleted // Now a bool
+          isCompleted, // Now a bool
+          selectors
           );
   }
 
@@ -70,10 +72,6 @@ contract Square {
       require(selectors[homeRow * 10 + awayCol] == 0x0000000000000000000000000000000000000000);
       selectors[homeRow * 10 + awayCol] = msg.sender;
     }
-
-  function getSelectors() public view returns (address[100] memory) {
-    return selectors;
-  }
 
  // SetLocked=true reveals the board 
   function setLocked() public onlyManagerCanCall {

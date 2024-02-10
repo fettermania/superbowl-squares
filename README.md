@@ -4,6 +4,16 @@
 - Wei: 1000000000000000 for .001 eth
 f02e80ce137b596113dd68257577f5a9961680d7, 60797101eb57ecf4db1b2d003b8690ccf8db52c3, a05f1f1d7b406ad10ac065290397252de8a2370a
 
+- Main version contract deploy: 123083671960000000
+- Classic version: 115511885560000000 - .115 eth
+
+- old contract:
+  - txn 
+  - gas used by txn: 822751.
+  - gas price: 15.5K
+  - current gas price: 60+!
+   
+
 # 2/6/24
 
 - [DONE] Try at git hash bf425c66ae038449999b99bb0d264acae81b45b8

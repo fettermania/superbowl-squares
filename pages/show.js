@@ -33,8 +33,8 @@ class SquaresDetail extends Component {
 			homeScore: 0,
           	awayScore: 0,
           	isCompleted: 0,
+			squareSelections: []
 		},
-		squareSelections : [],
 		rows : []
 	};
 
@@ -64,10 +64,10 @@ class SquaresDetail extends Component {
 		if (isCompleted == true) {
 			var homescore = this.state.summary.homeScore;
 			var awayscore = this.state.summary.awayScore;
-			var winneraddress = this.state.squareSelections[(homescore%10)*10+(awayscore%10)];
+			var winneraddress = this.state.summary.squareSelections[(homescore%10)*10+(awayscore%10)];
 			var completedMessage = "Contest completed. "
-				+  this.state.summary.awayName + " scores " + awayscore + ". "
-				+  this.state.summary.homeName + " scores " + homescore + "."
+				+  this.state.summary.awayName + " score: " + awayscore + ". "
+				+  this.state.summary.homeName + " score: " + homescore + "."
 			var winnerMessage = (winneraddress == SquaresDetail.nullAddress) ? " No winner. Refunds dispensed." : " Winner is " + winneraddress + ".";		
 			this.setState({errorMessage: completedMessage + winnerMessage, isLocked: true, isCompleted: true});
 		} else if (isLocked) {
@@ -86,9 +86,6 @@ class SquaresDetail extends Component {
 			console.log("Raw Summary")
 			console.log(summaryRaw)
 			const parsedTimestamp = parseInt(summaryRaw[5]);
-			const squareSelections = await square.methods.getSelectors().call();
-	//		const squareSelections = summaryRaw[9];
-			const rows = SquaresDetail.selectionsTo2D(squareSelections);
 			
 
 			const summary = {
@@ -102,17 +99,16 @@ class SquaresDetail extends Component {
 				homeScore: summaryRaw[6],
 				awayScore: summaryRaw[7],          	
 				isCompleted: summaryRaw[8],
-				//hiddenAxes: hiddenAxes,
-
+				squareSelections: summaryRaw[9]
 			}
+		const rows = SquaresDetail.selectionsTo2D(summaryRaw[9]);
 
 		const accounts = await myWeb3.eth.getAccounts();
 		const walletDetected = (typeof window !== "undefined" && typeof window.ethereum !== "undefined");
 			this.setState({accounts: accounts,
-			walletDetected: walletDetected,
+				walletDetected: walletDetected,
 				summary: summary,
-				rows: rows,
-				squareSelections: squareSelections});
+				rows: rows});
 			this.setGameProgressState(summary.isLocked, summary.isCompleted);
 		}  catch (e) {
 		Router.push('/');
@@ -202,12 +198,12 @@ class SquaresDetail extends Component {
 	}
 
 	renderStatsBlock() {
-		const squaresTaken = this.state.squareSelections.filter(address => 
+		const squaresTaken = this.state.summary.squareSelections.filter(address => 
 			address != SquaresDetail.nullAddress);
 
 		const countSquaresTaken = squaresTaken.length;
 		// TODO Does this ever return multiple accounts?
-		const countSquaresYouBought = this.state.squareSelections.filter(address => 
+		const countSquaresYouBought = this.state.summary.squareSelections.filter(address => 
 			address == this.state.accounts[0]).length;
 
 		const acctName = (this.state.accounts[0]) ? (this.state.accounts[0].substr(2,4) ) : "none";
